@@ -68,9 +68,17 @@ export const watchListUtil = function (buyerSetting) {
                   const waitingTime = i === 0 || i === 1
                       ? i + 2
                       : i;
+                  let auction = currentItem._auction;
+                  let currentBid = auction.currentBid || auction.startingBid;
+
+                  let checkPrice = buyerSetting["idAbBidExact"]
+                      ? bidPrice
+                      : auction.currentBid
+                          ? getBuyBidPrice(currentBid)
+                          : currentBid;
 
                   writeToLog(
-                      `@Try to bin on outbidden card. Name -  ${currentItem._staticData.name} - ${bidPrice}`,
+                      `@Try to bin on outbidden card. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,
                       idProgressAutobuyer
                   );
 

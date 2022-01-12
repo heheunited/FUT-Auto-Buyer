@@ -65,7 +65,7 @@ export const watchListUtil = function (buyerSetting) {
 
                 for (var i = 0; i < outBidItems.length; i++) {
                   const currentItem = outBidItems[i];
-                  const waitingTime = i === 0 || i === 1
+                  const waitingTime = i === 0
                       ? i + 2
                       : i;
                   let auction = currentItem._auction;
@@ -85,6 +85,8 @@ export const watchListUtil = function (buyerSetting) {
                       `@Try to bid on outbidden. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,
                       idProgressAutobuyer
                   );
+
+                  await wait(1);
 
                   await tryBidItems(
                     currentItem,

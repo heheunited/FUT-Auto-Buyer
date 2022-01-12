@@ -135,7 +135,7 @@ export const searchSettingsView = function () {
       "Player FutBin minimal price",
       0,
       { idAbBuyFutMinimalPrice },
-      "Minimal FutBin minimal price",
+      "",
       "BuyerSettings"
     )}
     ${generateTextInput(

@@ -77,6 +77,10 @@ export const watchListUtil = function (buyerSetting) {
                           ? getBuyBidPrice(currentBid)
                           : currentBid;
 
+                  if (checkPrice > bidPrice) {
+                    continue;
+                  }
+
                   writeToLog(
                       `@Try to bin on outbidden card. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,
                       idProgressAutobuyer

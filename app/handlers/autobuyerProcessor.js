@@ -178,6 +178,8 @@ const searchTransferMarket = function (buyerSetting) {
     let bidPrice = buyerSetting["idAbMaxBid"];
     let userBuyNowPrice = buyerSetting["idAbBuyPrice"];
     let useFutBinPrice = buyerSetting["idBuyFutBinPrice"];
+    let userFutBinMinimalPrice = buyerSetting["idAbBuyFutMinimalPrice"];
+    let isUserFutBinMinimalPriceProvided = userFutBinMinimalPrice > 0;
 
     if (!userBuyNowPrice && !bidPrice && !useFutBinPrice) {
       writeToLog(
@@ -218,7 +220,7 @@ const searchTransferMarket = function (buyerSetting) {
             );
             currentPage === 1 &&
               sendPinEvents("Transfer Market Results - List View");
-            if (useFutBinPrice && response.data.items[0].type === "player") {
+            if ((useFutBinPrice || isUserFutBinMinimalPriceProvided) && response.data.items[0].type === "player") {
               await addFutbinCachePrice(response.data.items);
             }
           }
@@ -256,13 +258,20 @@ const searchTransferMarket = function (buyerSetting) {
               auction.expires
             );
 
-            if (useFutBinPrice && type === "player") {
+            let currentPlayerFutBinPrice = -1;
+            if ((useFutBinPrice || isUserFutBinMinimalPriceProvided) && type === "player") {
               const existingValue = getValue(player.definitionId);
               if (existingValue && existingValue.price) {
                 const futBinBuyPrice = roundOffPrice(
                   (existingValue.price * futBinBuyPercent) / 100
                 );
-                userBuyNowPrice = futBinBuyPrice;
+
+                if (useFutBinPrice) {
+                  userBuyNowPrice = futBinBuyPrice;
+                }
+
+                currentPlayerFutBinPrice = futBinBuyPrice;
+
                 if (buyerSetting["idAbBidFutBin"]) {
                   bidPrice = futBinBuyPrice;
                 }
@@ -289,6 +298,10 @@ const searchTransferMarket = function (buyerSetting) {
               : isBid
               ? getBuyBidPrice(currentBid)
               : currentBid;
+
+            const isMinimalPLayerFutBinPriceCorrect = isUserFutBinMinimalPriceProvided
+                ? userFutBinMinimalPrice <= currentPlayerFutBinPrice
+                : false;
 
             let usersellPrice = buyerSetting["idAbSellPrice"];
             let minRating = buyerSetting["idAbMinRating"];
@@ -344,6 +357,11 @@ const searchTransferMarket = function (buyerSetting) {
 
             if (currentBids.has(auction.tradeId)) {
               logWrite("skip >>> (Cached Item)");
+              continue;
+            }
+
+            if (isUserFutBinMinimalPriceProvided && !isMinimalPLayerFutBinPriceCorrect) {
+              logWrite("skip >>> (Player futbin price less than User minimal futbin player price)");
               continue;
             }
 

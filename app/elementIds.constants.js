@@ -3,6 +3,7 @@ import { generateId } from "./utils/commonUtil";
 export const idFilterDropdown = "elem_" + generateId(15);
 export const idSelectedFilter = "elem_" + generateId(15);
 export const idAbBuyPrice = "elem_" + generateId(15);
+export const idAbBuyFutMinimalPrice = "elem_" + generateId(15);
 export const idAbCardCount = "elem_" + generateId(15);
 export const idAbMaxBid = "elem_" + generateId(15);
 export const idAbItemExpiring = "elem_" + generateId(15);

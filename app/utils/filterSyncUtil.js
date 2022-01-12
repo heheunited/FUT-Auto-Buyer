@@ -194,10 +194,11 @@ const sendRequest = async (url, payload) => {
 };
 
 const checkIfLoggedIn = () => {
-  const isLoggedIn = $(`#${idAbServerLogin}`).text() === "Logout";
-  if (!isLoggedIn) {
-    sendUINotification("User not logged in", UINotificationType.NEGATIVE);
-  }
+  // const isLoggedIn = $(`#${idAbServerLogin}`).text() === "Logout";
+  // if (!isLoggedIn) {
+  //   sendUINotification("User not logged in", UINotificationType.NEGATIVE);
+  // }
+  //TODO tmp
 
-  return isLoggedIn;
+  return true;
 };

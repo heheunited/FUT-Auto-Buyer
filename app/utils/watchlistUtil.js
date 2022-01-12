@@ -82,7 +82,7 @@ export const watchListUtil = function (buyerSetting) {
                   }
 
                   writeToLog(
-                      `@Try to bid on outbidden card. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,
+                      `@Try to bid on outbidden. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,
                       idProgressAutobuyer
                   );
 

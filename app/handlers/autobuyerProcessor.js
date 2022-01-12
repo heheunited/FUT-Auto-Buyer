@@ -361,7 +361,7 @@ const searchTransferMarket = function (buyerSetting) {
             }
 
             if (isUserFutBinMinimalPriceProvided && !isMinimalPLayerFutBinPriceCorrect) {
-              logWrite("skip >>> (Player futbin price less than User minimal futbin player price)");
+              logWrite("skip >>> (user min futbin price > futbin price)");
               continue;
             }
 

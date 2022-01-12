@@ -131,6 +131,14 @@ export const formatString = (str, len) => {
   return str;
 };
 
+export const timeStringFormat = (str, len = 3) => {
+  let explodedTime = str.split(" ");
+
+  return (
+      explodedTime[0] + ' ' + explodedTime[1].substr(0, len).toLowerCase() + '.'
+  );
+}
+
 export const promisifyTimeOut = (cb, wait) => {
   return new Promise((resolve) => {
     setTimeout(function () {

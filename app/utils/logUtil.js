@@ -32,25 +32,28 @@ export const writeToDebugLog = (
 };
 
 export const writeToAbLog = (
-  sym,
-  ItemName,
-  priceTxt,
-  operation,
-  result,
-  comments
+    sym,
+    ItemName,
+    priceTxt,
+    operation,
+    result,
+    comments,
+    expireTime = ''
 ) => {
   let message =
-    sym +
-    " | " +
-    ItemName +
-    " | " +
-    priceTxt +
-    " | " +
-    operation +
-    " | " +
-    result +
-    " | " +
-    comments;
+      sym +
+      " | " +
+      ItemName +
+      " | " +
+      priceTxt +
+      " | " +
+      operation +
+      " | " +
+      result +
+      " | " +
+      comments +
+      " | " +
+      expireTime;
   writeToLog(message, idProgressAutobuyer);
   return message;
 };

@@ -18,6 +18,6 @@ export const initializeLog = () => {
   let log_init_text =
     "Autobuyer Ready\n" +
     time_txt +
-    " Index  | Item name       | price  | op  | result  | comments\n";
+    " Index  | Item name       | price  | op  | result  | comments          | exp\n";
   log.val(log_init_text);
 };

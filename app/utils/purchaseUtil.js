@@ -12,7 +12,7 @@ import {
   convertToSeconds,
   formatString,
   getRandWaitTime,
-  playAudio,
+  playAudio, timeStringFormat,
   wait,
 } from "./commonUtil";
 import { getSellPriceFromFutBin } from "./futbinUtil";
@@ -120,12 +120,13 @@ export const buyPlayer = (
               `[${new Date().toLocaleTimeString()}] ${playerName.trim()} bid success - Price : ${price}`
             );
             logMessage = writeToAbLog(
-              sym,
-              playerName,
-              priceTxt,
-              "bid",
-              "success",
-              "waiting to expire"
+                sym,
+                playerName,
+                priceTxt,
+                "bid",
+                "success",
+                "waiting to expire",
+                timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires))
             );
             const filterName = getValue("currentFilter");
             if (filterName) {

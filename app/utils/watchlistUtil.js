@@ -65,12 +65,23 @@ export const watchListUtil = function (buyerSetting) {
 
                 for (var i = 0; i < outBidItems.length; i++) {
                   const currentItem = outBidItems[i];
+                  const waitingTime = i === 0 || i === 1
+                      ? i + 2
+                      : i;
+
+                  writeToLog(
+                      `@Try to bin on outbidden card. Name -  ${currentItem._staticData.name} - ${bidPrice}`,
+                      idProgressAutobuyer
+                  );
+
                   await tryBidItems(
                     currentItem,
                     bidPrice,
                     sellPrice,
                     buyerSetting
                   );
+
+                  await wait(waitingTime);
                 }
               }
 

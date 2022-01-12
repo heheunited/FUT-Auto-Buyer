@@ -79,12 +79,12 @@ export const watchListUtil = function (buyerSetting) {
                     continue;
                   }
 
+                  await wait(1);
+
                   writeToLog(
                       `@Try to bid on outbidden. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,
                       idProgressAutobuyer
                   );
-
-                  await wait(1);
 
                   await tryBidItems(
                     currentItem,

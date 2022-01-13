@@ -148,7 +148,7 @@ export const buyPlayer = (
               );
           }
         } else {
-          await wait(1)
+          await wait(3)
           let lossCount = increAndGetStoreValue("lossCount");
           let sym = " L:" + formatString(lossCount.toString(), 4);
           appendTransactions(

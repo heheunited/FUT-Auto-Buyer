@@ -51,15 +51,17 @@ export const watchListUtil = function (buyerSetting) {
 
               const userWatchItems = getValue("userWatchItems");
               if (isAutoBuyerActive && bidPrice) {
-                let outBidItems = watchResponse.data.items.filter(function (
-                  item
-                ) {
+                let outBidItems = watchResponse.data.items.filter(function (item) {
+                  let auction = item._auction;
+
+                  let isNeedTryBidOnItemIfMaxBidSettingExists = bidPrice > (auction.currentBid || auction.startingBid);
+
                   return (
-                    item._auction._bidState === "outbid" &&
-                    (!filterName ||
-                      filterWatchList.has(item._auction.tradeId)) &&
-                    !userWatchItems.has(item._auction.tradeId) &&
-                    item._auction._tradeState === "active"
+                      auction._bidState === "outbid" &&
+                      (!filterName || filterWatchList.has(auction.tradeId)) &&
+                      !userWatchItems.has(auction.tradeId) &&
+                      auction._tradeState === "active" &&
+                      isNeedTryBidOnItemIfMaxBidSettingExists
                   );
                 });
 

@@ -65,7 +65,7 @@ export const watchListUtil = function (buyerSetting) {
 
                 for (var i = 0; i < outBidItems.length; i++) {
                   const currentItem = outBidItems[i];
-                  const waitingTime = i === 0 ? 1 : i;
+                  const waitingTime = i === 0 ? 1 : ++i;
                   let auction = currentItem._auction;
                   let currentBid = auction.currentBid || auction.startingBid;
 

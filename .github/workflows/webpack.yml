@@ -13,9 +13,12 @@ jobs:
     strategy:
       matrix:
         node-version: [ 14.x ]
-    
+
     steps:
       - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -26,15 +29,12 @@ jobs:
         run: |
           npm install
           npm run build:prod
-      - uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - name: Push changes
+
+      - name: Commit Files
         run: |
         git config --local user.email "noreply111111@gmail.com"
         git config --local user.name "heheunitedauto1"
-        git commit -m "Add changes" -a
+        git commit -m "New release" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:

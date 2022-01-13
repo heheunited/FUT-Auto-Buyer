@@ -148,7 +148,7 @@ export const watchListUtil = function (buyerSetting) {
                       sellPrice * 0.95 - player._auction.currentBid;
                     updateProfit(profit);
 
-                    await wait(1)
+                    await wait(3)
 
                     await sellWonItems(
                       player,

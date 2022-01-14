@@ -63,7 +63,7 @@ export const watchListUtil = function (buyerSetting) {
                       auction._tradeState === "active" &&
                       isNeedTryBidOnItemIfMaxBidSettingExists
                   );
-                });
+                }).sort((a, b) => a._auction.expires - b._auction.expires);
 
                 for (var i = 0; i < outBidItems.length; i++) {
                   const currentItem = outBidItems[i];

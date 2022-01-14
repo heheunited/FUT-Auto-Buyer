@@ -1,10 +1,13 @@
-import { idProgressAutobuyer } from "../elementIds.constants";
+import {idProgressAutobuyer, idSellFutBinPercent} from "../elementIds.constants";
 import { getStatsValue, updateStats } from "../handlers/statsProcessor";
 import { writeToLog } from "./logUtil";
 import { sendPinEvents } from "./notificationUtil";
 import { updateUserCredits } from "./userUtil";
+import {getBuyerSettings, getValue} from "../services/repository";
+import {addFutbinCachePrice} from "./futbinUtil";
+import {listForPrice} from "./sellUtil";
 
-export const transferListUtil = function (relistUnsold, minSoldCount) {
+export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReListWithUpdatedPrice) {
   sendPinEvents("Transfer List - List View");
   return new Promise((resolve) => {
     services.Item.requestTransferItems().observe(
@@ -27,15 +30,25 @@ export const transferListUtil = function (relistUnsold, minSoldCount) {
 
         const shouldClearSold = soldItems >= minSoldCount;
 
-        if (unsoldItems && relistUnsold) {
-          services.Item.relistExpiredAuctions().observe(
-            this,
-            function (t, listResponse) {
-              !shouldClearSold &&
-                UTTransferListViewController.prototype.refreshList();
-            }
-          );
-        }
+          if (unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) {
+              services.Item.relistExpiredAuctions().observe(
+                  this,
+                  function (t, listResponse) {
+                      !shouldClearSold &&
+                      UTTransferListViewController.prototype.refreshList();
+                  }
+              );
+          }
+
+          if (unsoldItems && !relistUnsold && isNeedReListWithUpdatedPrice) {
+              await reListWithUpdatedPrice(
+                  response.data.items.filter((item) => {
+                          return (
+                              !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
+                          );
+                      }
+                  ))
+          }
 
         const activeTransfers = response.data.items.filter(function (item) {
           return item.getAuctionData().isSelling();
@@ -64,3 +77,20 @@ export const transferListUtil = function (relistUnsold, minSoldCount) {
     );
   });
 };
+
+export const reListWithUpdatedPrice = async (items) => {
+    const buyerSetting = getBuyerSettings();
+    let sellPercent = buyerSetting["idSellFutBinPercent"]
+
+    await addFutbinCachePrice(items)
+    for (var itmIndex = 0; itmIndex < items.length; itmIndex++) {
+        let player = items[itmIndex];
+        let existingValue = getValue(player.definitionId);
+
+        if (!existingValue || !existingValue.price) {
+            continue;
+        }
+
+        await listForPrice(existingValue.price, player, sellPercent)
+    }
+}

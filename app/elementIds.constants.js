@@ -12,6 +12,7 @@ export const idAbBidExact = "elem_" + generateId(15);
 export const idAbSellPrice = "elem_" + generateId(15);
 export const idAbMinDeleteCount = "elem_" + generateId(15);
 export const idAbSellToggle = "elem_" + generateId(15);
+export const idAbRelistUnsoldWithUpdatePrice = "elem_" + generateId(15);
 export const idAbWaitTime = "elem_" + generateId(15);
 export const idAbMaxPurchases = "elem_" + generateId(15);
 export const idAbCycleAmount = "elem_" + generateId(15);

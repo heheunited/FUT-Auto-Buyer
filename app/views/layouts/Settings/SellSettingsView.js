@@ -9,6 +9,7 @@ import {
   idSellCheckBuyPrice,
   idFutBinDuration,
   idAbDontMoveWon,
+  idAbRelistUnsoldWithUpdatePrice,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -57,6 +58,12 @@ export const sellSettingsView = function () {
     ${generateToggleInput(
       "Relist Unsold Items",
       { idAbSellToggle },
+      "",
+      "BuyerSettings"
+    )}
+    ${generateToggleInput(
+      "Relist unsold items with update price",
+      { idAbRelistUnsoldWithUpdatePrice },
       "",
       "BuyerSettings"
     )}

@@ -91,7 +91,7 @@ export const startAutoBuyer = async function (isResume) {
   await transferListWithContext(
     buyerSetting["idAbSellToggle"],
     buyerSetting["idAbMinDeleteCount"],
-    true
+    buyerSetting["idAbRelistUnsoldWithUpdatePrice"]
   );
   let operationInProgress = false;
   if (getValue("autoBuyerActive")) {

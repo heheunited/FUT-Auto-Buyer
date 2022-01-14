@@ -81,7 +81,7 @@ export const watchListUtil = function (buyerSetting) {
                     continue;
                   }
 
-                  await wait(1);
+                  await wait(2);
 
                   writeToLog(
                       `@Try to bid on outbidden. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,
@@ -230,7 +230,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
     ? getBuyBidPrice(currentBid)
     : currentBid;
 
-  if (isAutoBuyerActive && currentBid <= priceToBid) {
+  if (isAutoBuyerActive && currentBid < priceToBid) {
     writeToLog(
       "Bidding on outbidded item -> Bidding Price :" + checkPrice,
       idAutoBuyerFoundLog

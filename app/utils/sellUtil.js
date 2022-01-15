@@ -26,7 +26,7 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
       calculatedPrice,
       convertToSeconds(duration) || 3600
     );
-    await wait(getRandWaitTime('1-3')); //TODO need to test
+    await wait(1); //TODO need to test
   }
 };
 

@@ -54,16 +54,16 @@ export const watchListUtil = function (buyerSetting) {
                 let outBidItems = watchResponse.data.items.filter(function (item) {
                   let auction = item._auction;
 
-                  let isNeedTryBidOnItemIfMaxBidSettingExists = bidPrice > (auction.currentBid || auction.startingBid);
-                  let expireTimeLessThanMinute = auction.expires < 90;
+                  let isNeedTryBidOnItemIfMaxBidSettingProvided = bidPrice > (auction.currentBid || auction.startingBid);
+                  let expireTimeLessThan = auction.expires < 90;
 
                   return (
                       auction._bidState === "outbid" &&
                       (!filterName || filterWatchList.has(auction.tradeId)) &&
                       !userWatchItems.has(auction.tradeId) &&
                       auction._tradeState === "active" &&
-                      isNeedTryBidOnItemIfMaxBidSettingExists &&
-                      expireTimeLessThanMinute
+                      isNeedTryBidOnItemIfMaxBidSettingProvided &&
+                      expireTimeLessThan
                   );
                 }).sort((a, b) => a._auction.expires - b._auction.expires);
 
@@ -83,7 +83,7 @@ export const watchListUtil = function (buyerSetting) {
                     continue;
                   }
 
-                  await wait(1);
+                  await wait(2);
 
                   writeToLog(
                       `@Try to bid on outbidden. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,

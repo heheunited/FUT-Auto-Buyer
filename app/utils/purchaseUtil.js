@@ -156,16 +156,15 @@ export const buyPlayer = (
           );
           let status = (data.error?.code || data.status) + "";
 
-          // if (status == 429) {
-          //   writeToLog(
-          //       `***Too many request from this user triggered. Bot stopped.`,
-          //       idProgressAutobuyer
-          //   );
-          //
-          //   errorCodeCountMap.clear();
-          //   stopAutoBuyer();
-          //   resolve();
-          // }
+           if (status == 429) {
+             writeToLog(
+                 `***Too many request from this user triggered(429). Bot stopped.`,
+                 idProgressAutobuyer
+             );
+
+             errorCodeCountMap.clear();
+             stopAutoBuyer();
+           }
 
           logMessage = writeToAbLog(
             sym,
@@ -183,9 +182,9 @@ export const buyPlayer = (
               );
           }
 
-          if (buyerSetting["idBypassSoftBan"] && status == 429) {
-            setValue("softbanDetected", true);
-          }
+          // if (buyerSetting["idBypassSoftBan"] && status == 429) {
+          //   setValue("softbanDetected", true);
+          // }
 
           if (buyerSetting["idAbStopErrorCode"]) {
             const errorCodes = new Set(

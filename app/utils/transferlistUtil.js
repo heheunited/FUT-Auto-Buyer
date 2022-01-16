@@ -6,7 +6,7 @@ import { updateUserCredits } from "./userUtil";
 import {getBuyerSettings, getValue} from "../services/repository";
 import {addFutbinCachePrice} from "./futbinUtil";
 import {listForPrice} from "./sellUtil";
-import {wait} from "./commonUtil";
+import {getRandWaitTimeInSeconds, wait} from "./commonUtil";
 
 export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReListWithUpdatedPrice) {
   sendPinEvents("Transfer List - List View");
@@ -98,6 +98,6 @@ export const reListWithUpdatedPrice = async (items) => {
         )
 
         await listForPrice(existingValue.price, player, sellPercent)
-        await wait(1);
+        await wait(getRandWaitTimeInSeconds('3-5'));
     }
 }

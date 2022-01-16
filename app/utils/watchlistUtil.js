@@ -151,8 +151,6 @@ export const watchListUtil = function (buyerSetting) {
                       sellPrice * 0.95 - player._auction.currentBid;
                     updateProfit(profit);
 
-                    await wait(3)
-
                     await sellWonItems(
                       player,
                       sellPrice,
@@ -160,6 +158,8 @@ export const watchListUtil = function (buyerSetting) {
                       buyerSetting["idFutBinDuration"],
                       profit
                     );
+
+                    await wait(getRandWaitTimeInSeconds(buyerSetting['idAbWaitTime']))
                   } else {
                     services.Item.move(player, ItemPile.CLUB);
                   }

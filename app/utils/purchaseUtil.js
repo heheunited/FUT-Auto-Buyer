@@ -11,7 +11,7 @@ import {
   convertRangeToSeconds,
   convertToSeconds,
   formatString,
-  getRandWaitTime,
+  getRandWaitTime, getRandWaitTimeInSeconds,
   playAudio, timeStringFormat,
   wait,
 } from "./commonUtil";
@@ -148,7 +148,7 @@ export const buyPlayer = (
               );
           }
         } else {
-          await wait(3)
+          await wait(getRandWaitTimeInSeconds('3-5'))
           let lossCount = increAndGetStoreValue("lossCount");
           let sym = " L:" + formatString(lossCount.toString(), 4);
           appendTransactions(

@@ -69,7 +69,8 @@ export const watchListUtil = function (buyerSetting) {
 
                 for (var i = 0; i < outBidItems.length; i++) {
                   const currentItem = outBidItems[i];
-                  const waitingTime = i === 0 ? 1 : ++i;
+                  // const waitingTime = i === 0 ? 1 : ++i;
+                  const waitingTime = 5;
                   let auction = currentItem._auction;
                   let currentBid = auction.currentBid || auction.startingBid;
 
@@ -82,8 +83,6 @@ export const watchListUtil = function (buyerSetting) {
                   if (checkPrice > bidPrice) {
                     continue;
                   }
-
-                  await wait(2);
 
                   writeToLog(
                       `@Try to bid on outbidden. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,

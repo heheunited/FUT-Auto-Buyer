@@ -52,9 +52,7 @@ export const commonSettingsView = function () {
     "(Automatically clear expired items <br/> from transfer targets)",
     "CommonSettings"
   )}
-  ${
-    false &&
-    generateToggleInput(
+  ${generateToggleInput(
       "Bypass softban",
       { idBypassSoftBan },
       "(Automatically bypass softban)",

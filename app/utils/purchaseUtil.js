@@ -155,6 +155,18 @@ export const buyPlayer = (
             `[${new Date().toLocaleTimeString()}] ${playerName.trim()} buy failed - Price : ${price}`
           );
           let status = (data.error?.code || data.status) + "";
+
+          // if (status == 429) {
+          //   writeToLog(
+          //       `***Too many request from this user triggered. Bot stopped.`,
+          //       idProgressAutobuyer
+          //   );
+          //
+          //   errorCodeCountMap.clear();
+          //   stopAutoBuyer();
+          //   resolve();
+          // }
+
           logMessage = writeToAbLog(
             sym,
             playerName,

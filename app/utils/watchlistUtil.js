@@ -55,7 +55,7 @@ export const watchListUtil = function (buyerSetting) {
                   let auction = item._auction;
 
                   let isNeedTryBidOnItemIfMaxBidSettingProvided = bidPrice > (auction.currentBid || auction.startingBid);
-                  let expireTimeLessThan = auction.expires < 90;
+                  let expireTimeLessThan = auction.expires < 60;
 
                   return (
                       auction._bidState === "outbid" &&

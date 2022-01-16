@@ -156,7 +156,7 @@ export const buyPlayer = (
           );
           let status = (data.error?.code || data.status) + "";
 
-           if (status == 429) {
+           if (status == 429 || status == 521 || status == 512) {
              writeToLog(
                  `***Too many request from this user triggered(429). Bot stopped.`,
                  idProgressAutobuyer

@@ -124,6 +124,15 @@ export const getRandWaitTime = (range) => {
   return 0;
 };
 
+export const getRandWaitTimeInSeconds = (range) => {
+  if (range) {
+    const [start, end] = range.split("-").map((a) => parseInt(a));
+    return Math.round(Math.random() * (end - start) + start);
+  }
+
+  return 0;
+};
+
 export const formatString = (str, len) => {
   if (str.length <= len) {
     str += " ".repeat(len - str.length);

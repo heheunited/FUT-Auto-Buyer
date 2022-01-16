@@ -6,7 +6,7 @@ import { getValue, setValue } from "../services/repository";
 import {
   convertToSeconds,
   formatString,
-  getRandWaitTime,
+  getRandWaitTime, getRandWaitTimeInSeconds,
   promisifyTimeOut,
   wait,
 } from "./commonUtil";
@@ -96,7 +96,7 @@ export const watchListUtil = function (buyerSetting) {
                     buyerSetting
                   );
 
-                  await wait(waitingTime);
+                  await wait(getRandWaitTimeInSeconds('3-5'));
                 }
               }
 

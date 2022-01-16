@@ -158,7 +158,7 @@ export const buyPlayer = (
 
            if (status == 429 || status == 521 || status == 512) {
              writeToLog(
-                 `***Too many request from this user triggered(429). Bot stopped.`,
+                 `***Too many request from this user. Status ${status} triggered. Bot stopped.`,
                  idProgressAutobuyer
              );
 

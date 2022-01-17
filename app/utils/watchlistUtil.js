@@ -230,7 +230,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
     ? getBuyBidPrice(currentBid)
     : currentBid;
 
-  if (isAutoBuyerActive && currentBid < priceToBid) {
+  if (isAutoBuyerActive && currentBid <= priceToBid) {
     writeToLog(
       "Bidding on outbidded item -> Bidding Price :" + checkPrice,
       idAutoBuyerFoundLog

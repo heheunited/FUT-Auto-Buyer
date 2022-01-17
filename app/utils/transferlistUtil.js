@@ -92,12 +92,13 @@ export const reListWithUpdatedPrice = async (items) => {
             continue;
         }
 
+        await wait(getRandWaitTimeInSeconds('3-5'));
+
         writeToLog(
             `#Relist unsold with update price. Name - ${player._staticData.name}. FutBin price - ${existingValue.price}$`,
             idProgressAutobuyer
         )
 
         await listForPrice(existingValue.price, player, sellPercent)
-        await wait(getRandWaitTimeInSeconds('3-5'));
     }
 }

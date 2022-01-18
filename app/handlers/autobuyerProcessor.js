@@ -31,7 +31,7 @@ import {
   getSellBidPrice,
   roundOffPrice,
 } from "../utils/priceUtils";
-import { buyPlayer, checkRating } from "../utils/purchaseUtil";
+import {buyPlayer, checkRating, isBidOrBuyMakeExpectedProfit} from "../utils/purchaseUtil";
 import { updateRequestCount } from "../utils/statsUtil";
 import { setRandomInterval } from "../utils/timeOutUtil";
 import { transferListUtil } from "../utils/transferlistUtil";
@@ -178,8 +178,12 @@ const searchTransferMarket = function (buyerSetting) {
     let bidPrice = buyerSetting["idAbMaxBid"];
     let userBuyNowPrice = buyerSetting["idAbBuyPrice"];
     let useFutBinPrice = buyerSetting["idBuyFutBinPrice"];
+
     let userFutBinMinimalPrice = buyerSetting["idAbBuyFutMinimalPrice"];
     let isUserFutBinMinimalPriceProvided = userFutBinMinimalPrice > 0;
+
+    let expectedProfitInPercent = buyerSetting['idAbExpectedProfitInPercent'];
+    let isExpectedProfitInPercentProvided = expectedProfitInPercent > 0;
 
     if (!userBuyNowPrice && !bidPrice && !useFutBinPrice) {
       writeToLog(
@@ -220,7 +224,7 @@ const searchTransferMarket = function (buyerSetting) {
             );
             currentPage === 1 &&
               sendPinEvents("Transfer Market Results - List View");
-            if ((useFutBinPrice || isUserFutBinMinimalPriceProvided) && response.data.items[0].type === "player") {
+            if (response.data.items[0].type === "player") {
               await addFutbinCachePrice(response.data.items);
             }
           }
@@ -259,7 +263,7 @@ const searchTransferMarket = function (buyerSetting) {
             );
 
             let currentPlayerFutBinPrice = -1;
-            if ((useFutBinPrice || isUserFutBinMinimalPriceProvided) && type === "player") {
+            if (type === "player") {
               const existingValue = getValue(player.definitionId);
               if (existingValue && existingValue.price) {
                 const futBinBuyPrice = roundOffPrice(
@@ -362,6 +366,19 @@ const searchTransferMarket = function (buyerSetting) {
 
             if (isUserFutBinMinimalPriceProvided && !isMinimalPLayerFutBinPriceCorrect) {
               logWrite("skip >>> (min futbin price > player futbin price)");
+              continue;
+            }
+
+            if (
+                isExpectedProfitInPercentProvided &&
+                !isBidOrBuyMakeExpectedProfit(
+                userBuyNowPrice,
+                checkPrice,
+                currentPlayerFutBinPrice,
+                expectedProfitInPercent
+            )
+            ) {
+              logWrite(`skip >>> (Bid or Buy dont make expected profit: ${expectedProfitInPercent}%)`);
               continue;
             }
 

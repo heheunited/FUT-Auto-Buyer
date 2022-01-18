@@ -13,7 +13,7 @@ import {
 import { getSellPriceFromFutBin } from "./futbinUtil";
 import { writeToLog } from "./logUtil";
 import { sendPinEvents } from "./notificationUtil";
-import { getBuyBidPrice, getSellBidPrice } from "./priceUtils";
+import {calculateProfitPercent, getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import { buyPlayer } from "./purchaseUtil";
 import { updateProfit } from "./statsUtil";
 
@@ -28,6 +28,9 @@ export const watchListUtil = function (buyerSetting) {
     services.Item.requestWatchedItems().observe(this, function (t, response) {
       let bidPrice = buyerSetting["idAbMaxBid"];
       let sellPrice = buyerSetting["idAbSellPrice"];
+      let expectedProfitPercent = buyerSetting["idAbExpectedProfitInPercent"];
+      let isExpectedProfitInPercentProvided = expectedProfitPercent > 0;
+      let idBuyFutBinPercent = buyerSetting['idBuyFutBinPercent'];
 
       let activeItems = response.data.items.filter(function (item) {
         return item._auction && item._auction._tradeState === "active";
@@ -55,7 +58,7 @@ export const watchListUtil = function (buyerSetting) {
                   let auction = item._auction;
 
                   let isNeedTryBidOnItemIfMaxBidSettingProvided = bidPrice > (auction.currentBid || auction.startingBid);
-                  let expireTimeLessThan = auction.expires < 60;
+                  let expireTimeLessThan = auction.expires < 120;
 
                   return (
                       auction._bidState === "outbid" &&
@@ -79,6 +82,12 @@ export const watchListUtil = function (buyerSetting) {
                           : currentBid;
 
                   if (checkPrice > bidPrice) {
+                    continue;
+                  }
+
+                  if (isExpectedProfitInPercentProvided &&
+                      calculateProfitPercent(getFutBinPlayerPrice(currentItem.definitionId, idBuyFutBinPercent), checkPrice) < expectedProfitPercent
+                  ) {
                     continue;
                   }
 

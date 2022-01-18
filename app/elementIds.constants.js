@@ -9,6 +9,7 @@ export const idAbMaxBid = "elem_" + generateId(15);
 export const idAbItemExpiring = "elem_" + generateId(15);
 export const idAbSearchResult = "elem_" + generateId(15);
 export const idAbBidExact = "elem_" + generateId(15);
+export const idAbExpectedProfitInPercent = "elem_" + generateId(15);
 export const idAbSellPrice = "elem_" + generateId(15);
 export const idAbMinDeleteCount = "elem_" + generateId(15);
 export const idAbSellToggle = "elem_" + generateId(15);

@@ -18,7 +18,7 @@ import {
 import { getSellPriceFromFutBin } from "./futbinUtil";
 import { writeToAbLog, writeToLog } from "./logUtil";
 import { sendNotificationToUser } from "./notificationUtil";
-import { getSellBidPrice } from "./priceUtils";
+import {calculateProfitPercent, getSellBidPrice} from "./priceUtils";
 import { appendTransactions, updateProfit } from "./statsUtil";
 
 export const checkRating = (
@@ -234,3 +234,24 @@ export const buyPlayer = (
     );
   });
 };
+
+export const isBidOrBuyMakeExpectedProfit = (
+    userMaxBuyNow,
+    priceToBid,
+    futBinPrice,
+    expectedProfitPercent
+) => {
+  let result = false;
+
+  if (userMaxBuyNow) {
+    result = calculateProfitPercent(futBinPrice, userMaxBuyNow) >= expectedProfitPercent;
+  }
+
+  if (priceToBid) {
+    result = calculateProfitPercent(futBinPrice, priceToBid) >= expectedProfitPercent;
+  }
+
+  return result;
+}
+
+

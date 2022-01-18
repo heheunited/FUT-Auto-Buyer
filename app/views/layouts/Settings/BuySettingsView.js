@@ -1,16 +1,16 @@
 import {
-  idAbBidExact,
-  idAbBidFutBin,
-  idAbBuyPrice,
-  idAbCardCount,
-  idAbItemExpiring,
-  idAbMaxBid,
-  idAbSearchResult,
-  idAbShouldSort,
-  idAbSortBy,
-  idAbSortOrder,
-  idBuyFutBinPercent,
-  idBuyFutBinPrice,
+    idAbBidExact,
+    idAbBidFutBin,
+    idAbBuyPrice,
+    idAbCardCount, idAbExpectedProfitInPercent,
+    idAbItemExpiring,
+    idAbMaxBid,
+    idAbSearchResult,
+    idAbShouldSort,
+    idAbSortBy,
+    idAbSortOrder,
+    idBuyFutBinPercent,
+    idBuyFutBinPrice,
 } from "../../../elementIds.constants";
 import { getValue, setValue } from "../../../services/repository";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
@@ -56,6 +56,13 @@ export const buySettingsView = function () {
         "",
         "BuyerSettings"
       )}
+      ${generateTextInput(
+      "Minimum expected profit in percent",
+      0,
+      { idAbExpectedProfitInPercent },
+      '(0 - disabled)',
+      "BuyerSettings"
+       )}
       ${generateTextInput(
         "Buy Price",
         "",

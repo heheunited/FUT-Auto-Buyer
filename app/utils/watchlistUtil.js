@@ -94,11 +94,6 @@ export const watchListUtil = function (buyerSetting) {
                   let waitingTime = (getRandWaitTimeInSeconds(buyerSetting['idAbWaitTime']) - getRandWaitTimeInSeconds('1-2'));
                   await wait(waitingTime);
 
-                  writeToLog(
-                      `@@Try to outbid. Player: ${currentItem._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(currentItem.definitionId)}`,
-                      idProgressAutobuyer
-                  );
-
                   await tryBidItems(
                     currentItem,
                     bidPrice,
@@ -251,8 +246,8 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
 
   if (isAutoBuyerActive && currentBid <= priceToBid) {
     writeToLog(
-      "Bidding on outbidded item -> Bidding Price :" + checkPrice,
-      idAutoBuyerFoundLog
+        `@@Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}`,
+        idProgressAutobuyer
     );
     await buyPlayer(player, playerName, checkPrice, sellPrice);
     buyerSetting["idAbAddBuyDelay"] && (await wait(1));

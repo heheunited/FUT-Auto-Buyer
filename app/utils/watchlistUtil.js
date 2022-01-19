@@ -91,7 +91,7 @@ export const watchListUtil = function (buyerSetting) {
                     continue;
                   }
 
-                  let waitingTime = (getRandWaitTimeInSeconds(buyerSetting['idAbWaitTime']) + getRandWaitTimeInSeconds('1-2'));
+                  let waitingTime = (getRandWaitTimeInSeconds(buyerSetting['idAbWaitTime']) - getRandWaitTimeInSeconds('1-2'));
                   await wait(waitingTime);
 
                   writeToLog(

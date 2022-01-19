@@ -1,5 +1,5 @@
 import {
-    idAbBidExact,
+    idAbBidExact, idAbBidExpiresLessThanSeconds,
     idAbBidFutBin,
     idAbBuyPrice,
     idAbCardCount, idAbExpectedProfitInPercent,
@@ -66,7 +66,7 @@ export const buySettingsView = function () {
        ${generateTextInput(
       "Bid if card expires time less than N (Seconds)",
       120,
-      { idAbExpectedProfitInPercent },
+      { idAbBidExpiresLessThanSeconds },
       '',
       "BuyerSettings"
        )}

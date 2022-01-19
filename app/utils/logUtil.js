@@ -4,7 +4,7 @@ import {
 } from "../elementIds.constants";
 import { getBuyerSettings, getValue } from "../services/repository";
 import { initializeLog } from "../views/layouts/LogView";
-import { sendNotificationToUser } from "./notificationUtil";
+import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
 
 export const writeToDebugLog = (
   ratingTxt,
@@ -59,11 +59,9 @@ export const writeToAbLog = (
 };
 
 export const showCaptchaLogs = function (captchaCloseTab) {
-  sendNotificationToUser(
-    "Captcha, please solve the problem so that the bot can work again.",
-      false,
-      getBuyerSettings()['idAbErrorsBotNotification']
-  );
+  sendNotificationToUser("Captcha, please solve the problem so that the bot can work again.");
+
+  sendErrorNotificationToUser("[!!!] Autostopping bot since Captcha got triggered")
 
   if (captchaCloseTab) {
     window.location.href = "about:blank";

@@ -7,7 +7,7 @@ import {
 } from "../services/repository";
 import { playAudio } from "../utils/commonUtil";
 import { showCaptchaLogs, writeToLog } from "../utils/logUtil";
-import { sendNotificationToUser } from "../utils/notificationUtil";
+import {sendErrorNotificationToUser, sendNotificationToUser} from "../utils/notificationUtil";
 import { stopAutoBuyer } from "./autobuyerProcessor";
 import { solveCaptcha } from "./captchaSolver";
 
@@ -35,21 +35,25 @@ export const searchErrorHandler = (
   } else {
     const buyerSetting = getBuyerSettings();
     let sendDetailedNotification = buyerSetting["idDetailedNotification"];
-    let sendBotErrorsNotifications = buyerSetting["idAbErrorsBotNotification"];
     const searchFailedCount = increAndGetStoreValue("searchFailedCount");
     if (searchFailedCount >= 3) {
       shouldStopBot = true;
+
       let message = writeToLog(
         `[!!!] Autostopping bot as search failed for ${searchFailedCount} consecutive times, please check if you can access transfer market in Web App ${response.status}`,
         idProgressAutobuyer
       );
+
       setValue(
         "lastErrorMessage",
         `Search failed ${searchFailedCount} consecutive times`
       );
-      if (sendDetailedNotification || sendBotErrorsNotifications) {
-        sendNotificationToUser(message, false, sendBotErrorsNotifications);
+
+      if (sendDetailedNotification) {
+        sendNotificationToUser(message);
       }
+
+      sendErrorNotificationToUser(message);
     } else {
       writeToLog(
         `[!!!] Search failed - ${response.status}`,

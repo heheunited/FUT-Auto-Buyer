@@ -16,7 +16,7 @@ export const sendPinEvents = (pageId) => {
   });
 };
 
-export const sendNotificationToUser = (message, isTestMessage, isErrorMessage = false) => {
+export const sendNotificationToUser = (message, isTestMessage) => {
   const buyerSetting = getBuyerSettings();
 
   if (!isTestMessage) {
@@ -27,11 +27,15 @@ export const sendNotificationToUser = (message, isTestMessage, isErrorMessage = 
     sendNotificationToExternal(buyerSetting, message);
     isTestMessage && sendUINotification("Test Notification Sent");
   }
+};
 
-  if (buyerSetting["idAbErrorsBotNotification"] && isErrorMessage) {
+export const sendErrorNotificationToUser = (message) => {
+  const buyerSetting = getBuyerSettings();
+
+  if (buyerSetting['idAbErrorsBotNotification'] && message) {
     sendNotificationToExternal(buyerSetting, message);
   }
-};
+}
 
 const sendNotificationToExternal = (buyerSetting, message) => {
   let telegramToken = buyerSetting["idTelegramBotToken"];

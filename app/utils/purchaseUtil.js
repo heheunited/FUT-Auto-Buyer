@@ -17,7 +17,7 @@ import {
 } from "./commonUtil";
 import { getSellPriceFromFutBin } from "./futbinUtil";
 import { writeToAbLog, writeToLog } from "./logUtil";
-import { sendNotificationToUser } from "./notificationUtil";
+import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
 import {calculateProfitPercent, getSellBidPrice} from "./priceUtils";
 import { appendTransactions, updateProfit } from "./statsUtil";
 
@@ -45,7 +45,6 @@ export const buyPlayer = (
         let priceTxt = formatString(price.toString(), 6);
         const notificationType = buyerSetting["idNotificationType"];
         let sendDetailedNotification = buyerSetting["idDetailedNotification"];
-        let sendBotErrorsNotifications = buyerSetting["idAbErrorsBotNotification"];
         let logMessage = "";
 
         if (data.success) {
@@ -162,7 +161,7 @@ export const buyPlayer = (
 
              writeToLog(logMessage, idProgressAutobuyer);
 
-             sendNotificationToUser(logMessage, false, buyerSetting['idAbErrorsBotNotification']);
+             sendErrorNotificationToUser(logMessage)
 
              errorCodeCountMap.clear();
              stopAutoBuyer();
@@ -211,9 +210,12 @@ export const buyPlayer = (
               );
               errorCodeCountMap.clear();
               stopAutoBuyer();
-              if (sendDetailedNotification || sendBotErrorsNotifications) {
-                sendNotificationToUser(logMessage, false, sendBotErrorsNotifications);
+
+              if (sendDetailedNotification) {
+                sendNotificationToUser(logMessage);
               }
+
+              sendErrorNotificationToUser(logMessage);
 
               if (buyerSetting["idAbResumeAfterErrorOccured"]) {
                 const pauseFor = convertRangeToSeconds(

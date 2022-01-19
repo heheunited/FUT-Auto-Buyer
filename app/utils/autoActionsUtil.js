@@ -17,7 +17,7 @@ import {
   showLoader
 } from "./commonUtil";
 import { writeToLog } from "./logUtil";
-import { sendNotificationToUser, sendUINotification } from "./notificationUtil";
+import {sendErrorNotificationToUser, sendNotificationToUser, sendUINotification} from "./notificationUtil";
 import bypassSoftban from "./softbanUtil";
 import { loadFilter } from "./userExternalUtil";
 
@@ -33,7 +33,6 @@ export const stopBotIfRequired = (buyerSetting) => {
     stopAfter = time;
   }
   let sendDetailedNotification = buyerSetting["idDetailedNotification"];
-  let sendBotErrorsNotifications = buyerSetting["idAbErrorsBotNotification"];
   let currentTime = new Date().getTime();
   let timeElapsed = (currentTime - botStartTime) / 1000 >= time;
   const isSelling = false;
@@ -59,7 +58,8 @@ export const stopBotIfRequired = (buyerSetting) => {
       let logMessage = `Autobuyer stopped (Time elapsed) | Automatic restart in ${convertSecondsToTime(autoRestart)}`;
       writeToLog(logMessage, idProgressAutobuyer);
 
-      sendNotificationToUser(logMessage, false, buyerSetting['idAbErrorsBotNotification']);
+      sendNotificationToUser(logMessage);
+      sendErrorNotificationToUser(logMessage);
     }
     stopAfter = null;
 
@@ -68,9 +68,12 @@ export const stopBotIfRequired = (buyerSetting) => {
   } else {
     if (isTransferListFull || (cardsToBuy && purchasedCardCount >= cardsToBuy)) {
 
-      if (sendDetailedNotification || sendBotErrorsNotifications) {
-        sendNotificationToUser(`Autobuyer stopped | ${message}`, false, sendBotErrorsNotifications);
+      if (sendDetailedNotification) {
+        sendNotificationToUser(`Autobuyer stopped | ${message}`);
       }
+
+      sendErrorNotificationToUser(`Autobuyer stopped | ${message}`);
+
       writeToLog(`Autobuyer stopped | ${message}`, idProgressAutobuyer);
       stopAfter = null;
       stopAutoBuyer();

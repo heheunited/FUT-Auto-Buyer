@@ -25,7 +25,12 @@ import {
 } from "../utils/commonUtil";
 import { addFutbinCachePrice } from "../utils/futbinUtil";
 import { writeToDebugLog, writeToLog } from "../utils/logUtil";
-import {sendNotificationToUser, sendPinEvents, sendUINotification} from "../utils/notificationUtil";
+import {
+  sendErrorNotificationToUser,
+  sendNotificationToUser,
+  sendPinEvents,
+  sendUINotification
+} from "../utils/notificationUtil";
 import {
   getBuyBidPrice,
   getSellBidPrice,
@@ -132,7 +137,8 @@ export const autoRestartAutoBuyer = () => {
           `Autobuyer automatically restarted.`,
           idProgressAutobuyer
       );
-      sendNotificationToUser('Autobuyer automatically restarted.', false, buyerSetting['idAbErrorsBotNotification'])
+
+      sendErrorNotificationToUser('Autobuyer automatically restarted.')
     }, autoRestart * 1000);
   }
 };

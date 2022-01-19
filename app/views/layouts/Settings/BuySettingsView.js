@@ -63,6 +63,13 @@ export const buySettingsView = function () {
       '(0 - disabled)',
       "BuyerSettings"
        )}
+       ${generateTextInput(
+      "Bid if card expires time less than N (Seconds)",
+      120,
+      { idAbExpectedProfitInPercent },
+      '',
+      "BuyerSettings"
+       )}
       ${generateTextInput(
         "Buy Price",
         "",

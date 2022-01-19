@@ -95,7 +95,7 @@ export const watchListUtil = function (buyerSetting) {
                   await wait(waitingTime);
 
                   writeToLog(
-                      `@@Try to outbid. Player: ${currentItem._staticData.name}. Bid: ${checkPrice}$. FB price: ${getFutBinPlayerPrice(currentItem.definitionId)}`,
+                      `@@Try to outbid. Player: ${currentItem._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(currentItem.definitionId)}`,
                       idProgressAutobuyer
                   );
 

@@ -191,7 +191,7 @@ export const watchListUtil = function (buyerSetting) {
                   let currentBid = (auction.currentBid || auction.startingBid);
 
                   writeToLog(
-                      `--Player: ${player._staticData.name} expired. Bid: ${currentBid}. Removed.`,
+                      `--Player: ${player._staticData.name} expired. Bid: ${currentBid}. Removed. FutBin price: ${getFutBinPlayerPrice(player.definitionId)}`,
                       idProgressAutobuyer
                   );
                 })

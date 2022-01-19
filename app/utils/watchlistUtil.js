@@ -185,6 +185,16 @@ export const watchListUtil = function (buyerSetting) {
                   `Found ${expiredItems.length} expired items and removed from watchlist`,
                   idAutoBuyerFoundLog
                 );
+
+                expiredItems.map(player => {
+                  let auction = player._auction;
+                  let currentBid = (auction.currentBid || auction.startingBid);
+
+                  writeToLog(
+                      `--Player: ${player._staticData.name} expired. Bid: ${currentBid}. Removed.`,
+                      idProgressAutobuyer
+                  );
+                })
               }
 
               services.Item.clearTransferMarketCache();

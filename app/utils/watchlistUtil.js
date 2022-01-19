@@ -95,7 +95,7 @@ export const watchListUtil = function (buyerSetting) {
                   await wait(waitingTime);
 
                   writeToLog(
-                      `@Try to bid on outbidden. Name - ${currentItem._staticData.name}. Price - ${checkPrice}$`,
+                      `@@Try to outbid. Player: ${currentItem._staticData.name}. Bid: ${checkPrice}$. FB price: ${getFutBinPlayerPrice(currentItem.definitionId)}`,
                       idProgressAutobuyer
                   );
 
@@ -191,7 +191,7 @@ export const watchListUtil = function (buyerSetting) {
                   let currentBid = (auction.currentBid || auction.startingBid);
 
                   writeToLog(
-                      `--Player: ${player._staticData.name} expired. Bid: ${currentBid}. FutBin price: ${getFutBinPlayerPrice(player.definitionId)}. Removed.`,
+                      `--Player: ${player._staticData.name} expired. Bid: ${currentBid}. FB price: ${getFutBinPlayerPrice(player.definitionId)}. Removed.`,
                       idProgressAutobuyer
                   );
                 })

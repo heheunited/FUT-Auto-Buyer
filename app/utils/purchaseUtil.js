@@ -45,6 +45,7 @@ export const buyPlayer = (
         let priceTxt = formatString(price.toString(), 6);
         const notificationType = buyerSetting["idNotificationType"];
         let sendDetailedNotification = buyerSetting["idDetailedNotification"];
+        let sendBotErrorsNotifications = buyerSetting["idAbErrorsBotNotification"];
         let logMessage = "";
 
         if (data.success) {
@@ -209,7 +210,9 @@ export const buyPlayer = (
               );
               errorCodeCountMap.clear();
               stopAutoBuyer();
-              if (sendDetailedNotification) sendNotificationToUser(logMessage);
+              if (sendDetailedNotification || sendBotErrorsNotifications) {
+                sendNotificationToUser(logMessage, false, sendBotErrorsNotifications);
+              }
 
               if (buyerSetting["idAbResumeAfterErrorOccured"]) {
                 const pauseFor = convertRangeToSeconds(

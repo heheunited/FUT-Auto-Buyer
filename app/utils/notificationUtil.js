@@ -16,14 +16,20 @@ export const sendPinEvents = (pageId) => {
   });
 };
 
-export const sendNotificationToUser = (message, isTestMessage) => {
+export const sendNotificationToUser = (message, isTestMessage, isErrorMessage = false) => {
   const buyerSetting = getBuyerSettings();
+
   if (!isTestMessage) {
     sendUINotification(message);
   }
+
   if (buyerSetting["idAbMessageNotificationToggle"] || isTestMessage) {
     sendNotificationToExternal(buyerSetting, message);
     isTestMessage && sendUINotification("Test Notification Sent");
+  }
+
+  if (buyerSetting["idAbErrorsBotNotification"] && isErrorMessage) {
+    sendNotificationToExternal(buyerSetting, message);
   }
 };
 

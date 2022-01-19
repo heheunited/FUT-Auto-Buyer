@@ -11,6 +11,7 @@ import {
   idTestNotification,
   idWinMp3,
   idFinishMp3,
+  idAbErrorsBotNotification,
 } from "../../../elementIds.constants";
 import { sendNotificationToUser } from "../../../utils/notificationUtil";
 import { generateButton } from "../../../utils/uiUtils/generateButton";
@@ -82,6 +83,12 @@ export const notificationSettingsView = function () {
     "Detailed Notifications",
     { idDetailedNotification },
     "Send detailed notification message",
+    "CommonSettings"
+  )}  
+  ${generateToggleInput(
+    "Send Bot Errors Notifications",
+    { idAbErrorsBotNotification },
+    "Send notifications about bot errors",
     "CommonSettings"
   )}
   <div class="btn-test-notification buyer-settings-field">

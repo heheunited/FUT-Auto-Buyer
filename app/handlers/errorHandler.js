@@ -35,6 +35,7 @@ export const searchErrorHandler = (
   } else {
     const buyerSetting = getBuyerSettings();
     let sendDetailedNotification = buyerSetting["idDetailedNotification"];
+    let sendBotErrorsNotifications = buyerSetting["idAbErrorsBotNotification"];
     const searchFailedCount = increAndGetStoreValue("searchFailedCount");
     if (searchFailedCount >= 3) {
       shouldStopBot = true;
@@ -46,7 +47,9 @@ export const searchErrorHandler = (
         "lastErrorMessage",
         `Search failed ${searchFailedCount} consecutive times`
       );
-      if (sendDetailedNotification) sendNotificationToUser(message);
+      if (sendDetailedNotification || sendBotErrorsNotifications) {
+        sendNotificationToUser(message, false, sendBotErrorsNotifications);
+      }
     } else {
       writeToLog(
         `[!!!] Search failed - ${response.status}`,

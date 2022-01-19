@@ -33,6 +33,7 @@ export const stopBotIfRequired = (buyerSetting) => {
     stopAfter = time;
   }
   let sendDetailedNotification = buyerSetting["idDetailedNotification"];
+  let sendBotErrorsNotifications = buyerSetting["idAbErrorsBotNotification"];
   let currentTime = new Date().getTime();
   let timeElapsed = (currentTime - botStartTime) / 1000 >= time;
   const isSelling = false;
@@ -54,11 +55,11 @@ export const stopBotIfRequired = (buyerSetting) => {
       const autoRestart = convertRangeToSeconds(
           buyerSetting["idAbRestartAfter"]
       );
-      writeToLog(
-          `Autobuyer stopped (Time elapsed) | Automatic restart in ${convertSecondsToTime(autoRestart)}`,
-          idProgressAutobuyer
-      );
 
+      let logMessage = `Autobuyer stopped (Time elapsed) | Automatic restart in ${convertSecondsToTime(autoRestart)}`;
+      writeToLog(logMessage, idProgressAutobuyer);
+
+      sendNotificationToUser(logMessage, false, buyerSetting['idAbErrorsBotNotification']);
     }
     stopAfter = null;
 
@@ -67,8 +68,9 @@ export const stopBotIfRequired = (buyerSetting) => {
   } else {
     if (isTransferListFull || (cardsToBuy && purchasedCardCount >= cardsToBuy)) {
 
-      if (sendDetailedNotification)
-        sendNotificationToUser(`Autobuyer stopped | ${message}`);
+      if (sendDetailedNotification || sendBotErrorsNotifications) {
+        sendNotificationToUser(`Autobuyer stopped | ${message}`, false, sendBotErrorsNotifications);
+      }
       writeToLog(`Autobuyer stopped | ${message}`, idProgressAutobuyer);
       stopAfter = null;
       stopAutoBuyer();

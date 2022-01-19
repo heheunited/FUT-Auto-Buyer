@@ -95,7 +95,7 @@ export const reListWithUpdatedPrice = async (items) => {
         await wait(getRandWaitTimeInSeconds('3-5'));
 
         writeToLog(
-            `#Relist unsold with update price. Name - ${player._staticData.name}. FutBin price - ${existingValue.price}$`,
+            `##Relist unsold with update price. Player: ${player._staticData.name}. FB price: ${existingValue.price}$`,
             idProgressAutobuyer
         )
 

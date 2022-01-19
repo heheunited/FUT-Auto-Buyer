@@ -88,7 +88,7 @@ export const notificationSettingsView = function () {
   ${generateToggleInput(
     "Send Bot Errors Notifications",
     { idAbErrorsBotNotification },
-    "Send notifications about bot errors",
+    "Send notifications about errors/stop bot",
     "CommonSettings"
   )}
   <div class="btn-test-notification buyer-settings-field">

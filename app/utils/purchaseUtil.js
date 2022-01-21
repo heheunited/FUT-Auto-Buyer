@@ -18,7 +18,7 @@ import {
 import { getSellPriceFromFutBin } from "./futbinUtil";
 import { writeToAbLog, writeToLog } from "./logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
-import {calculateProfitPercent, getSellBidPrice} from "./priceUtils";
+import {calculateProfitPercent, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import { appendTransactions, updateProfit } from "./statsUtil";
 
 export const checkRating = (
@@ -83,6 +83,7 @@ export const buyPlayer = (
               sym,
               playerName,
               priceTxt,
+              getFutBinPlayerPrice(player.definitionId),
               "buy",
               "success",
               sellPrice < 0
@@ -123,6 +124,7 @@ export const buyPlayer = (
                 sym,
                 playerName,
                 priceTxt,
+                getFutBinPlayerPrice(player.definitionId),
                 "bid",
                 "success",
                 "waiting to expire",
@@ -171,6 +173,7 @@ export const buyPlayer = (
             sym,
             playerName,
             priceTxt,
+            getFutBinPlayerPrice(player.definitionId),
             isBin ? "buy" : "bid",
             "failure",
             `ERR: (${errorCodeLookUp[status] + "(" + status + ")" || status})`

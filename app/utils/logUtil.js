@@ -35,6 +35,7 @@ export const writeToAbLog = (
     sym,
     ItemName,
     priceTxt,
+    futBinPrice,
     operation,
     result,
     comments,
@@ -45,7 +46,7 @@ export const writeToAbLog = (
       " | " +
       ItemName +
       " | " +
-      priceTxt +
+      priceTxt + ' :: ' + futBinPrice +
       " | " +
       operation +
       " | " +

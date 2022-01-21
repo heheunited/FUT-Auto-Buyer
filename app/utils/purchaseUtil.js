@@ -233,6 +233,8 @@ export const buyPlayer = (
             }
           }
         }
+
+
         buyerSetting["idAbAddBuyDelay"] &&
           (await wait(convertToSeconds(buyerSetting["idAbDelayToAdd"])));
         resolve();

@@ -83,7 +83,7 @@ export const buyPlayer = (
               sym,
               playerName,
               priceTxt,
-              getFutBinPlayerPrice(player.definitionId),
+              formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
               "buy",
               "success",
               sellPrice < 0
@@ -124,7 +124,7 @@ export const buyPlayer = (
                 sym,
                 playerName,
                 priceTxt,
-                getFutBinPlayerPrice(player.definitionId),
+                formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
                 "bid",
                 "success",
                 "waiting to expire",
@@ -173,7 +173,7 @@ export const buyPlayer = (
             sym,
             playerName,
             priceTxt,
-            getFutBinPlayerPrice(player.definitionId),
+            formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
             isBin ? "buy" : "bid",
             "failure",
             `ERR: (${errorCodeLookUp[status] + "(" + status + ")" || status})`

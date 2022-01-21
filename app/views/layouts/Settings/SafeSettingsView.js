@@ -67,7 +67,7 @@ export const safeSettingsView = function () {
     "\\d+[H|M|S|h|m|s]$"
   )}
   ${generateTextInput(
-      "Delay after outbid card.",
+      "Delay before outbid card.",
       "0",
       { idAbDelayAfterOutbid },
       "(eg. 7-15. 0 - disabled)",

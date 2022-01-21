@@ -28,6 +28,7 @@ export const watchListUtil = function (buyerSetting) {
     services.Item.requestWatchedItems().observe(this, function (t, response) {
       let bidPrice = buyerSetting["idAbMaxBid"];
       let sellPrice = buyerSetting["idAbSellPrice"];
+      let delayAfterOutbid = buyerSetting['idAbDelayAfterOutbid'];
       let expectedProfitPercent = buyerSetting["idAbExpectedProfitInPercent"];
       let isExpectedProfitInPercentProvided = expectedProfitPercent > 0;
       let idBuyFutBinPercent = buyerSetting['idBuyFutBinPercent'];
@@ -91,7 +92,6 @@ export const watchListUtil = function (buyerSetting) {
                     continue;
                   }
 
-                  let delayAfterOutbid = buyerSetting['idAbDelayAfterOutbid'];
                   if (delayAfterOutbid != '0') {
                     await wait(getRandWaitTimeInSeconds(delayAfterOutbid));
                   }

@@ -91,10 +91,10 @@ export const watchListUtil = function (buyerSetting) {
                     continue;
                   }
 
-                  // let waitingTime = (getRandWaitTimeInSeconds(buyerSetting['idAbWaitTime']) - getRandWaitTimeInSeconds('1-2'));
-                  // await wait(waitingTime);
-
-                  //TODO tmp commented
+                  let delayAfterOutbid = buyerSetting['idAbDelayAfterOutbid'];
+                  if (delayAfterOutbid != '0') {
+                    await wait(getRandWaitTimeInSeconds(delayAfterOutbid));
+                  }
 
                   await tryBidItems(
                     currentItem,

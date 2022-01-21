@@ -6,7 +6,7 @@ import {
   idAbWaitTime,
   idAbAddBuyDelay,
   idAbDelayToAdd,
-  idAbRestartAfter,
+  idAbRestartAfter, idAbDelayAfterOutbid,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -65,6 +65,15 @@ export const safeSettingsView = function () {
     "CommonSettings",
     "text",
     "\\d+[H|M|S|h|m|s]$"
+  )}
+  ${generateTextInput(
+      "Delay after outbid card.",
+      "0",
+      { idAbDelayAfterOutbid },
+      "(eg. 7-15. 0 - disabled)",
+      "CommonSettings",
+      "text",
+      "\\d+-\\d+$"
   )}
   ${generateTextInput(
     "Stop After",

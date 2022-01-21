@@ -46,7 +46,9 @@ export const writeToAbLog = (
       " | " +
       ItemName +
       " | " +
-      priceTxt + ' :: ' + futBinPrice +
+      priceTxt +
+      " | " +
+      futBinPrice +
       " | " +
       operation +
       " | " +

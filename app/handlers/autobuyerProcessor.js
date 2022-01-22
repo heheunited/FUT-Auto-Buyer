@@ -170,7 +170,9 @@ export const stopAutoBuyer = (isPaused) => {
     .css("color", "red")
     .html(isPaused ? "PAUSED" : "IDLE");
 
-  isPaused ? '' : sendErrorNotificationToUser('Autobuyer go IDLE.')
+  if (!isPaused) {
+    sendErrorNotificationToUser('Autobuyer go IDLE.');
+  }
 };
 
 const searchTransferMarket = function (buyerSetting) {

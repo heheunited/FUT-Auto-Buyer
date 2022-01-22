@@ -169,6 +169,8 @@ export const stopAutoBuyer = (isPaused) => {
   $("#" + idAbStatus)
     .css("color", "red")
     .html(isPaused ? "PAUSED" : "IDLE");
+
+  isPaused ? '' : sendErrorNotificationToUser('Autobuyer go IDLE.')
 };
 
 const searchTransferMarket = function (buyerSetting) {

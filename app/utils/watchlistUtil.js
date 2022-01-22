@@ -16,6 +16,7 @@ import { sendPinEvents } from "./notificationUtil";
 import {calculateProfitPercent, getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import { buyPlayer } from "./purchaseUtil";
 import { updateProfit } from "./statsUtil";
+import {increaseSentToTransferListCount} from "./transferListStatsUtils";
 
 const sellBids = new Set();
 
@@ -278,6 +279,7 @@ const sellWonItems = async (
     idProgressAutobuyer
   );
   player.clearAuction();
+  increaseSentToTransferListCount();
 
   await promisifyTimeOut(function () {
     services.Item.list(

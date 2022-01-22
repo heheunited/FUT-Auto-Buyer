@@ -32,7 +32,7 @@ import {
   sendUINotification
 } from "../utils/notificationUtil";
 import {
-  getBuyBidPrice,
+  getBuyBidPrice, getFutBinPlayerPrice,
   getSellBidPrice,
   roundOffPrice,
 } from "../utils/priceUtils";
@@ -42,6 +42,7 @@ import { setRandomInterval } from "../utils/timeOutUtil";
 import { transferListUtil } from "../utils/transferlistUtil";
 import { addUserWatchItems, watchListUtil } from "../utils/watchlistUtil";
 import { searchErrorHandler } from "./errorHandler";
+import {getSentToTransferListStatsPerSession} from "../utils/transferListStatsUtils";
 
 let interval = null;
 let passInterval = null;
@@ -171,7 +172,9 @@ export const stopAutoBuyer = (isPaused) => {
     .html(isPaused ? "PAUSED" : "IDLE");
 
   if (!isPaused) {
-    sendErrorNotificationToUser('Autobuyer go IDLE.');
+    let transferStatsMsg = getSentToTransferListStatsPerSession(true);
+    sendErrorNotificationToUser('Autobuyer go IDLE. ' + transferStatsMsg);
+    writeToLog(transferStatsMsg, idProgressAutobuyer);
   }
 };
 

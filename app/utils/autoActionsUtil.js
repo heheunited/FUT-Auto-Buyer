@@ -20,6 +20,7 @@ import { writeToLog } from "./logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser, sendUINotification} from "./notificationUtil";
 import bypassSoftban from "./softbanUtil";
 import { loadFilter } from "./userExternalUtil";
+import {getSentToTransferListStatsPerSession} from "./transferListStatsUtils";
 
 let stopAfter, pauseCycle;
 
@@ -55,11 +56,14 @@ export const stopBotIfRequired = (buyerSetting) => {
           buyerSetting["idAbRestartAfter"]
       );
 
-      let logMessage = `Autobuyer stopped (Time elapsed) | Automatic restart in ${convertSecondsToTime(autoRestart)}`;
-      writeToLog(logMessage, idProgressAutobuyer);
+      let transferStatsMsg = getSentToTransferListStatsPerSession(true);
+      let logMessage = `Autobuyer stopped (Time elapsed) | Automatic restart in ${convertSecondsToTime(autoRestart)}.`;
+      let summaryMsg = logMessage + transferStatsMsg;
+
+      writeToLog(summaryMsg, idProgressAutobuyer);
 
       sendNotificationToUser(logMessage);
-      sendErrorNotificationToUser(logMessage);
+      sendErrorNotificationToUser(summaryMsg);
     }
     stopAfter = null;
 

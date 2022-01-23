@@ -16,7 +16,7 @@ import { sendPinEvents } from "./notificationUtil";
 import {calculateProfitPercent, getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import { buyPlayer } from "./purchaseUtil";
 import { updateProfit } from "./statsUtil";
-import {increaseSentToTransferListCount} from "./transferListStatsUtils";
+import {increaseLosedTransferListCount, increaseSentToTransferListCount} from "./transferListStatsUtils";
 
 const sellBids = new Set();
 
@@ -183,6 +183,8 @@ export const watchListUtil = function (buyerSetting) {
                   `Found ${expiredItems.length} expired items and removed from watchlist`,
                   idAutoBuyerFoundLog
                 );
+
+                increaseLosedTransferListCount(expiredItems.length);
 
                 expiredItems.map(player => {
                   let auction = player._auction;

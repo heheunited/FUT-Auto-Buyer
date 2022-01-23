@@ -42,7 +42,10 @@ import { setRandomInterval } from "../utils/timeOutUtil";
 import { transferListUtil } from "../utils/transferlistUtil";
 import { addUserWatchItems, watchListUtil } from "../utils/watchlistUtil";
 import { searchErrorHandler } from "./errorHandler";
-import {getSentToTransferListStatsPerSession} from "../utils/transferListStatsUtils";
+import {
+  getLosedTransferListStatsPerSession,
+  getSentToTransferListStatsPerSession
+} from "../utils/transferListStatsUtils";
 
 let interval = null;
 let passInterval = null;
@@ -172,9 +175,10 @@ export const stopAutoBuyer = (isPaused) => {
     .html(isPaused ? "PAUSED" : "IDLE");
 
   if (!isPaused) {
-    let transferStatsMsg = !(getBuyerSettings()['idAbErrorsBotNotification']) ? getSentToTransferListStatsPerSession(true) : '';
-    sendErrorNotificationToUser('Autobuyer go IDLE. ' + transferStatsMsg);
-    writeToLog(transferStatsMsg, idProgressAutobuyer);
+    let wonTransferStatsMsg = !(getBuyerSettings()['idAbErrorsBotNotification']) ? getSentToTransferListStatsPerSession(true) : '';
+    let losedTransferStatsMsg = !(getBuyerSettings()['idAbErrorsBotNotification']) ? getLosedTransferListStatsPerSession(true) : '';
+    sendErrorNotificationToUser('Autobuyer go IDLE. ' + wonTransferStatsMsg + losedTransferStatsMsg);
+    writeToLog(wonTransferStatsMsg + losedTransferStatsMsg, idProgressAutobuyer);
   }
 };
 

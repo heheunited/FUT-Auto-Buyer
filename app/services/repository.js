@@ -28,3 +28,13 @@ export const increAndGetStoreValue = (key) => {
   setValue(key, storeValue);
   return storeValue;
 };
+
+export const increaseForCountAndGetStoreValue = (key, count) => {
+  let storeValue = getValue(key) || 0;
+
+  storeValue += count;
+
+  setValue(key, storeValue);
+
+  return storeValue;
+}

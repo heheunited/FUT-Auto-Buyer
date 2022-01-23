@@ -172,7 +172,7 @@ export const stopAutoBuyer = (isPaused) => {
     .html(isPaused ? "PAUSED" : "IDLE");
 
   if (!isPaused) {
-    let transferStatsMsg = getSentToTransferListStatsPerSession(true);
+    let transferStatsMsg = !(getBuyerSettings()['idAbErrorsBotNotification']) ? getSentToTransferListStatsPerSession(true) : '';
     sendErrorNotificationToUser('Autobuyer go IDLE. ' + transferStatsMsg);
     writeToLog(transferStatsMsg, idProgressAutobuyer);
   }

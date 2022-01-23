@@ -1,10 +1,10 @@
 import {getValue, increAndGetStoreValue, increaseForCountAndGetStoreValue, setValue} from "../services/repository";
 
 const sendToTransferListPerSessionKey = 'sendToTransferListPerSession';
-const losedTransferListCountKey = 'losedTransferListCount';
+const losedTransferListCountKey = 'losedTransferListCountPerSession';
 
 const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
-    let message = `Count sent to transfer list players per this sessions: ${_getSentToTransferListStats()}.`
+    let message = `\n Count sent to transfer list players per this sessions: ${_getSentToTransferListStats()}.`
 
     if (isNeedReset) {
         _resetSentToTransferListStats();
@@ -14,7 +14,7 @@ const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
 }
 
 const getLosedTransferListStatsPerSession = (isNeedReset = false) => {
-    let message = `Count losed transfer list players per this sessions: ${_getLosedTransferListStats()}.`
+    let message = `\n Count losed transfer list players per this sessions: ${_getLosedTransferListStats()}. \n`
 
     if (isNeedReset) {
         _resetLosedTransferListStats();
@@ -23,6 +23,12 @@ const getLosedTransferListStatsPerSession = (isNeedReset = false) => {
     return message;
 }
 
+const getSummaryTransferListStats = (isNeedReset = false) => {
+    let sentMessage = getSentToTransferListStatsPerSession(isNeedReset);
+    let losedMessage = getLosedTransferListStatsPerSession(isNeedReset);
+
+    return sentMessage + losedMessage;
+}
 
 const _getSentToTransferListStats = () => {
     return (getValue(sendToTransferListPerSessionKey) || 0);
@@ -37,7 +43,7 @@ const _resetSentToTransferListStats = () => {
 }
 
 const _resetLosedTransferListStats = () => {
-    setValue(sendToTransferListPerSessionKey, 0)
+    setValue(losedTransferListCountKey, 0)
 }
 
 const increaseSentToTransferListCount = () => {
@@ -52,5 +58,6 @@ export {
     getSentToTransferListStatsPerSession,
     increaseSentToTransferListCount,
     getLosedTransferListStatsPerSession,
-    increaseLosedTransferListCount
+    increaseLosedTransferListCount,
+    getSummaryTransferListStats
 }

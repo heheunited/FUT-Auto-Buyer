@@ -44,7 +44,7 @@ import { addUserWatchItems, watchListUtil } from "../utils/watchlistUtil";
 import { searchErrorHandler } from "./errorHandler";
 import {
   getLosedTransferListStatsPerSession,
-  getSentToTransferListStatsPerSession
+  getSentToTransferListStatsPerSession, getSummaryTransferListStats
 } from "../utils/transferListStatsUtils";
 
 let interval = null;
@@ -175,10 +175,9 @@ export const stopAutoBuyer = (isPaused) => {
     .html(isPaused ? "PAUSED" : "IDLE");
 
   if (!isPaused) {
-    let wonTransferStatsMsg = !(getBuyerSettings()['idAbErrorsBotNotification']) ? getSentToTransferListStatsPerSession(true) : '';
-    let losedTransferStatsMsg = !(getBuyerSettings()['idAbErrorsBotNotification']) ? getLosedTransferListStatsPerSession(true) : '';
-    sendErrorNotificationToUser('Autobuyer go IDLE. ' + wonTransferStatsMsg + losedTransferStatsMsg);
-    writeToLog(wonTransferStatsMsg + losedTransferStatsMsg, idProgressAutobuyer);
+    let summaryStatsMsg = !(getBuyerSettings()['idAbErrorsBotNotification']) ? getSummaryTransferListStats(true) : '';
+    sendErrorNotificationToUser('Autobuyer go IDLE. ' + summaryStatsMsg);
+    writeToLog(summaryStatsMsg, idProgressAutobuyer);
   }
 };
 

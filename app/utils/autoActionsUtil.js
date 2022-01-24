@@ -21,8 +21,6 @@ import {sendErrorNotificationToUser, sendNotificationToUser, sendUINotification}
 import bypassSoftban from "./softbanUtil";
 import { loadFilter } from "./userExternalUtil";
 import {
-  getLosedTransferListStatsPerSession,
-  getSentToTransferListStatsPerSession,
   getSummaryTransferListStats
 } from "./transferListStatsUtils";
 

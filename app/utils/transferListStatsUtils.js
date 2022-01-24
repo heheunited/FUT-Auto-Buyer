@@ -1,63 +1,66 @@
-import {getValue, increAndGetStoreValue, increaseForCountAndGetStoreValue, setValue} from "../services/repository";
+import {
+    getBuyerSettings,
+    getValue,
+    increAndGetStoreValue,
+    increaseForCountAndGetStoreValue,
+    setValue
+} from "../services/repository";
 
+const buyerSetting = getBuyerSettings();
 const sendToTransferListPerSessionKey = 'sendToTransferListPerSession';
-const losedTransferListCountKey = 'losedTransferListCountPerSession';
+const lessThanMaxBidLosedTransferListCountKey = 'lessThanMaxBidLosedTransferListCountKey';
+const higherThanMaxBidLosedTransferListCountKey = 'higherThanMaxBidLosedTransferListCountKey';
 
 const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
-    let message = `\n Count sent to transfer list players per this sessions: ${_getSentToTransferListStats()}.`
+    let message = `\nSent to transfer list items. Count: ${_getTransferListStats(sendToTransferListPerSessionKey)}.`
 
     if (isNeedReset) {
-        _resetSentToTransferListStats();
+        _resetTransferListStats(sendToTransferListPerSessionKey);
     }
 
     return message;
 }
 
-const getLosedTransferListStatsPerSession = (isNeedReset = false) => {
-    let message = `\n Count losed transfer list players per this sessions: ${_getLosedTransferListStats()}. \n`
+const getTotalLosedTransferListStatsPerSession = (isNeedReset = false) => {
+    let lessThanMaxBidMsg = `\nLosed items with current bid < ${buyerSetting['ibMaxBid']}. Count: ${_getTransferListStats(lessThanMaxBidLosedTransferListCountKey)}. \n`
+    let higherThanMaxBidMsg = `\nLosed items with current bid > ${buyerSetting['ibMaxBid']}. Count: ${_getTransferListStats(higherThanMaxBidLosedTransferListCountKey)}. \n`
 
     if (isNeedReset) {
-        _resetLosedTransferListStats();
+        _resetTransferListStats(lessThanMaxBidLosedTransferListCountKey);
+        _resetTransferListStats(higherThanMaxBidLosedTransferListCountKey);
     }
 
-    return message;
+    return lessThanMaxBidMsg + higherThanMaxBidMsg;
 }
 
 const getSummaryTransferListStats = (isNeedReset = false) => {
     let sentMessage = getSentToTransferListStatsPerSession(isNeedReset);
-    let losedMessage = getLosedTransferListStatsPerSession(isNeedReset);
+    let losedMessage = getTotalLosedTransferListStatsPerSession(isNeedReset);
 
     return sentMessage + losedMessage;
 }
 
-const _getSentToTransferListStats = () => {
-    return (getValue(sendToTransferListPerSessionKey) || 0);
+const _getTransferListStats = (key, defaultValue = 0) => {
+    return (getValue(key) || defaultValue);
 }
 
-const _getLosedTransferListStats = () => {
-    return (getValue(losedTransferListCountKey) || 0);
-}
-
-const _resetSentToTransferListStats = () => {
-    setValue(sendToTransferListPerSessionKey, 0)
-}
-
-const _resetLosedTransferListStats = () => {
-    setValue(losedTransferListCountKey, 0)
+const _resetTransferListStats = (key, newValue = 0) => {
+    setValue(key, newValue)
 }
 
 const increaseSentToTransferListCount = () => {
     increAndGetStoreValue(sendToTransferListPerSessionKey);
 }
 
-const increaseLosedTransferListCount = (count) => {
-    increaseForCountAndGetStoreValue(losedTransferListCountKey, count);
+const increaseTotalLosedTransferListCount = (lessThanMaxBid = 0, greaterThanMaxBid = 0) => {
+    increaseForCountAndGetStoreValue(lessThanMaxBidLosedTransferListCountKey, lessThanMaxBid);
+    increaseForCountAndGetStoreValue(higherThanMaxBidLosedTransferListCountKey, greaterThanMaxBid);
 }
 
 export {
     getSentToTransferListStatsPerSession,
     increaseSentToTransferListCount,
-    getLosedTransferListStatsPerSession,
-    increaseLosedTransferListCount,
+    getTotalLosedTransferListStatsPerSession,
+    increaseTotalLosedTransferListCount,
     getSummaryTransferListStats
 }

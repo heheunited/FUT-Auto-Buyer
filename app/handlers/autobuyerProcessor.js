@@ -42,10 +42,7 @@ import { setRandomInterval } from "../utils/timeOutUtil";
 import { transferListUtil } from "../utils/transferlistUtil";
 import { addUserWatchItems, watchListUtil } from "../utils/watchlistUtil";
 import { searchErrorHandler } from "./errorHandler";
-import {
-  getLosedTransferListStatsPerSession,
-  getSentToTransferListStatsPerSession, getSummaryTransferListStats
-} from "../utils/transferListStatsUtils";
+import {getSummaryTransferListStats} from "../utils/transferListStatsUtils";
 
 let interval = null;
 let passInterval = null;

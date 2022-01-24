@@ -1,4 +1,5 @@
 import {
+  idAbMaxBid,
   idAutoBuyerFoundLog,
   idProgressAutobuyer,
 } from "../elementIds.constants";
@@ -16,7 +17,7 @@ import { sendPinEvents } from "./notificationUtil";
 import {calculateProfitPercent, getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import { buyPlayer } from "./purchaseUtil";
 import { updateProfit } from "./statsUtil";
-import {increaseLosedTransferListCount, increaseSentToTransferListCount} from "./transferListStatsUtils";
+import {increaseTotalLosedTransferListCount, increaseSentToTransferListCount} from "./transferListStatsUtils";
 
 const sellBids = new Set();
 
@@ -184,7 +185,21 @@ export const watchListUtil = function (buyerSetting) {
                   idAutoBuyerFoundLog
                 );
 
-                increaseLosedTransferListCount(expiredItems.length);
+                let userMaxBid = buyerSetting['ibMaxBid'];
+                let countExpiredItemsWithCurrentBidLessThanUserMaxBid = expiredItems.filter((player) => {
+                      let playerAuction = player._auction;
+                      let currentBid = (playerAuction.currentBid || playerAuction.startingBid);
+
+                      return currentBid <= userMaxBid;
+                    }
+                ).length
+
+                let countExpiredItemsWithCurrentBidGreaterThanUserMaxBid = expiredItems.length - countExpiredItemsWithCurrentBidLessThanUserMaxBid;
+
+                increaseTotalLosedTransferListCount(
+                    countExpiredItemsWithCurrentBidLessThanUserMaxBid,
+                    countExpiredItemsWithCurrentBidGreaterThanUserMaxBid
+                );
 
                 expiredItems.map(player => {
                   let auction = player._auction;

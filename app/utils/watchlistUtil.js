@@ -185,7 +185,7 @@ export const watchListUtil = function (buyerSetting) {
                   idAutoBuyerFoundLog
                 );
 
-                let userMaxBid = buyerSetting['ibMaxBid'];
+                let userMaxBid = buyerSetting['idAbMaxBid'];
                 let countExpiredItemsWithCurrentBidLessThanUserMaxBid = expiredItems.filter((player) => {
                       let playerAuction = player._auction;
                       let currentBid = (playerAuction.currentBid || playerAuction.startingBid);

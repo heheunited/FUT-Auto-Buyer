@@ -206,7 +206,7 @@ export const watchListUtil = function (buyerSetting) {
                   let currentBid = (auction.currentBid || auction.startingBid);
 
                   writeToLog(
-                      `--Removed Player: ${player._staticData.name} expired. Last Bid: ${currentBid}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
+                      `--Removed Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
                       idProgressAutobuyer
                   );
                 })
@@ -282,7 +282,7 @@ const sellWonItems = async (
   profit
 ) => {
   let auction = player._auction;
-  let playerName = formatString(player._staticData.name, 15);
+  let playerName = formatString(player._staticData.name, 12);
   sellBids.add(auction.tradeId);
   writeToLog(
     " ($$$) " +

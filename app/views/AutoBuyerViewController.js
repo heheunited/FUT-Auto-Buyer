@@ -30,7 +30,7 @@ JSUtils.inherits(AutoBuyerViewController, UTMarketSearchFiltersViewController);
 AutoBuyerViewController.prototype.init = function () {
   searchFiltersViewInit.call(this);
   let view = this.getView();
-  if (!isPhone()) view.__root.style = "width: 48%; float: left;";
+  if (!isPhone()) view.__root.style = "width: 46%; float: left;";
   setValue("AutoBuyerInstance", this);
 
   const menuItems = generateMenuItems.call(this);

@@ -8,10 +8,10 @@ import {
 
 const sendToTransferListPerSessionKey = 'sendToTransferListPerSession';
 const lessThanMaxBidLosedTransferListCountKey = 'lessThanMaxBidLosedTransferListCountKey';
-const higherThanMaxBidLosedTransferListCountKey = 'higherThanMaxBidLosedTransferListCountKey';
+const greaterThanMaxBidLosedTransferListCountKey = 'greaterThanMaxBidLosedTransferListCountKey';
 
 const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
-    let message = `\n Sent to transfer list items. Count: ${_getTransferListStats(sendToTransferListPerSessionKey)}.`
+    let message = `Sent to transfer list items. Count: ${_getTransferListStats(sendToTransferListPerSessionKey)}.`
 
     if (isNeedReset) {
         _resetTransferListStats(sendToTransferListPerSessionKey);
@@ -24,12 +24,12 @@ const getTotalLosedTransferListStatsPerSession = (isNeedReset = false) => {
     const buyerSetting = getBuyerSettings();
     let idAbMaxBid = buyerSetting['idAbMaxBid'];
 
-    let lessThanMaxBidMsg = `\n Losed items with current bid < ${idAbMaxBid}. Count: ${_getTransferListStats(lessThanMaxBidLosedTransferListCountKey)}. `
-    let higherThanMaxBidMsg = `\n Losed items with current bid > ${idAbMaxBid}. Count: ${_getTransferListStats(higherThanMaxBidLosedTransferListCountKey)}. `
+    let lessThanMaxBidMsg = `Losed items with current bid < ${idAbMaxBid}. Count: ${_getTransferListStats(lessThanMaxBidLosedTransferListCountKey)}. `
+    let higherThanMaxBidMsg = `Losed items with current bid > ${idAbMaxBid}. Count: ${_getTransferListStats(greaterThanMaxBidLosedTransferListCountKey)}. `
 
     if (isNeedReset) {
         _resetTransferListStats(lessThanMaxBidLosedTransferListCountKey);
-        _resetTransferListStats(higherThanMaxBidLosedTransferListCountKey);
+        _resetTransferListStats(greaterThanMaxBidLosedTransferListCountKey);
     }
 
     return lessThanMaxBidMsg + higherThanMaxBidMsg;
@@ -56,7 +56,7 @@ const increaseSentToTransferListCount = () => {
 
 const increaseTotalLosedTransferListCount = (lessThanMaxBid = 0, greaterThanMaxBid = 0) => {
     increaseForCountAndGetStoreValue(lessThanMaxBidLosedTransferListCountKey, lessThanMaxBid);
-    increaseForCountAndGetStoreValue(higherThanMaxBidLosedTransferListCountKey, greaterThanMaxBid);
+    increaseForCountAndGetStoreValue(greaterThanMaxBidLosedTransferListCountKey, greaterThanMaxBid);
 }
 
 export {

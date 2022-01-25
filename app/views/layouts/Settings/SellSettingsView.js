@@ -81,7 +81,7 @@ export const sellSettingsView = function () {
       "BuyerSettings"
     )}
     ${generateTextInput(
-      "Minimal Sell Price",
+      "Minimal Sell/Relist Price",
       0,
       { idAbMinSellPrice },
       `(0 - disabled)`,

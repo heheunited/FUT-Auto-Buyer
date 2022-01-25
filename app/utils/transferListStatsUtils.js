@@ -6,7 +6,6 @@ import {
     setValue
 } from "../services/repository";
 
-const buyerSetting = getBuyerSettings();
 const sendToTransferListPerSessionKey = 'sendToTransferListPerSession';
 const lessThanMaxBidLosedTransferListCountKey = 'lessThanMaxBidLosedTransferListCountKey';
 const higherThanMaxBidLosedTransferListCountKey = 'higherThanMaxBidLosedTransferListCountKey';
@@ -22,6 +21,7 @@ const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
 }
 
 const getTotalLosedTransferListStatsPerSession = (isNeedReset = false) => {
+    const buyerSetting = getBuyerSettings();
     let idAbMaxBid = buyerSetting['idAbMaxBid'];
 
     let lessThanMaxBidMsg = `\n Losed items with current bid < ${idAbMaxBid}. Count: ${_getTransferListStats(lessThanMaxBidLosedTransferListCountKey)}. `

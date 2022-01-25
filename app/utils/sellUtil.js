@@ -1,4 +1,4 @@
-import { convertToSeconds, getRandWaitTime, wait, getRandNumberInRange } from "./commonUtil";
+import { convertToSeconds, getRandNumberInRange } from "./commonUtil";
 import { getBuyBidPrice, getSellBidPrice, roundOffPrice } from "./priceUtils";
 
 export const listForPrice = async (sellPrice, player, futBinPercent) => {

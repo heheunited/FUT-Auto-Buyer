@@ -9,7 +9,7 @@ import {
   idSellCheckBuyPrice,
   idFutBinDuration,
   idAbDontMoveWon,
-  idAbRelistUnsoldWithUpdatePrice,
+  idAbRelistUnsoldWithUpdatePrice, idAbMinSellPrice,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -78,6 +78,13 @@ export const sellSettingsView = function () {
       "",
       { idAbSellPrice },
       `(-1 to send to transferlist)<br />Receive After Tax: <span id=${idSellAfterTax}>0</span>`,
+      "BuyerSettings"
+    )}
+    ${generateTextInput(
+      "Minimal Sell Price",
+      0,
+      { idAbMinSellPrice },
+      `(0 - disabled)`,
       "BuyerSettings"
     )}
     ${generateTextInput(

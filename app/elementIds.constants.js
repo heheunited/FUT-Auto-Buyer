@@ -12,6 +12,7 @@ export const idAbBidExact = "elem_" + generateId(15);
 export const idAbExpectedProfitInPercent = "elem_" + generateId(15);
 export const idAbBidExpiresLessThanSeconds = "elem_" + generateId(15);
 export const idAbSellPrice = "elem_" + generateId(15);
+export const idAbMinSellPrice = "elem_" + generateId(15);
 export const idAbMinDeleteCount = "elem_" + generateId(15);
 export const idAbSellToggle = "elem_" + generateId(15);
 export const idAbRelistUnsoldWithUpdatePrice = "elem_" + generateId(15);

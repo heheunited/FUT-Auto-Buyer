@@ -92,6 +92,13 @@ export const reListWithUpdatedPrice = async (items) => {
             continue;
         }
 
+        let playerPrice = existingValue.price;
+
+        let userMinimalSellPrice = buyerSetting['idAbMinSellPrice'];
+        if (userMinimalSellPrice != 0) {
+            playerPrice = playerPrice >= userMinimalSellPrice ? playerPrice : userMinimalSellPrice;
+        }
+
         await wait(getRandWaitTimeInSeconds('3-5'));
 
         writeToLog(
@@ -99,6 +106,6 @@ export const reListWithUpdatedPrice = async (items) => {
             idProgressAutobuyer
         )
 
-        await listForPrice(existingValue.price, player, sellPercent)
+        await listForPrice(playerPrice, player, sellPercent)
     }
 }

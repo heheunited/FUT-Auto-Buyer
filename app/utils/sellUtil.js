@@ -1,5 +1,5 @@
 import { convertToSeconds, getRandNumberInRange } from "./commonUtil";
-import { getBuyBidPrice, getSellBidPrice, roundOffPrice } from "./priceUtils";
+import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice, roundOffPrice} from "./priceUtils";
 import {writeToLog} from "./logUtil";
 import {idProgressAutobuyer} from "../elementIds.constants";
 
@@ -25,7 +25,7 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
     calculatedPrice = roundOffPrice(calculatedPrice, 200);
 
     writeToLog(
-        `##Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice} FB price: ${existingValue.price}$`,
+        `##Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}$`,
         idProgressAutobuyer
     )
 

@@ -99,7 +99,7 @@ export const reListWithUpdatedPrice = async (items) => {
             playerPrice = playerPrice >= userMinimalSellPrice ? playerPrice : userMinimalSellPrice;
         }
 
-        await wait(getRandWaitTimeInSeconds('3-5'));
         await listForPrice(playerPrice, player, sellPercent)
+        await wait(getRandWaitTimeInSeconds(buyerSetting['idAbDelayAfterRelist']));
     }
 }

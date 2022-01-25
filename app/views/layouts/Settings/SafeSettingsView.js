@@ -6,7 +6,7 @@ import {
   idAbWaitTime,
   idAbAddBuyDelay,
   idAbDelayToAdd,
-  idAbRestartAfter, idAbDelayAfterOutbid,
+  idAbRestartAfter, idAbDelayAfterOutbid, idAbDelayAfterRelist,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -91,6 +91,15 @@ export const safeSettingsView = function () {
       "CommonSettings",
       "text",
       "\\d+-\\d+[H|M|S|h|m|s]$"
+  )}
+ ${generateTextInput(
+      "Delay after relist (M)",
+      "3-5",
+      { idAbDelayAfterRelist },
+      "",
+      "CommonSettings",
+      "text",
+      "\\d+-\\d+$"
   )} 
   </div>`;
 };

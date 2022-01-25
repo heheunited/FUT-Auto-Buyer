@@ -290,8 +290,8 @@ const sellWonItems = async (
       "[" +
       player._auction.tradeId +
       "] -- Selling for: " +
-      sellPrice + `, FB price: ${getFutBinPlayerPrice(player.definitionId)}` +
-      ", Profit: " +
+      sellPrice + `. FB price: ${getFutBinPlayerPrice(player.definitionId)}` +
+      ". Profit: " +
       profit,
     idProgressAutobuyer
   );

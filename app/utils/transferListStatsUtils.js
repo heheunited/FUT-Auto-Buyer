@@ -12,7 +12,7 @@ const lessThanMaxBidLosedTransferListCountKey = 'lessThanMaxBidLosedTransferList
 const higherThanMaxBidLosedTransferListCountKey = 'higherThanMaxBidLosedTransferListCountKey';
 
 const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
-    let message = `\nSent to transfer list items. Count: ${_getTransferListStats(sendToTransferListPerSessionKey)}.`
+    let message = `\n Sent to transfer list items. Count: ${_getTransferListStats(sendToTransferListPerSessionKey)}.`
 
     if (isNeedReset) {
         _resetTransferListStats(sendToTransferListPerSessionKey);
@@ -24,8 +24,8 @@ const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
 const getTotalLosedTransferListStatsPerSession = (isNeedReset = false) => {
     let idAbMaxBid = buyerSetting['idAbMaxBid'];
 
-    let lessThanMaxBidMsg = `\nLosed items with current bid < ${idAbMaxBid}. Count: ${_getTransferListStats(lessThanMaxBidLosedTransferListCountKey)}. `
-    let higherThanMaxBidMsg = `\nLosed items with current bid > ${idAbMaxBid}. Count: ${_getTransferListStats(higherThanMaxBidLosedTransferListCountKey)}. `
+    let lessThanMaxBidMsg = `\n Losed items with current bid < ${idAbMaxBid}. Count: ${_getTransferListStats(lessThanMaxBidLosedTransferListCountKey)}. `
+    let higherThanMaxBidMsg = `\n Losed items with current bid > ${idAbMaxBid}. Count: ${_getTransferListStats(higherThanMaxBidLosedTransferListCountKey)}. `
 
     if (isNeedReset) {
         _resetTransferListStats(lessThanMaxBidLosedTransferListCountKey);

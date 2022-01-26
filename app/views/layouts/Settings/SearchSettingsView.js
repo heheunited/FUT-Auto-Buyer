@@ -13,7 +13,7 @@ import {
   idAddIgnorePlayersList,
   idRemoveIgnorePlayers,
   idAbIgnoreAllowToggle,
-  idAbBuyFutMinimalPrice,
+  idAbBuyFutMinimalPrice, idAbBuyFutMaximalPrice,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { checkAndAppendOption } from "../../../utils/filterUtil";
@@ -132,10 +132,17 @@ export const searchSettingsView = function () {
       "BuyerSettings"
     )}
     ${generateTextInput(
-      "Player FutBin minimal price",
+      "FutBin minimal price",
       0,
       { idAbBuyFutMinimalPrice },
-      "",
+      "(0 - disabled)",
+      "BuyerSettings"
+    )}
+    ${generateTextInput(
+      "FutBin maximal price",
+      0,
+      { idAbBuyFutMaximalPrice },
+      "(0 - disabled)",
       "BuyerSettings"
     )}
     ${generateTextInput(

@@ -195,6 +195,9 @@ const searchTransferMarket = function (buyerSetting) {
     let userFutBinMinimalPrice = buyerSetting["idAbBuyFutMinimalPrice"];
     let isUserFutBinMinimalPriceProvided = userFutBinMinimalPrice > 0;
 
+    let userFutBinMaximalPrice = buyerSetting["idAbBuyFutMaximalPrice"];
+    let isUserFutBinMaximalPriceProvided = userFutBinMaximalPrice > 0;
+
     let expectedProfitInPercent = buyerSetting['idAbExpectedProfitInPercent'];
     let isExpectedProfitInPercentProvided = expectedProfitInPercent > 0;
 
@@ -320,6 +323,10 @@ const searchTransferMarket = function (buyerSetting) {
                 ? userFutBinMinimalPrice <= currentPlayerFutBinPrice
                 : false;
 
+            const isMaximalPLayerFutBinPriceExceeded = isUserFutBinMaximalPriceProvided
+                ? currentPlayerFutBinPrice > userFutBinMaximalPrice
+                : false;
+
             let usersellPrice = buyerSetting["idAbSellPrice"];
             let minRating = buyerSetting["idAbMinRating"];
             let maxRating = buyerSetting["idAbMaxRating"];
@@ -378,7 +385,12 @@ const searchTransferMarket = function (buyerSetting) {
             }
 
             if (isUserFutBinMinimalPriceProvided && !isMinimalPLayerFutBinPriceCorrect) {
-              logWrite("skip >>> (min futbin price > player futbin price)");
+              logWrite("skip >>> (min futbin price > futbin price)");
+              continue;
+            }
+
+            if (isUserFutBinMaximalPriceProvided && isMaximalPLayerFutBinPriceExceeded) {
+              logWrite("skip >>> (futbin price > max futbin price)");
               continue;
             }
 

@@ -2,12 +2,14 @@ import { convertToSeconds, getRandNumberInRange } from "./commonUtil";
 import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice, roundOffPrice} from "./priceUtils";
 import {writeToLog} from "./logUtil";
 import {idProgressAutobuyer} from "../elementIds.constants";
+import {getBuyerSettings} from "../services/repository";
 
 export const listForPrice = async (sellPrice, player, futBinPercent) => {
+  let buyerSetting = getBuyerSettings();
   await getPriceLimits(player);
   if (sellPrice) {
     futBinPercent = getRandNumberInRange(futBinPercent) || 100;
-    const duration = "1H";
+    const duration = buyerSetting['idFutBinDuration'];
     let calculatedPrice = (sellPrice * futBinPercent) / 100;
     if (player.hasPriceLimits()) {
       calculatedPrice = roundOffPrice(

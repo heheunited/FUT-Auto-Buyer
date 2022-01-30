@@ -24,7 +24,7 @@ const validateSettings = () => {
 export const saveFilterDetails = function (self) {
   const btnContext = this;
   $(btnContext).addClass("active");
-  let buyerSetting = getBuyerSettings();
+  let buyerSetting = getBuyerSettings(true);
   let commonSettings = getValue("CommonSettings");
   setTimeout(function () {
     let settingsJson = {};
@@ -33,6 +33,7 @@ export const saveFilterDetails = function (self) {
       criteria: viewModel.searchCriteria,
       playerData: viewModel.playerData,
       buyerSettings: buyerSetting,
+      commonSettings: commonSettings
     };
 
     let currentFilterName = $(`${filterDropdownId} option`)
@@ -79,13 +80,14 @@ export const loadFilter = async function (currentFilterName) {
   const filterSetting = getValue("filters")[currentFilterName];
   if (!filterSetting) return;
   let {
-    searchCriteria: { criteria, playerData, buyerSettings },
+    searchCriteria: { criteria, playerData, buyerSettings, commonSettings},
   } = JSON.parse(filterSetting);
+  setValue("CommonSettings", ...commonSettings)
   await updateCommonSettings();
-  //TODO removed sync common settings
+  const cmnSettings = getValue("CommonSettings") || {};
   setValue("BuyerSettings", buyerSettings);
   setValue("currentFilter", currentFilterName);
-  buyerSettings = { ...buyerSettings};
+  buyerSettings = { ...buyerSettings, ...cmnSettings };
   this._viewmodel.playerData = {};
   Object.assign(this._viewmodel.searchCriteria, criteria);
   Object.assign(this._viewmodel.playerData, playerData);

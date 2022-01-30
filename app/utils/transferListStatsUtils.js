@@ -21,10 +21,10 @@ const reListPlayerRequestsCountKey = 'reListPlayerRequestsCountKey';
 const removePlayerRequestsCountKey = 'removePlayerRequestsCountKey';
 
 const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
-    let message = ` Sent to transfer list items, count: ${_getTransferListStats(sendToTransferListPerSessionKey)} :::`;
+    let message = ` Sent to transfer list items, count: ${_getStatsValue(sendToTransferListPerSessionKey)} :::`;
 
     if (isNeedReset) {
-        _resetTransferListStats(sendToTransferListPerSessionKey);
+        _resetStatsValue(sendToTransferListPerSessionKey);
     }
 
     return message;
@@ -34,22 +34,22 @@ const getTotalLosedTransferListStatsPerSession = (isNeedReset = false) => {
     const buyerSetting = getBuyerSettings();
     let idAbMaxBid = buyerSetting['idAbMaxBid'];
 
-    let lessThanMaxBidMsg = ` Losed items with current bid < ${idAbMaxBid}, count: ${_getTransferListStats(lessThanMaxBidLosedTransferListCountKey)} :::`;
-    let higherThanMaxBidMsg = ` Losed items with current bid > ${idAbMaxBid}, count: ${_getTransferListStats(greaterThanMaxBidLosedTransferListCountKey)} :::`;
+    let lessThanMaxBidMsg = ` Losed items with current bid < ${idAbMaxBid}, count: ${_getStatsValue(lessThanMaxBidLosedTransferListCountKey)} :::`;
+    let higherThanMaxBidMsg = ` Losed items with current bid > ${idAbMaxBid}, count: ${_getStatsValue(greaterThanMaxBidLosedTransferListCountKey)} :::`;
 
     if (isNeedReset) {
-        _resetTransferListStats(lessThanMaxBidLosedTransferListCountKey);
-        _resetTransferListStats(greaterThanMaxBidLosedTransferListCountKey);
+        _resetStatsValue(lessThanMaxBidLosedTransferListCountKey);
+        _resetStatsValue(greaterThanMaxBidLosedTransferListCountKey);
     }
 
     return lessThanMaxBidMsg + higherThanMaxBidMsg;
 }
 
 const getEstimatedProfitStatsPerSession = (isNeedReset = false) => {
-    let estimatedProfitMsg = ` Estimated Profit: ${_getTransferListStats(estimatedProfitKey)} `
+    let estimatedProfitMsg = ` Estimated Profit: ${_getStatsValue(estimatedProfitKey)} `
 
     if (isNeedReset) {
-        _resetTransferListStats(estimatedProfitKey);
+        _resetStatsValue(estimatedProfitKey);
     }
 
     return estimatedProfitMsg;
@@ -64,10 +64,10 @@ const getSummaryTransferListStats = (isNeedReset = false) => {
 }
 
 const getTradeItemsStatisticForBackend = () => {
-    const sttlCount = _getTransferListStats(sendToTransferListPerSessionKey);
-    const llmbCount = _getTransferListStats(lessThanMaxBidLosedTransferListCountKey);
-    const ltmbCount = _getTransferListStats(greaterThanMaxBidLosedTransferListCountKey);
-    const estimatedProfit = _getTransferListStats(estimatedProfitKey);
+    const sttlCount = _getStatsValue(sendToTransferListPerSessionKey);
+    const llmbCount = _getStatsValue(lessThanMaxBidLosedTransferListCountKey);
+    const ltmbCount = _getStatsValue(greaterThanMaxBidLosedTransferListCountKey);
+    const estimatedProfit = _getStatsValue(estimatedProfitKey);
 
     if (sttlCount === 0 && llmbCount === 0 && ltmbCount === 0 && estimatedProfit === 0) {
         return false;
@@ -83,14 +83,14 @@ const getTradeItemsStatisticForBackend = () => {
 
 const getRequestsStatisticForBackend = (isNeedReset) => {
 
-    const totalBuyPlayerRequestsCount = _getTransferListStats(totalBuyPlayerRequestsCountKey);
-    const bidPlayerRequestsCount = _getTransferListStats(bidPlayerRequestsCountKey);
-    const buyPlayerRequestsCount = _getTransferListStats(buyPlayerRequestsCountKey);
-    const outbidPlayerRequestsCount = _getTransferListStats(outbidPlayerRequestsCountKey);
-    const searchRequestCount = _getTransferListStats(searchRequestsCountKey);
-    const listPlayerRequestsCount = _getTransferListStats(listPlayerRequestsCountKey);
-    const reListPlayerRequestsCount = _getTransferListStats(reListPlayerRequestsCountKey);
-    const removePlayerRequestsCount = _getTransferListStats(removePlayerRequestsCountKey);
+    const totalBuyPlayerRequestsCount = _getStatsValue(totalBuyPlayerRequestsCountKey);
+    const bidPlayerRequestsCount = _getStatsValue(bidPlayerRequestsCountKey);
+    const buyPlayerRequestsCount = _getStatsValue(buyPlayerRequestsCountKey);
+    const outbidPlayerRequestsCount = _getStatsValue(outbidPlayerRequestsCountKey);
+    const searchRequestCount = _getStatsValue(searchRequestsCountKey);
+    const listPlayerRequestsCount = _getStatsValue(listPlayerRequestsCountKey);
+    const reListPlayerRequestsCount = _getStatsValue(reListPlayerRequestsCountKey);
+    const removePlayerRequestsCount = _getStatsValue(removePlayerRequestsCountKey);
 
     if (
         !totalBuyPlayerRequestsCount &&
@@ -106,14 +106,14 @@ const getRequestsStatisticForBackend = (isNeedReset) => {
     }
 
     if (isNeedReset) {
-        _resetTransferListStats(buyPlayerRequestsCountKey);
-        _resetTransferListStats(bidPlayerRequestsCountKey);
-        _resetTransferListStats(outbidPlayerRequestsCountKey);
-        _resetTransferListStats(searchRequestsCountKey);
-        _resetTransferListStats(totalBuyPlayerRequestsCountKey);
-        _resetTransferListStats(listPlayerRequestsCountKey);
-        _resetTransferListStats(reListPlayerRequestsCountKey);
-        _resetTransferListStats(removePlayerRequestsCountKey);
+        _resetStatsValue(buyPlayerRequestsCountKey);
+        _resetStatsValue(bidPlayerRequestsCountKey);
+        _resetStatsValue(outbidPlayerRequestsCountKey);
+        _resetStatsValue(searchRequestsCountKey);
+        _resetStatsValue(totalBuyPlayerRequestsCountKey);
+        _resetStatsValue(listPlayerRequestsCountKey);
+        _resetStatsValue(reListPlayerRequestsCountKey);
+        _resetStatsValue(removePlayerRequestsCountKey);
     }
 
     return {
@@ -128,11 +128,11 @@ const getRequestsStatisticForBackend = (isNeedReset) => {
     }
 }
 
-const _getTransferListStats = (key, defaultValue = 0) => {
+const _getStatsValue = (key, defaultValue = 0) => {
     return (getValue(key) || defaultValue);
 }
 
-const _resetTransferListStats = (key, newValue = 0) => {
+const _resetStatsValue = (key, newValue = 0) => {
     setValue(key, newValue)
 }
 

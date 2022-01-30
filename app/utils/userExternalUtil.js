@@ -80,9 +80,13 @@ export const loadFilter = async function (currentFilterName) {
   const filterSetting = getValue("filters")[currentFilterName];
   if (!filterSetting) return;
   let {
-    searchCriteria: { criteria, playerData, buyerSettings, commonSettings},
+    searchCriteria: { criteria, playerData, buyerSettings, commonSettings = {}},
   } = JSON.parse(filterSetting);
-  setValue("CommonSettings", ...commonSettings)
+  await insertFilters(
+      "CommonSettings",
+      JSON.stringify(commonSettings),
+      "CommonSettings"
+  )
   await updateCommonSettings();
   const cmnSettings = getValue("CommonSettings") || {};
   setValue("BuyerSettings", buyerSettings);

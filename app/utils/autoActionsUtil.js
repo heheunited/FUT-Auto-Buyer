@@ -58,14 +58,10 @@ export const stopBotIfRequired = (buyerSetting) => {
           buyerSetting["idAbRestartAfter"]
       );
 
-      let summaryStatsMsg = getSummaryTransferListStats(true);
       let logMessage = `Autobuyer stopped (Time elapsed) | Automatic restart in ${convertSecondsToTime(autoRestart)}.`;
-      let summaryMsg = logMessage + summaryStatsMsg;
-
-      writeToLog(summaryMsg, idProgressAutobuyer);
 
       sendNotificationToUser(logMessage);
-      sendErrorNotificationToUser(summaryMsg);
+      sendErrorNotificationToUser(logMessage);
     }
     stopAfter = null;
 

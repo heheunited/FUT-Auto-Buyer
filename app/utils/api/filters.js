@@ -1,6 +1,6 @@
-import axios from "axios";
 import {sendUINotification} from "../notificationUtil";
 import {saveFilterInDB} from "../userExternalUtil";
+import {getRequestToBackend, postRequestToBackend} from "./apiRequest";
 
 const apiEndpoint = 'https://mysterious-savannah-72408.herokuapp.com/api';
 const filtersPath = '/filters';
@@ -12,26 +12,32 @@ const uploadFilter = (filterName, jsonSettings) => {
         'settings': jsonSettings
     }
 
-    axios.post(filtersEndpoint, data).then(response => {
-        if (response.data.success === true) {
+    postRequestToBackend(filtersEndpoint, data).then(response => {
+        let responseData = response.data;
+
+        if (responseData.success === true) {
             sendUINotification(`Filter: ${filterName} success uploaded`);
+        } else {
+            sendUINotification(`Something went wrong! Message: ${responseData.message}`, UINotificationType.NEGATIVE);
         }
     }).catch(error => {
-        sendUINotification(`Filter: ${filterName} upload failed`);
+        sendUINotification(`Filter: ${error} upload failed`, UINotificationType.NEGATIVE);
     })
 }
 
 const syncFilters = async () => {
-    await axios.get(filtersEndpoint).then(response => {
+    await getRequestToBackend(filtersEndpoint).then(response => {
         let responseData = response.data;
         if (responseData.success === true) {
             responseData.data.map(filter => {
                 saveFilterInDB(filter.name, filter.settings)
                 sendUINotification(`Filter: ${filter.name} success synced`);
             })
+        } else {
+            sendUINotification(`Something went wrong! Message: ${responseData.message}`);
         }
     }).catch(error => {
-        console.log(error)
+        sendUINotification(`Sync error: ${error}`, UINotificationType.NEGATIVE);
     });
 }
 

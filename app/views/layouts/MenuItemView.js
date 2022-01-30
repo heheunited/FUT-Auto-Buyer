@@ -14,6 +14,7 @@ import { updateMultiFilterSettings } from "../../utils/filterUtil";
 import { getUserFilters } from "../../utils/dbUtil";
 import { idAbSortBy } from "../../elementIds.constants";
 import { initializeDiscordClient } from "../../utils/notificationUtil";
+import {backendSettingsView} from "./Settings/BackendSettingsView";
 
 const settingsLookup = new Map();
 settingsLookup.set(0, {
@@ -47,6 +48,10 @@ settingsLookup.set(6, {
 settingsLookup.set(7, {
   label: "Common Settings",
   selector: ".common-settings-view",
+});
+settingsLookup.set(8, {
+  label: "Backend Settings",
+  selector: ".backend-settings-view",
 });
 
 let menuRoot;
@@ -109,6 +114,7 @@ const appendMenuItems = async (isInit) => {
   menuRoot.append(captchaSettingsView.call(this));
   menuRoot.append(notificationSettingsView.call(this));
   menuRoot.append(commonSettingsView.call(this));
+  menuRoot.append(backendSettingsView.call(this));
 
   $(".menu-container").animate({
     scrollLeft: 0,

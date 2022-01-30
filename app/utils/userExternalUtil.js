@@ -24,7 +24,7 @@ const validateSettings = () => {
 export const saveFilterDetails = function (self) {
   const btnContext = this;
   $(btnContext).addClass("active");
-  let buyerSetting = getBuyerSettings(true);
+  let buyerSetting = getBuyerSettings();
   let commonSettings = getValue("CommonSettings");
   setTimeout(function () {
     let settingsJson = {};
@@ -82,10 +82,10 @@ export const loadFilter = async function (currentFilterName) {
     searchCriteria: { criteria, playerData, buyerSettings },
   } = JSON.parse(filterSetting);
   await updateCommonSettings();
-  const commonSettings = getValue("CommonSettings") || {};
+  //TODO removed sync common settings
   setValue("BuyerSettings", buyerSettings);
   setValue("currentFilter", currentFilterName);
-  buyerSettings = { ...buyerSettings, ...commonSettings };
+  buyerSettings = { ...buyerSettings};
   this._viewmodel.playerData = {};
   Object.assign(this._viewmodel.searchCriteria, criteria);
   Object.assign(this._viewmodel.playerData, playerData);

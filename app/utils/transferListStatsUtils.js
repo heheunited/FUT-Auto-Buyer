@@ -42,6 +42,22 @@ const getSummaryTransferListStats = (isNeedReset = false) => {
     return sentMessage + losedMessage;
 }
 
+const getTradeItemsStatisticForBackend = () => {
+    const sttlCount = _getTransferListStats(sendToTransferListPerSessionKey);
+    const llmbCount = _getTransferListStats(lessThanMaxBidLosedTransferListCountKey);
+    const ltmbCount = _getTransferListStats(greaterThanMaxBidLosedTransferListCountKey);
+
+    if (sttlCount === 0 && llmbCount === 0 && ltmbCount === 0) {
+        return false;
+    }
+
+    return {
+        sttl_count: sttlCount,
+        llmb_count: llmbCount,
+        ltmb_count: ltmbCount
+    }
+}
+
 const _getTransferListStats = (key, defaultValue = 0) => {
     return (getValue(key) || defaultValue);
 }
@@ -64,5 +80,6 @@ export {
     increaseSentToTransferListCount,
     getTotalLosedTransferListStatsPerSession,
     increaseTotalLosedTransferListCount,
-    getSummaryTransferListStats
+    getSummaryTransferListStats,
+    getTradeItemsStatisticForBackend
 }

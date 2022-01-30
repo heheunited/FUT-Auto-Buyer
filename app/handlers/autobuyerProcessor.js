@@ -41,7 +41,8 @@ import { setRandomInterval } from "../utils/timeOutUtil";
 import { transferListUtil } from "../utils/transferlistUtil";
 import { addUserWatchItems, watchListUtil } from "../utils/watchlistUtil";
 import { searchErrorHandler } from "./errorHandler";
-import {getSummaryTransferListStats} from "../utils/transferListStatsUtils";
+import {getSummaryTransferListStats, getTradeItemsStatisticForBackend} from "../utils/transferListStatsUtils";
+import {recordItemTradeStatistics} from "../utils/api/autobuyerItemsTradeStatistic";
 
 let interval = null;
 let passInterval = null;
@@ -171,6 +172,12 @@ export const stopAutoBuyer = (isPaused) => {
     .html(isPaused ? "PAUSED" : "IDLE");
 
   if (!isPaused) {
+    let dataForBackend = getTradeItemsStatisticForBackend();
+
+    if (dataForBackend !== false) {
+      recordItemTradeStatistics(dataForBackend);
+    }
+
     let summaryStatsMsg = getSummaryTransferListStats(true);
     sendErrorNotificationToUser('Autobuyer go IDLE. ' + summaryStatsMsg);
     writeToLog(summaryStatsMsg, idProgressAutobuyer);

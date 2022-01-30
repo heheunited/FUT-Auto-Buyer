@@ -9,6 +9,7 @@ import {
 const sendToTransferListPerSessionKey = 'sendToTransferListPerSession';
 const lessThanMaxBidLosedTransferListCountKey = 'lessThanMaxBidLosedTransferListCountKey';
 const greaterThanMaxBidLosedTransferListCountKey = 'greaterThanMaxBidLosedTransferListCountKey';
+const estimatedProfitKey = 'estimatedProfitKey';
 
 const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
     let message = ` Sent to transfer list items, count: ${_getTransferListStats(sendToTransferListPerSessionKey)} :::`;
@@ -25,7 +26,7 @@ const getTotalLosedTransferListStatsPerSession = (isNeedReset = false) => {
     let idAbMaxBid = buyerSetting['idAbMaxBid'];
 
     let lessThanMaxBidMsg = ` Losed items with current bid < ${idAbMaxBid}, count: ${_getTransferListStats(lessThanMaxBidLosedTransferListCountKey)} :::`;
-    let higherThanMaxBidMsg = ` Losed items with current bid > ${idAbMaxBid}, count: ${_getTransferListStats(greaterThanMaxBidLosedTransferListCountKey)}`;
+    let higherThanMaxBidMsg = ` Losed items with current bid > ${idAbMaxBid}, count: ${_getTransferListStats(greaterThanMaxBidLosedTransferListCountKey)} :::`;
 
     if (isNeedReset) {
         _resetTransferListStats(lessThanMaxBidLosedTransferListCountKey);
@@ -35,26 +36,39 @@ const getTotalLosedTransferListStatsPerSession = (isNeedReset = false) => {
     return lessThanMaxBidMsg + higherThanMaxBidMsg;
 }
 
+const getEstimatedProfitStatsPerSession = (isNeedReset = false) => {
+    let estimatedProfitMsg = ` Estimated Profit: ${_getTransferListStats(estimatedProfitKey)} `
+
+    if (isNeedReset) {
+        _resetTransferListStats(estimatedProfitKey);
+    }
+
+    return estimatedProfitMsg;
+}
+
 const getSummaryTransferListStats = (isNeedReset = false) => {
     let sentMessage = getSentToTransferListStatsPerSession(isNeedReset);
     let losedMessage = getTotalLosedTransferListStatsPerSession(isNeedReset);
+    let estimatedProfitMessage = getEstimatedProfitStatsPerSession(isNeedReset);
 
-    return sentMessage + losedMessage;
+    return sentMessage + losedMessage + estimatedProfitMessage;
 }
 
 const getTradeItemsStatisticForBackend = () => {
     const sttlCount = _getTransferListStats(sendToTransferListPerSessionKey);
     const llmbCount = _getTransferListStats(lessThanMaxBidLosedTransferListCountKey);
     const ltmbCount = _getTransferListStats(greaterThanMaxBidLosedTransferListCountKey);
+    const estimatedProfit = _getTransferListStats(estimatedProfitKey);
 
-    if (sttlCount === 0 && llmbCount === 0 && ltmbCount === 0) {
+    if (sttlCount === 0 && llmbCount === 0 && ltmbCount === 0 && estimatedProfit === 0) {
         return false;
     }
 
     return {
         sttl_count: sttlCount,
         llmb_count: llmbCount,
-        ltmb_count: ltmbCount
+        ltmb_count: ltmbCount,
+        estimated_profit: estimatedProfit
     }
 }
 
@@ -70,6 +84,10 @@ const increaseSentToTransferListCount = () => {
     increAndGetStoreValue(sendToTransferListPerSessionKey);
 }
 
+const increaseEstimatedProfit = (profit) => {
+    increaseForCountAndGetStoreValue(estimatedProfitKey, profit)
+}
+
 const increaseTotalLosedTransferListCount = (lessThanMaxBid = 0, greaterThanMaxBid = 0) => {
     increaseForCountAndGetStoreValue(lessThanMaxBidLosedTransferListCountKey, lessThanMaxBid);
     increaseForCountAndGetStoreValue(greaterThanMaxBidLosedTransferListCountKey, greaterThanMaxBid);
@@ -81,5 +99,6 @@ export {
     getTotalLosedTransferListStatsPerSession,
     increaseTotalLosedTransferListCount,
     getSummaryTransferListStats,
-    getTradeItemsStatisticForBackend
+    getTradeItemsStatisticForBackend,
+    increaseEstimatedProfit
 }

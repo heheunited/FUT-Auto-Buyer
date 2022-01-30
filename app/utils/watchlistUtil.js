@@ -17,7 +17,11 @@ import { sendPinEvents } from "./notificationUtil";
 import {calculateProfitPercent, getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import { buyPlayer } from "./purchaseUtil";
 import { updateProfit } from "./statsUtil";
-import {increaseTotalLosedTransferListCount, increaseSentToTransferListCount} from "./transferListStatsUtils";
+import {
+  increaseTotalLosedTransferListCount,
+  increaseSentToTransferListCount,
+  increaseEstimatedProfit
+} from "./transferListStatsUtils";
 
 const sellBids = new Set();
 
@@ -297,6 +301,7 @@ const sellWonItems = async (
   );
   player.clearAuction();
   increaseSentToTransferListCount();
+  increaseEstimatedProfit(profit);
 
   await promisifyTimeOut(function () {
     services.Item.list(

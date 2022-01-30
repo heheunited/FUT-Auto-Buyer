@@ -1,13 +1,13 @@
 import {
-  idFilterDropdown,
-  idSelectedFilter,
-  idSelectFilterCount,
-  idAbNumberFilterSearch,
-  idAbServerLogin,
-  idAbDownloadFilter,
-  idAbUploadFilter,
-  idRunFilterSequential,
-  idAbReportProblem,
+    idFilterDropdown,
+    idSelectedFilter,
+    idSelectFilterCount,
+    idAbNumberFilterSearch,
+    idAbServerLogin,
+    idAbDownloadFilter,
+    idAbUploadFilter,
+    idRunFilterSequential,
+    idAbReportProblem, idAbUploadFilterToCloud, idAbSyncFiltersWithCloud,
 } from "../../../elementIds.constants";
 import { getValue, setValue } from "../../../services/repository";
 import {
@@ -16,8 +16,9 @@ import {
 } from "../../../utils/authUtil";
 import { getUserFilters } from "../../../utils/dbUtil";
 import {
-  uploadFiltersLocal,
-  uploadFiltersToServer,
+    syncFilterWithCloud,
+    uploadFiltersLocal, uploadFiltersToCloud,
+    uploadFiltersToServer,
 } from "../../../utils/filterSyncUtil";
 import { updateMultiFilterSettings } from "../../../utils/filterUtil";
 import { showPopUp } from "../../../utils/popupUtil";
@@ -211,8 +212,23 @@ export const filterHeaderSettingsView = async function () {
                      () => {
                        uploadFiltersToServer();
                      },
+                     "filterSync"
+                   )}
+                   ${generateButton(
+                     idAbUploadFilterToCloud,
+                     "☁",
+                     () => {
+                       uploadFiltersToCloud();
+                     },
                      "filterSync",
-                     "Download filters"
+                   )} 
+                   ${generateButton(
+                      idAbSyncFiltersWithCloud,
+                     "♺",
+                     () => {
+                         syncFilterWithCloud();
+                     },
+                     "filterSync",
                    )} 
                </div>
                <div id="btn-actions" style="width:100%;margin-top: 1%;" class="button-container"> 

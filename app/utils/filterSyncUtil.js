@@ -9,6 +9,7 @@ import { downloadJson, hideLoader, showLoader } from "./commonUtil";
 import { sendUINotification } from "./notificationUtil";
 import { showPopUp } from "./popupUtil";
 import { saveFilterInDB } from "./userExternalUtil";
+import {syncFilters, uploadFilter} from "./api/filters";
 
 export const uploadFiltersToServer = () => {
   if (!checkIfLoggedIn()) return;
@@ -35,6 +36,22 @@ export const uploadFiltersToServer = () => {
     }
   );
 };
+
+export const uploadFiltersToCloud = () => {
+  const userFilters = getValue("filters");
+
+  if (userFilters === null) {
+    sendUINotification('Filters for upload not found!');
+  }
+
+  for(let filterName in userFilters) {
+    uploadFilter(filterName, JSON.parse(userFilters[filterName]))
+  }
+}
+
+export const syncFilterWithCloud = () => {
+  syncFilters();
+}
 
 export const downloadLocal = (userFilters) => {
   const filterToDownload = {};

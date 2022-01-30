@@ -15,6 +15,7 @@
   "author": "Ck Algos",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.25.0",
     "webpack": "^5.47.1"
   },
   "devDependencies": {

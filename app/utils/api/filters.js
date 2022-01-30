@@ -1,5 +1,6 @@
 import axios from "axios";
 import {sendUINotification} from "../notificationUtil";
+import {saveFilterInDB} from "../userExternalUtil";
 
 const apiEndpoint = 'https://mysterious-savannah-72408.herokuapp.com/api';
 const filtersPath = '/filters';
@@ -20,9 +21,15 @@ const uploadFilter = (filterName, jsonSettings) => {
     })
 }
 
-const syncFilters = () => {
-    axios.get(filtersEndpoint).then(response => {
-        console.log(response)
+const syncFilters = async () => {
+    await axios.get(filtersEndpoint).then(response => {
+        let responseData = response.data;
+        if (responseData.success === true) {
+            responseData.data.map(filter => {
+                saveFilterInDB(filter.name, filter.settings)
+                sendUINotification(`Filter: ${filter.name} success synced`);
+            })
+        }
     }).catch(error => {
         console.log(error)
     });

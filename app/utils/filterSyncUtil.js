@@ -49,8 +49,8 @@ export const uploadFiltersToCloud = () => {
   }
 }
 
-export const syncFilterWithCloud = () => {
-  syncFilters();
+export const syncFilterWithCloud = async () => {
+  await syncFilters();
 }
 
 export const downloadLocal = (userFilters) => {

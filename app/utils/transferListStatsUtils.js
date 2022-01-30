@@ -11,6 +11,15 @@ const lessThanMaxBidLosedTransferListCountKey = 'lessThanMaxBidLosedTransferList
 const greaterThanMaxBidLosedTransferListCountKey = 'greaterThanMaxBidLosedTransferListCountKey';
 const estimatedProfitKey = 'estimatedProfitKey';
 
+const totalBuyPlayerRequestsCountKey = 'totalBuyPlayerRequestsCountKey';
+const bidPlayerRequestsCountKey = 'bidPlayerRequestsCountKey';
+const buyPlayerRequestsCountKey = 'buyPlayerRequestsCountKey';
+const outbidPlayerRequestsCountKey = 'outbidPlayerRequestsCountKey';
+const searchRequestsCountKey = 'searchRequestsCountKey';
+const listPlayerRequestsCountKey = 'listPlayerRequestsCountKey';
+const reListPlayerRequestsCountKey = 'reListPlayerRequestsCountKey';
+const removePlayerRequestsCountKey = 'removePlayerRequestsCountKey';
+
 const getSentToTransferListStatsPerSession = (isNeedReset = false) => {
     let message = ` Sent to transfer list items, count: ${_getTransferListStats(sendToTransferListPerSessionKey)} :::`;
 
@@ -72,6 +81,53 @@ const getTradeItemsStatisticForBackend = () => {
     }
 }
 
+const getRequestsStatisticForBackend = (isNeedReset) => {
+
+    const totalBuyPlayerRequestsCount = _getTransferListStats(totalBuyPlayerRequestsCountKey);
+    const bidPlayerRequestsCount = _getTransferListStats(bidPlayerRequestsCountKey);
+    const buyPlayerRequestsCount = _getTransferListStats(buyPlayerRequestsCountKey);
+    const outbidPlayerRequestsCount = _getTransferListStats(outbidPlayerRequestsCountKey);
+    const searchRequestCount = _getTransferListStats(searchRequestsCountKey);
+    const listPlayerRequestsCount = _getTransferListStats(listPlayerRequestsCountKey);
+    const reListPlayerRequestsCount = _getTransferListStats(reListPlayerRequestsCountKey);
+    const removePlayerRequestsCount = _getTransferListStats(removePlayerRequestsCountKey);
+
+    if (
+        !totalBuyPlayerRequestsCount &&
+        !bidPlayerRequestsCount &&
+        !outbidPlayerRequestsCount &&
+        !searchRequestCount &&
+        !buyPlayerRequestsCount &&
+        !listPlayerRequestsCount &&
+        !reListPlayerRequestsCount &&
+        !removePlayerRequestsCount
+    ) {
+        return false;
+    }
+
+    if (isNeedReset) {
+        _resetTransferListStats(buyPlayerRequestsCountKey);
+        _resetTransferListStats(bidPlayerRequestsCountKey);
+        _resetTransferListStats(outbidPlayerRequestsCountKey);
+        _resetTransferListStats(searchRequestsCountKey);
+        _resetTransferListStats(totalBuyPlayerRequestsCountKey);
+        _resetTransferListStats(listPlayerRequestsCountKey);
+        _resetTransferListStats(reListPlayerRequestsCountKey);
+        _resetTransferListStats(removePlayerRequestsCountKey);
+    }
+
+    return {
+        total_buyplayer_count: totalBuyPlayerRequestsCount,
+        bid_count: bidPlayerRequestsCount,
+        buy_count: buyPlayerRequestsCount,
+        outbid_count: outbidPlayerRequestsCount,
+        search_count: searchRequestCount,
+        list_player_count: listPlayerRequestsCount,
+        relist_player_count: reListPlayerRequestsCount,
+        remove_player_count: removePlayerRequestsCount
+    }
+}
+
 const _getTransferListStats = (key, defaultValue = 0) => {
     return (getValue(key) || defaultValue);
 }
@@ -93,6 +149,37 @@ const increaseTotalLosedTransferListCount = (lessThanMaxBid = 0, greaterThanMaxB
     increaseForCountAndGetStoreValue(greaterThanMaxBidLosedTransferListCountKey, greaterThanMaxBid);
 }
 
+const increaseTotalBuyPlayerRequestsCount = () => {
+    increAndGetStoreValue(totalBuyPlayerRequestsCountKey)
+}
+
+const increaseBidPlayerRequestsCount = () => {
+    increAndGetStoreValue(bidPlayerRequestsCountKey)
+}
+const increaseBuyPlayerRequestsCount = () => {
+    increAndGetStoreValue(buyPlayerRequestsCountKey)
+}
+
+const increaseOutbidPlayerRequestsCount = () => {
+    increAndGetStoreValue(outbidPlayerRequestsCountKey)
+}
+
+const increaseSearchRequestCount = () => {
+    increAndGetStoreValue(searchRequestsCountKey)
+}
+
+const increaseListPlayerRequestCount = () => {
+    increAndGetStoreValue(listPlayerRequestsCountKey)
+}
+
+const increaseReListPlayerRequestCount = () => {
+    increAndGetStoreValue(reListPlayerRequestsCountKey)
+}
+
+const increaseRemovePlayerRequestCount = () => {
+    increAndGetStoreValue(removePlayerRequestsCountKey)
+}
+
 export {
     getSentToTransferListStatsPerSession,
     increaseSentToTransferListCount,
@@ -100,5 +187,14 @@ export {
     increaseTotalLosedTransferListCount,
     getSummaryTransferListStats,
     getTradeItemsStatisticForBackend,
-    increaseEstimatedProfit
+    increaseEstimatedProfit,
+    increaseTotalBuyPlayerRequestsCount,
+    increaseBidPlayerRequestsCount,
+    increaseOutbidPlayerRequestsCount,
+    increaseSearchRequestCount,
+    getRequestsStatisticForBackend,
+    increaseBuyPlayerRequestsCount,
+    increaseListPlayerRequestCount,
+    increaseReListPlayerRequestCount,
+    increaseRemovePlayerRequestCount
 }

@@ -20,6 +20,11 @@ import { writeToAbLog, writeToLog } from "./logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
 import {calculateProfitPercent, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import { appendTransactions, updateProfit } from "./statsUtil";
+import {
+  increaseBidPlayerRequestsCount,
+  increaseBuyPlayerRequestsCount,
+  increaseTotalBuyPlayerRequestsCount
+} from "./transferListStatsUtils";
 
 export const checkRating = (
   cardRating,
@@ -42,6 +47,8 @@ export const buyPlayer = (
     services.Item.bid(player, price).observe(
       this,
       async function (sender, data) {
+        increaseTotalBuyPlayerRequestsCount();
+
         let priceTxt = formatString(price.toString(), 6);
         const notificationType = buyerSetting["idNotificationType"];
         let sendDetailedNotification = buyerSetting["idDetailedNotification"];
@@ -94,6 +101,7 @@ export const buyPlayer = (
                 ? ""
                 : "move to club"
             );
+            increaseBuyPlayerRequestsCount();
 
             if (!buyerSetting["idAbDontMoveWon"]) {
               setTimeout(function () {
@@ -130,6 +138,7 @@ export const buyPlayer = (
                 "waiting to expire",
                 timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires))
             );
+            increaseBidPlayerRequestsCount();
             const filterName = getValue("currentFilter");
             if (filterName) {
               const bidItemsByFilter = getValue("filterBidItems") || new Map();

@@ -20,7 +20,10 @@ import { updateProfit } from "./statsUtil";
 import {
   increaseTotalLosedTransferListCount,
   increaseSentToTransferListCount,
-  increaseEstimatedProfit
+  increaseEstimatedProfit,
+  increaseOutbidPlayerRequestsCount,
+  increaseListPlayerRequestCount,
+  increaseRemovePlayerRequestCount
 } from "./transferListStatsUtils";
 
 const sellBids = new Set();
@@ -183,6 +186,7 @@ export const watchListUtil = function (buyerSetting) {
               });
 
               if (buyerSetting["idAutoClearExpired"] && expiredItems.length) {
+                increaseRemovePlayerRequestCount();
                 services.Item.untarget(expiredItems);
                 writeToLog(
                   `Found ${expiredItems.length} expired items and removed from watchlist`,
@@ -273,6 +277,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
         `@@Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
         idProgressAutobuyer
     );
+    increaseOutbidPlayerRequestsCount();
     await buyPlayer(player, playerName, checkPrice, sellPrice);
     buyerSetting["idAbAddBuyDelay"] && (await wait(1));
   }
@@ -302,6 +307,7 @@ const sellWonItems = async (
   player.clearAuction();
   increaseSentToTransferListCount();
   increaseEstimatedProfit(profit);
+  increaseListPlayerRequestCount();
 
   await promisifyTimeOut(function () {
     services.Item.list(

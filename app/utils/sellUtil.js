@@ -3,6 +3,7 @@ import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice, roundOffPrice} fr
 import {writeToLog} from "./logUtil";
 import {idProgressAutobuyer} from "../elementIds.constants";
 import {getBuyerSettings} from "../services/repository";
+import {increaseReListPlayerRequestCount} from "./transferListStatsUtils";
 
 export const listForPrice = async (sellPrice, player, futBinPercent) => {
   let buyerSetting = getBuyerSettings();
@@ -30,6 +31,8 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
         `##Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}$`,
         idProgressAutobuyer
     )
+
+    increaseReListPlayerRequestCount();
 
     services.Item.list(
       player,

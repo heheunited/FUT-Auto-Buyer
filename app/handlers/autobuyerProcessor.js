@@ -41,8 +41,14 @@ import { setRandomInterval } from "../utils/timeOutUtil";
 import { transferListUtil } from "../utils/transferlistUtil";
 import { addUserWatchItems, watchListUtil } from "../utils/watchlistUtil";
 import { searchErrorHandler } from "./errorHandler";
-import {getSummaryTransferListStats, getTradeItemsStatisticForBackend} from "../utils/transferListStatsUtils";
+import {
+  getRequestsStatisticForBackend,
+  getSummaryTransferListStats,
+  getTradeItemsStatisticForBackend,
+  increaseSearchRequestCount
+} from "../utils/transferListStatsUtils";
 import {recordItemTradeStatistics} from "../utils/api/autobuyerItemsTradeStatistic";
+import {recordRequestsStatistics} from "../utils/api/autobuyerRequestsStatistic";
 
 let interval = null;
 let passInterval = null;
@@ -172,10 +178,15 @@ export const stopAutoBuyer = (isPaused) => {
     .html(isPaused ? "PAUSED" : "IDLE");
 
   if (!isPaused) {
-    let dataForBackend = getTradeItemsStatisticForBackend();
+    let tradeItemsStatisticDataForBackend = getTradeItemsStatisticForBackend();
+    let requestsStatisticDataForBackend = getRequestsStatisticForBackend(true);
 
-    if (dataForBackend !== false) {
-      recordItemTradeStatistics(dataForBackend);
+    if (tradeItemsStatisticDataForBackend !== false) {
+      recordItemTradeStatistics(tradeItemsStatisticDataForBackend);
+    }
+
+    if (requestsStatisticDataForBackend !== false) {
+      recordRequestsStatistics(requestsStatisticDataForBackend);
     }
 
     let summaryStatsMsg = getSummaryTransferListStats(true);
@@ -218,6 +229,7 @@ const searchTransferMarket = function (buyerSetting) {
 
     sendPinEvents("Transfer Market Search");
     updateRequestCount();
+    increaseSearchRequestCount();
     let searchCriteria = this._viewmodel.searchCriteria;
     if (useRandMinBid)
       searchCriteria.minBid = roundOffPrice(

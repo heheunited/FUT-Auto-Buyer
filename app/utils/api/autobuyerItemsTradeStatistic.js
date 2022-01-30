@@ -11,7 +11,7 @@ const recordItemTradeStatistics = (data) => {
             const responseData = response.data;
 
             if (responseData.success === true) {
-                sendUINotification(`Statistic recorded!`);
+                sendUINotification(`Item trades statistic recorded!`);
             }
         }).catch(console.log)
 }

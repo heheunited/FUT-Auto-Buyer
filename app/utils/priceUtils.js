@@ -54,7 +54,7 @@ export const calculateProfitPercent = (playerPrice, userPrice) => {
   return Math.round(100 - resultPercent);
 }
 
-export const getFutBinPlayerPrice = (definitionId, idBuyFutBinPercent = 100) => {
+export const getFutBinPlayerPrice = (definitionId, idBuyFutBinPercent = 100, defaultValue = null) => {
   const existingValue = getValue(definitionId);
 
   if (existingValue && existingValue.price) {
@@ -63,5 +63,5 @@ export const getFutBinPlayerPrice = (definitionId, idBuyFutBinPercent = 100) => 
     );
   }
 
-  return null;
+  return defaultValue;
 }

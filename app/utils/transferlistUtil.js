@@ -7,6 +7,7 @@ import {getBuyerSettings, getValue} from "../services/repository";
 import {addFutbinCachePrice} from "./futbinUtil";
 import {listForPrice} from "./sellUtil";
 import {getRandWaitTimeInSeconds, wait} from "./commonUtil";
+import {saveStatisticAboutTransferListPlayers} from "./api/transferListPlayers";
 
 export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReListWithUpdatedPrice) {
   sendPinEvents("Transfer List - List View");
@@ -14,9 +15,10 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
     services.Item.requestTransferItems().observe(
       this,
       async function (t, response) {
-        let soldItems = response.data.items.filter(function (item) {
-          return item.getAuctionData().isSold();
-        }).length;
+          let soldItemsList = response.data.items.filter(function (item) {
+              return item.getAuctionData().isSold();
+          })
+          let soldItems = soldItemsList.length;
         if (getStatsValue("soldItems") < soldItems) {
           await updateUserCredits();
         }
@@ -72,6 +74,7 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
             idProgressAutobuyer
           );
           UTTransferListViewController.prototype._clearSold();
+          saveStatisticAboutTransferListPlayers(soldItemsList);
         }
         resolve();
       }

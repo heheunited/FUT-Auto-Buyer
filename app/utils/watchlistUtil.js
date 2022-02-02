@@ -214,7 +214,7 @@ export const watchListUtil = function (buyerSetting) {
                   let currentBid = (auction.currentBid || auction.startingBid);
 
                   writeToLog(
-                      `--Removed Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
+                      `[---] Removed Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
                       idProgressAutobuyer
                   );
                 })
@@ -274,7 +274,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
 
   if (isAutoBuyerActive && currentBid <= priceToBid) {
     writeToLog(
-        `@@Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
+        `[@@@] Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
         idProgressAutobuyer
     );
     increaseOutbidPlayerRequestsCount();
@@ -291,7 +291,7 @@ const sellWonItems = async (
   profit
 ) => {
   let auction = player._auction;
-  let playerName = formatString(player._staticData.name, 12);
+  let playerName = formatString(player._staticData.name, 14);
   sellBids.add(auction.tradeId);
   writeToLog(
     " ($$$) " +

@@ -28,7 +28,7 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
     calculatedPrice = roundOffPrice(calculatedPrice, 200);
 
     writeToLog(
-        `##Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}$`,
+        `[###] Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}$`,
         idProgressAutobuyer
     )
 

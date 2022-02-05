@@ -34,6 +34,7 @@ const _loop = async () => {
     let checkCaptchaStatusEndpoint = apiEndpoint + '/webhook/captcha/status';
 
     if (getValue('autoBuyerActive') === true) {
+        await _deleteAllCaptchaEntities();
         return true;
     }
 

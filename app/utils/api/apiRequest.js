@@ -22,10 +22,20 @@ const postRequestToBackend = (url, data) => {
         });
 }
 
+const deleteRequestToBackend = (url) => {
+    url += _getApiKey();
+
+    return axios.delete(url, {
+        validateStatus: function (status) {
+            return status < 500;
+        }
+    });
+}
+
 const _getApiKey = () => {
     const apiKeySetting = getBuyerSettings()['idAbBackendApiKey'];
 
     return `?apiKey=${apiKeySetting}`
 };
 
-export {getRequestToBackend, postRequestToBackend}
+export {getRequestToBackend, postRequestToBackend, deleteRequestToBackend}

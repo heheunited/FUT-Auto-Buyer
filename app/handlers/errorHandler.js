@@ -10,6 +10,7 @@ import { showCaptchaLogs, writeToLog } from "../utils/logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser} from "../utils/notificationUtil";
 import { stopAutoBuyer } from "./autobuyerProcessor";
 import { solveCaptcha } from "./captchaSolver";
+import {longPollingCaptchaResolve} from "../utils/captchaUtil";
 
 export const searchErrorHandler = (
   response,
@@ -31,6 +32,7 @@ export const searchErrorHandler = (
     } else {
       showCaptchaLogs(captchaCloseTab);
       setValue("lastErrorMessage", "Captcha Triggerred");
+      longPollingCaptchaResolve();
     }
   } else {
     const buyerSetting = getBuyerSettings();

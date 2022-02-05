@@ -49,6 +49,7 @@ import {
 } from "../utils/transferListStatsUtils";
 import {recordItemTradeStatistics} from "../utils/api/autobuyerItemsTradeStatistic";
 import {recordRequestsStatistics} from "../utils/api/autobuyerRequestsStatistic";
+import {_deleteAllCaptchaEntities} from "../utils/captchaUtil";
 
 let interval = null;
 let passInterval = null;
@@ -88,6 +89,7 @@ export const startAutoBuyer = async function (isResume) {
     setValue("purchasedCardCount", 0);
     setValue("searchFailedCount", 0);
     setValue("currentPage", 1);
+    _deleteAllCaptchaEntities()
   }
   let switchFilterWithContext = switchFilterIfRequired.bind(this);
   let srchTmWithContext = searchTransferMarket.bind(this);

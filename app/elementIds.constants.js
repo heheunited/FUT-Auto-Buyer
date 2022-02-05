@@ -117,3 +117,4 @@ export const idAbCountDown = "elem_" + generateId(15);
 export const idAbDownloadStats = "elem_" + generateId(15);
 
 export const idAbBackendApiKey = "elem_" + generateId(15);
+export const idAbLongPollingCaptchaResolve = "elem_" + generateId(15);

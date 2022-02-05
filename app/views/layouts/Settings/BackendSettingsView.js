@@ -1,7 +1,8 @@
 import {
-    idAbBackendApiKey,
+    idAbBackendApiKey, idAbLongPollingCaptchaResolve,
 } from "../../../elementIds.constants";
 import {generateTextInput} from "../../../utils/uiUtils/generateTextInput";
+import {generateToggleInput} from "../../../utils/uiUtils/generateToggleInput";
 
 export const backendSettingsView = function () {
     return `<div style='display : none' class='buyer-settings-wrapper backend-settings-view'>  
@@ -16,6 +17,12 @@ export const backendSettingsView = function () {
         "API key for requests",
         "CommonSettings",
         "text"
+    )}
+        ${generateToggleInput(
+        "Long Polling Captcha Resolve",
+        {idAbLongPollingCaptchaResolve},
+        "",
+        "CommonSettings"
     )}
     `;
 };

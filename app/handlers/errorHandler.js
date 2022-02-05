@@ -18,6 +18,7 @@ export const searchErrorHandler = (
   captchaCloseTab
 ) => {
   let shouldStopBot = false;
+  let isCaptchaTriggered = false;
   if (
     response.status === UtasErrorCode.CAPTCHA_REQUIRED ||
     (response.error && response.error.code == UtasErrorCode.CAPTCHA_REQUIRED)
@@ -30,9 +31,9 @@ export const searchErrorHandler = (
       );
       solveCaptcha();
     } else {
+      isCaptchaTriggered = true;
       showCaptchaLogs(captchaCloseTab);
       setValue("lastErrorMessage", "Captcha Triggerred");
-      longPollingCaptchaResolve();
     }
   } else {
     const buyerSetting = getBuyerSettings();
@@ -66,5 +67,9 @@ export const searchErrorHandler = (
   if (shouldStopBot) {
     playAudio("capatcha");
     stopAutoBuyer();
+
+    if (isCaptchaTriggered) {
+      longPollingCaptchaResolve();
+    }
   }
 };

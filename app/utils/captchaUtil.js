@@ -25,6 +25,9 @@ const longPollingCaptchaResolve = async () => {
         return false;
     }
 
+    sendUINotification('Send long polling captcha resolve request');
+    sendErrorNotificationToUser('Send long polling captcha resolve request');
+
     await _createUnresolvedCaptchaEntity();
 
     await _loop();
@@ -43,7 +46,8 @@ const _loop = async () => {
             let responseData = response.data;
 
             if (responseData.is_resolved === false) {
-                setTimeout(await _loop, 30000)
+                await new Promise(resolve => setTimeout(resolve, 30000))
+                await _loop();
             } else {
                 let message = 'Captcha success resolved by long polling. Start Autobuyer.'
                 sendErrorNotificationToUser(message)

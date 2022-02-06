@@ -104,6 +104,10 @@ export const watchListUtil = function (buyerSetting) {
                           expectedProfitPercent
                       )
                   ) {
+                    writeToLog(
+                        `[???] Outbid does not make excepted profit percent: ${expectedProfitPercent}%. Player: ${currentItem._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(currentItem.definitionId)}`,
+                        idProgressAutobuyer
+                    );
                     continue;
                   }
 

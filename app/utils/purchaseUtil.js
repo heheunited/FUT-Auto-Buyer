@@ -261,17 +261,11 @@ export const isBidOrBuyMakeExpectedProfit = (
     futBinPrice,
     expectedProfitPercent
 ) => {
-  let result = false;
-
-  if (userMaxBuyNow) {
-    result = calculateProfitPercent(futBinPrice, userMaxBuyNow) >= expectedProfitPercent;
+  if (userMaxBuyNow && userMaxBuyNow > 0 && calculateProfitPercent(futBinPrice, userMaxBuyNow) >= expectedProfitPercent) {
+    return true;
   }
 
-  if (priceToBid) {
-    result = calculateProfitPercent(futBinPrice, priceToBid) >= expectedProfitPercent;
-  }
-
-  return result;
+  return priceToBid && priceToBid > 0 && calculateProfitPercent(futBinPrice, priceToBid) >= expectedProfitPercent;
 }
 
 

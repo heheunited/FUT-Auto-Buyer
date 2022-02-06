@@ -15,7 +15,7 @@ import { getSellPriceFromFutBin } from "./futbinUtil";
 import { writeToLog } from "./logUtil";
 import { sendPinEvents } from "./notificationUtil";
 import {calculateProfitPercent, getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
-import { buyPlayer } from "./purchaseUtil";
+import {buyPlayer, isBidOrBuyMakeExpectedProfit} from "./purchaseUtil";
 import { updateProfit } from "./statsUtil";
 import {
   increaseTotalLosedTransferListCount,
@@ -95,8 +95,14 @@ export const watchListUtil = function (buyerSetting) {
                     continue;
                   }
 
-                  if (isExpectedProfitInPercentProvided &&
-                      calculateProfitPercent(getFutBinPlayerPrice(currentItem.definitionId, idBuyFutBinPercent), checkPrice) < expectedProfitPercent
+                  if (
+                      isExpectedProfitInPercentProvided &&
+                      !isBidOrBuyMakeExpectedProfit(
+                          null,
+                          bidPrice,
+                          getFutBinPlayerPrice(currentItem.definitionId),
+                          expectedProfitPercent
+                      )
                   ) {
                     continue;
                   }

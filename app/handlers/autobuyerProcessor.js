@@ -31,7 +31,7 @@ import {
   sendUINotification
 } from "../utils/notificationUtil";
 import {
-  getBuyBidPrice,
+  getBuyBidPrice, getFutBinPlayerPrice,
   getSellBidPrice,
   roundOffPrice,
 } from "../utils/priceUtils";
@@ -418,11 +418,11 @@ const searchTransferMarket = function (buyerSetting) {
             if (
                 isExpectedProfitInPercentProvided &&
                 !isBidOrBuyMakeExpectedProfit(
-                userBuyNowPrice,
-                checkPrice,
-                currentPlayerFutBinPrice,
-                expectedProfitInPercent
-            )
+                    userBuyNowPrice,
+                    checkPrice,
+                    getFutBinPlayerPrice(player.definitionId),
+                    expectedProfitInPercent
+                )
             ) {
               logWrite(`skip >>> (Bid or Buy dont make expected profit: ${expectedProfitInPercent}%)`);
               continue;

@@ -99,7 +99,7 @@ export const watchListUtil = function (buyerSetting) {
                       isExpectedProfitInPercentProvided &&
                       !isBidOrBuyMakeExpectedProfit(
                           null,
-                          bidPrice,
+                          checkPrice,
                           getFutBinPlayerPrice(currentItem.definitionId),
                           expectedProfitPercent
                       )

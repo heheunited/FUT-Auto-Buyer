@@ -422,7 +422,7 @@ const searchTransferMarket = function (buyerSetting) {
                 !isBidOrBuyMakeExpectedProfit(
                     userBuyNowPrice,
                     checkPrice,
-                    getFutBinPlayerPrice(player.definitionId),
+                    getFutBinPlayerPrice(player.definitionId, 95),
                     expectedProfitInPercent
                 )
             ) {

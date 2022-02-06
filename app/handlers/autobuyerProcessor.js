@@ -341,7 +341,7 @@ const searchTransferMarket = function (buyerSetting) {
               : currentBid;
 
             const isMinimalPLayerFutBinPriceCorrect = isUserFutBinMinimalPriceProvided
-                ? userFutBinMinimalPrice <= currentPlayerFutBinPrice
+                ? getFutBinPlayerPrice(player.definitionId) >= userFutBinMinimalPrice
                 : false;
 
             const isMaximalPLayerFutBinPriceExceeded = isUserFutBinMaximalPriceProvided

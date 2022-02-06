@@ -11,6 +11,7 @@ export const writeToDebugLog = (
   playerName,
   bidTxt,
   buyTxt,
+  futbinPriceTxt,
   expireTime,
   actionTxt
 ) => {
@@ -23,6 +24,8 @@ export const writeToDebugLog = (
       bidTxt +
       " | " +
       buyTxt +
+      " | " +
+      futbinPriceTxt +
       " | " +
       expireTime +
       " | " +

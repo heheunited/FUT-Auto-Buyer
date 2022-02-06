@@ -256,7 +256,7 @@ const searchTransferMarket = function (buyerSetting) {
 
           if (response.data.items.length > 0) {
             writeToLog(
-              "| rating   | player name     | bid    | buy    | time            | action",
+              "| rating   | player name     | bid    | buy    | FutBin    | time            | action",
               idAutoBuyerFoundLog
             );
             currentPage === 1 &&
@@ -354,6 +354,7 @@ const searchTransferMarket = function (buyerSetting) {
 
             let bidTxt = formatString(currentBid.toString(), 6);
             let buyTxt = formatString(buyNowPrice.toString(), 6);
+            let fuutbinPriceTxt = formatString(currentPlayerFutBinPrice ? currentPlayerFutBinPrice.toString() : 'null', 6)
             let playerName = formatString(player._staticData.name, 15);
             let expireTime = formatString(expires, 15);
 
@@ -365,11 +366,12 @@ const searchTransferMarket = function (buyerSetting) {
             const ratingTxt = !isValidRating ? "no" : "ok";
 
             const logWrite = writeToLogClosure(
-              "(" + playerRating + "-" + ratingTxt + ") ",
-              playerName,
-              bidTxt,
-              buyTxt,
-              expireTime
+                "(" + playerRating + "-" + ratingTxt + ") ",
+                playerName,
+                bidTxt,
+                buyTxt,
+                fuutbinPriceTxt,
+                expireTime
             );
 
             if (
@@ -500,6 +502,7 @@ const writeToLogClosure = (
   playerName,
   bidTxt,
   buyTxt,
+  futbinPriceTxt,
   expireTime
 ) => {
   return (actionTxt) => {
@@ -508,6 +511,7 @@ const writeToLogClosure = (
       playerName,
       bidTxt,
       buyTxt,
+      futbinPriceTxt,
       expireTime,
       actionTxt
     );

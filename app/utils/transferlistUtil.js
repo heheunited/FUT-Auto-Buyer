@@ -44,11 +44,11 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                   ))
           }
 
-          if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (getValue('shouldRelistAfterFbPrice') === true)) {
+          if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (unsoldItems && getValue('shouldRelistAfterFbPrice') === true)) {
 
               if (getValue('shouldRelistAfterFbPrice') === true) {
-                  writeToLog(`[^^^2] Force relist after FutBin price.`, idProgressAutobuyer
-                  )
+                  writeToLog(`[^^^2] Force relist after FutBin price.`, idProgressAutobuyer)
+                  setValue('shouldRelistAfterFbPrice', false);
               }
 
               services.Item.relistExpiredAuctions().observe(

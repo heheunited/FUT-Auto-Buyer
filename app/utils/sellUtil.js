@@ -27,13 +27,17 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
 
     calculatedPrice = roundOffPrice(calculatedPrice, 200);
 
-    if (getValue('shouldRelistAfterFbPrice') === false) {
-      const compareResult = Number(player._auction.buyNowPrice) === calculatedPrice;
-      setValue('shouldRelistAfterFbPrice', compareResult)
+    if (Number(player._auction.buyNowPrice) === calculatedPrice) {
 
-      if (compareResult === true) {
-        return;
+      if (getValue('shouldRelistAfterFbPrice') === false) {
+        setValue('shouldRelistAfterFbPrice', true);
+        writeToLog(
+            `[^^^] Relist after FutBin price activated.`,
+            idProgressAutobuyer
+        )
       }
+
+      return;
     }
 
     writeToLog(

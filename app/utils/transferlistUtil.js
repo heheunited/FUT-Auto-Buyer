@@ -1,8 +1,8 @@
 import {idProgressAutobuyer, idSellFutBinPercent} from "../elementIds.constants";
-import { getStatsValue, updateStats } from "../handlers/statsProcessor";
-import { writeToLog } from "./logUtil";
-import { sendPinEvents } from "./notificationUtil";
-import { updateUserCredits } from "./userUtil";
+import {getStatsValue, updateStats} from "../handlers/statsProcessor";
+import {writeToLog} from "./logUtil";
+import {sendPinEvents} from "./notificationUtil";
+import {updateUserCredits} from "./userUtil";
 import {getBuyerSettings, getValue, setValue} from "../services/repository";
 import {addFutbinCachePrice} from "./futbinUtil";
 import {listForPrice} from "./sellUtil";
@@ -10,84 +10,83 @@ import {getRandWaitTimeInSeconds, wait} from "./commonUtil";
 import {saveStatisticAboutTransferListPlayers} from "./api/transferListPlayers";
 
 export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReListWithUpdatedPrice) {
-  sendPinEvents("Transfer List - List View");
-  return new Promise((resolve) => {
-    services.Item.requestTransferItems().observe(
-      this,
-      async function (t, response) {
-          let soldItemsList = response.data.items.filter(function (item) {
-              return item.getAuctionData().isSold();
-          })
-          let soldItems = soldItemsList.length;
-        if (getStatsValue("soldItems") < soldItems) {
-          await updateUserCredits();
-        }
-        updateStats("soldItems", soldItems);
+    sendPinEvents("Transfer List - List View");
+    return new Promise((resolve) => {
+        services.Item.requestTransferItems().observe(
+            this,
+            async function (t, response) {
+                let soldItemsList = response.data.items.filter(function (item) {
+                    return item.getAuctionData().isSold();
+                })
+                let soldItems = soldItemsList.length;
+                if (getStatsValue("soldItems") < soldItems) {
+                    await updateUserCredits();
+                }
+                updateStats("soldItems", soldItems);
 
-        const unsoldItems = response.data.items.filter(function (item) {
-          return (
-            !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
-          );
-        }).length;
-        updateStats("unsoldItems", unsoldItems);
+                const unsoldItems = response.data.items.filter(function (item) {
+                    return (
+                        !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
+                    );
+                }).length;
+                updateStats("unsoldItems", unsoldItems);
 
-        const shouldClearSold = soldItems >= minSoldCount;
+                const shouldClearSold = soldItems >= minSoldCount;
 
-          if (unsoldItems && !relistUnsold && isNeedReListWithUpdatedPrice) {
-              setValue('shouldRelistAfterFbPrice', false);
-              await reListWithUpdatedPrice(
-                  response.data.items.filter((item) => {
-                          return (
-                              !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
-                          );
-                      }
-                  ))
-          }
+                if (unsoldItems && !relistUnsold && isNeedReListWithUpdatedPrice) {
+                    setValue('shouldRelistAfterFbPrice', false);
+                    await reListWithUpdatedPrice(
+                        response.data.items.filter((item) => {
+                                return (
+                                    !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
+                                );
+                            }
+                        ))
+                }
 
-          if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (unsoldItems && (getValue('shouldRelistAfterFbPrice') === true))) {
+                if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (unsoldItems && getValue('shouldRelistAfterFbPrice') === true)) {
 
-              if (getValue('shouldRelistAfterFbPrice') === true) {
-                  writeToLog(`[^^^2] Force relist after FutBin price.`, idProgressAutobuyer)
-              }
+                    if (getValue('shouldRelistAfterFbPrice') === true) {
+                        writeToLog(`[^^^2] Force relist after FutBin price.`, idProgressAutobuyer);
+                        setValue('shouldRelistAfterFbPrice', false);
+                    }
 
-              services.Item.relistExpiredAuctions().observe(
-                  this,
-                  function (t, listResponse) {
-                      !shouldClearSold &&
-                      UTTransferListViewController.prototype.refreshList();
-                  }
-              );
+                    services.Item.relistExpiredAuctions().observe(
+                        this,
+                        function (t, listResponse) {
+                            !shouldClearSold &&
+                            UTTransferListViewController.prototype.refreshList();
+                        }
+                    );
+                }
 
-              setValue('shouldRelistAfterFbPrice', false);
-          }
+                const activeTransfers = response.data.items.filter(function (item) {
+                    return item.getAuctionData().isSelling();
+                }).length;
+                updateStats("activeTransfers", activeTransfers);
 
-        const activeTransfers = response.data.items.filter(function (item) {
-          return item.getAuctionData().isSelling();
-        }).length;
-        updateStats("activeTransfers", activeTransfers);
+                const availableItems = response.data.items.filter(function (item) {
+                    return item.getAuctionData().isInactive();
+                }).length;
 
-        const availableItems = response.data.items.filter(function (item) {
-          return item.getAuctionData().isInactive();
-        }).length;
+                updateStats("availableItems", availableItems);
 
-        updateStats("availableItems", availableItems);
+                const userCoins = services.User.getUser().coins.amount;
+                updateStats("coinsNumber", userCoins);
+                updateStats("coins", userCoins.toLocaleString());
 
-        const userCoins = services.User.getUser().coins.amount;
-        updateStats("coinsNumber", userCoins);
-        updateStats("coins", userCoins.toLocaleString());
-
-        if (shouldClearSold) {
-          writeToLog(
-            "[TRANSFER-LIST] > " + soldItems + " item(s) sold\n",
-            idProgressAutobuyer
-          );
-          UTTransferListViewController.prototype._clearSold();
-          saveStatisticAboutTransferListPlayers(soldItemsList);
-        }
-        resolve();
-      }
-    );
-  });
+                if (shouldClearSold) {
+                    writeToLog(
+                        "[TRANSFER-LIST] > " + soldItems + " item(s) sold\n",
+                        idProgressAutobuyer
+                    );
+                    UTTransferListViewController.prototype._clearSold();
+                    saveStatisticAboutTransferListPlayers(soldItemsList);
+                }
+                resolve();
+            }
+        );
+    });
 };
 
 export const reListWithUpdatedPrice = async (items) => {

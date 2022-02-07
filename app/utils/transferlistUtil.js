@@ -33,16 +33,6 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
 
                 const shouldClearSold = soldItems >= minSoldCount;
 
-                if (unsoldItems && !relistUnsold && isNeedReListWithUpdatedPrice) {
-                    await reListWithUpdatedPrice(
-                        response.data.items.filter((item) => {
-                                return (
-                                    !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
-                                );
-                            }
-                        ))
-                }
-
                 if (unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) {
                     services.Item.relistExpiredAuctions().observe(
                         this,
@@ -51,6 +41,16 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                             UTTransferListViewController.prototype.refreshList();
                         }
                     );
+                }
+
+                if (unsoldItems && !relistUnsold && isNeedReListWithUpdatedPrice) {
+                    await reListWithUpdatedPrice(
+                        response.data.items.filter((item) => {
+                                return (
+                                    !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
+                                );
+                            }
+                        ))
                 }
 
                 const activeTransfers = response.data.items.filter(function (item) {

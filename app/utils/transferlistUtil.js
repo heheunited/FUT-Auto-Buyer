@@ -109,8 +109,10 @@ export const reListWithUpdatedPrice = async (items) => {
             playerPrice = playerPrice >= userMinimalSellPrice ? playerPrice : userMinimalSellPrice;
         }
 
-        if ((await listForPrice(playerPrice, player, sellPercent)) === true) {
-            await wait(getRandWaitTimeInSeconds('3-7'));
-        }
+        await listForPrice(playerPrice, player, sellPercent).then(async result => {
+            if (result === true) {
+                await wait(getRandWaitTimeInSeconds('3-7'));
+            }
+        })
     }
 }

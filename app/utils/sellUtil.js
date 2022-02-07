@@ -1,5 +1,5 @@
 import {convertToSeconds, getRandNumberInRange} from "./commonUtil";
-import {getBuyBidPrice, getSellBidPrice, roundOffPrice} from "./priceUtils";
+import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice, roundOffPrice} from "./priceUtils";
 import {getBuyerSettings} from "../services/repository";
 import {increaseReListPlayerRequestCount} from "./transferListStatsUtils";
 import {idProgressAutobuyer} from "../elementIds.constants";

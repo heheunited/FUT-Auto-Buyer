@@ -32,7 +32,7 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
             if (getValue('shouldRelistAfterFbPrice') === false) {
                 setValue('shouldRelistAfterFbPrice', true);
                 writeToLog(
-                    `[^^^] Relist after FutBin price activated.`,
+                    `[^^^1] Relist after FutBin price activated.`,
                     idProgressAutobuyer
                 )
             }

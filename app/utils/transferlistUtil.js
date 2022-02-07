@@ -47,7 +47,7 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
           if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (getValue('shouldRelistAfterFbPrice') === true)) {
 
               if (getValue('shouldRelistAfterFbPrice') === true) {
-                  writeToLog(`[^^^] Force relist after FutBin`, idProgressAutobuyer
+                  writeToLog(`[^^^2] Force relist after FutBin price.`, idProgressAutobuyer
                   )
               }
 

@@ -2,7 +2,7 @@ import { convertToSeconds, getRandNumberInRange } from "./commonUtil";
 import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice, roundOffPrice} from "./priceUtils";
 import {writeToLog} from "./logUtil";
 import {idProgressAutobuyer} from "../elementIds.constants";
-import {getBuyerSettings} from "../services/repository";
+import {getBuyerSettings, getValue, setValue} from "../services/repository";
 import {increaseReListPlayerRequestCount} from "./transferListStatsUtils";
 
 export const listForPrice = async (sellPrice, player, futBinPercent) => {
@@ -26,6 +26,15 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
     }
 
     calculatedPrice = roundOffPrice(calculatedPrice, 200);
+
+    if (getValue('shouldRelistAfterFbPrice') === false) {
+      const compareResult = Number(player._auction.buyNowPrice) === calculatedPrice;
+      setValue('shouldRelistAfterFbPrice', compareResult)
+
+      if (compareResult === true) {
+        return;
+      }
+    }
 
     writeToLog(
         `[###] Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}$`,

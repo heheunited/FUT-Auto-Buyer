@@ -3,7 +3,7 @@ import { getStatsValue, updateStats } from "../handlers/statsProcessor";
 import { writeToLog } from "./logUtil";
 import { sendPinEvents } from "./notificationUtil";
 import { updateUserCredits } from "./userUtil";
-import {getBuyerSettings, getValue} from "../services/repository";
+import {getBuyerSettings, getValue, setValue} from "../services/repository";
 import {addFutbinCachePrice} from "./futbinUtil";
 import {listForPrice} from "./sellUtil";
 import {getRandWaitTimeInSeconds, wait} from "./commonUtil";
@@ -33,17 +33,8 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
 
         const shouldClearSold = soldItems >= minSoldCount;
 
-          if (unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) {
-              services.Item.relistExpiredAuctions().observe(
-                  this,
-                  function (t, listResponse) {
-                      !shouldClearSold &&
-                      UTTransferListViewController.prototype.refreshList();
-                  }
-              );
-          }
-
           if (unsoldItems && !relistUnsold && isNeedReListWithUpdatedPrice) {
+              setValue('shouldRelistAfterFbPrice', false);
               await reListWithUpdatedPrice(
                   response.data.items.filter((item) => {
                           return (
@@ -51,6 +42,16 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                           );
                       }
                   ))
+          }
+
+          if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (getValue('shouldRelistAfterFbPrice') === true)) {
+              services.Item.relistExpiredAuctions().observe(
+                  this,
+                  function (t, listResponse) {
+                      !shouldClearSold &&
+                      UTTransferListViewController.prototype.refreshList();
+                  }
+              );
           }
 
         const activeTransfers = response.data.items.filter(function (item) {

@@ -44,11 +44,10 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                   ))
           }
 
-          if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (unsoldItems && getValue('shouldRelistAfterFbPrice') === true)) {
+          if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (unsoldItems && (getValue('shouldRelistAfterFbPrice') === true))) {
 
               if (getValue('shouldRelistAfterFbPrice') === true) {
                   writeToLog(`[^^^2] Force relist after FutBin price.`, idProgressAutobuyer)
-                  setValue('shouldRelistAfterFbPrice', false);
               }
 
               services.Item.relistExpiredAuctions().observe(
@@ -58,6 +57,8 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                       UTTransferListViewController.prototype.refreshList();
                   }
               );
+
+              setValue('shouldRelistAfterFbPrice', false);
           }
 
         const activeTransfers = response.data.items.filter(function (item) {
@@ -109,8 +110,8 @@ export const reListWithUpdatedPrice = async (items) => {
             playerPrice = playerPrice >= userMinimalSellPrice ? playerPrice : userMinimalSellPrice;
         }
 
-        if (await listForPrice(playerPrice, player, sellPercent)) {
-            await wait(getRandWaitTimeInSeconds('3-6'));
+        if ((await listForPrice(playerPrice, player, sellPercent)) === true) {
+            await wait(getRandWaitTimeInSeconds('3-7'));
         }
     }
 }

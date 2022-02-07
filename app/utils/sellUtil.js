@@ -8,7 +8,7 @@ import {increaseReListPlayerRequestCount} from "./transferListStatsUtils";
 export const listForPrice = async (sellPrice, player, futBinPercent) => {
     let buyerSetting = getBuyerSettings();
     await getPriceLimits(player);
-    if (sellPrice > 0) {
+    if (sellPrice) {
         futBinPercent = getRandNumberInRange(futBinPercent) || 100;
         const duration = buyerSetting['idFutBinDuration'];
         let calculatedPrice = (sellPrice * futBinPercent) / 100;

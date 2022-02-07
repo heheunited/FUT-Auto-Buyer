@@ -34,7 +34,6 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                 const shouldClearSold = soldItems >= minSoldCount;
 
                 if (unsoldItems && !relistUnsold && isNeedReListWithUpdatedPrice) {
-                    setValue('shouldRelistAfterFbPrice', false);
                     await reListWithUpdatedPrice(
                         response.data.items.filter((item) => {
                                 return (
@@ -44,13 +43,7 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                         ))
                 }
 
-                if ((unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) || (unsoldItems && getValue('shouldRelistAfterFbPrice') === true)) {
-
-                    if (getValue('shouldRelistAfterFbPrice') === true) {
-                        writeToLog(`[^^^2] Force relist after FutBin price.`, idProgressAutobuyer);
-                        setValue('shouldRelistAfterFbPrice', false);
-                    }
-
+                if (unsoldItems && relistUnsold && !isNeedReListWithUpdatedPrice) {
                     services.Item.relistExpiredAuctions().observe(
                         this,
                         function (t, listResponse) {
@@ -91,9 +84,9 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
 
 export const reListWithUpdatedPrice = async (items) => {
     const buyerSetting = getBuyerSettings();
-    let sellPercent = buyerSetting["idSellFutBinPercent"]
+    let sellPercent = buyerSetting["idSellFutBinPercent"];
 
-    await addFutbinCachePrice(items)
+    await addFutbinCachePrice(items);
     for (var itmIndex = 0; itmIndex < items.length; itmIndex++) {
         let player = items[itmIndex];
         let existingValue = getValue(player.definitionId);
@@ -109,10 +102,7 @@ export const reListWithUpdatedPrice = async (items) => {
             playerPrice = playerPrice >= userMinimalSellPrice ? playerPrice : userMinimalSellPrice;
         }
 
-        await listForPrice(playerPrice, player, sellPercent).then(async result => {
-            if (result === true) {
-                await wait(getRandWaitTimeInSeconds('3-7'));
-            }
-        })
+        await listForPrice(playerPrice, player, sellPercent);
+        await wait(getRandWaitTimeInSeconds('3-7'));
     }
 }

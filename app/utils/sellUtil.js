@@ -1,9 +1,9 @@
 import {convertToSeconds, getRandNumberInRange} from "./commonUtil";
-import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice, roundOffPrice} from "./priceUtils";
-import {writeToLog} from "./logUtil";
-import {idProgressAutobuyer} from "../elementIds.constants";
-import {getBuyerSettings, getValue, setValue} from "../services/repository";
+import {getBuyBidPrice, getSellBidPrice, roundOffPrice} from "./priceUtils";
+import {getBuyerSettings} from "../services/repository";
 import {increaseReListPlayerRequestCount} from "./transferListStatsUtils";
+import {idProgressAutobuyer} from "../elementIds.constants";
+import {writeToLog} from "./logUtil";
 
 export const listForPrice = async (sellPrice, player, futBinPercent) => {
     let buyerSetting = getBuyerSettings();
@@ -27,25 +27,12 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
 
         calculatedPrice = roundOffPrice(calculatedPrice, 200);
 
-        if (Number(player._auction.buyNowPrice) === calculatedPrice) {
-
-            if (getValue('shouldRelistAfterFbPrice') === false) {
-                setValue('shouldRelistAfterFbPrice', true);
-                writeToLog(
-                    `[^^^1] Relist after FutBin price activated.`,
-                    idProgressAutobuyer
-                )
-            }
-
-            return false;
-        }
+        increaseReListPlayerRequestCount();
 
         writeToLog(
             `[###] Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}$`,
             idProgressAutobuyer
         )
-
-        increaseReListPlayerRequestCount();
 
         services.Item.list(
             player,
@@ -53,11 +40,7 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
             calculatedPrice,
             convertToSeconds(duration) || 3600
         );
-
-        return true;
     }
-
-    return false;
 };
 
 const getPriceLimits = async (player) => {

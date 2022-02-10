@@ -6,7 +6,7 @@ import {
 import {getValue, setValue} from "../services/repository";
 import {
     convertToSeconds,
-    formatString,
+    formatString, getMinOrMaxFromRange,
     getRandWaitTime, getRandWaitTimeInSeconds,
     promisifyTimeOut,
     wait,
@@ -14,7 +14,7 @@ import {
 import {getSellPriceFromFutBin} from "./futbinUtil";
 import {writeToLog} from "./logUtil";
 import {sendPinEvents} from "./notificationUtil";
-import {calculateProfitPercent, getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
+import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import {buyPlayer, isBidOrBuyMakeExpectedProfit} from "./purchaseUtil";
 import {updateProfit} from "./statsUtil";
 import {
@@ -95,7 +95,8 @@ export const watchListUtil = function (buyerSetting) {
                                         bidPrice > currentBid &&
                                         expireTimeLessThan &&
                                         expectedPercentProfit &&
-                                        bidPrice > checkPrice
+                                        bidPrice > checkPrice &&
+                                        auction.expires > getMinOrMaxFromRange(delayAfterOutbid, 'max')
                                     );
                                 }).sort((a, b) => a._auction.expires - b._auction.expires);
 

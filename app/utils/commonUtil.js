@@ -133,6 +133,16 @@ export const getRandWaitTimeInSeconds = (range) => {
   return 0;
 };
 
+export const getMinOrMaxFromRange = (range, minOrMax = 'max') => {
+  if (range) {
+    const [min, max] = range.split("-").map((a) => parseInt(a));
+    const response = {min: min, max: max};
+    return response[minOrMax]
+  }
+
+  return 0;
+};
+
 export const formatString = (str, len) => {
   if (str.length <= len) {
     str += " ".repeat(len - str.length);

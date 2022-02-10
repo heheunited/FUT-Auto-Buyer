@@ -136,7 +136,12 @@ export const getRandWaitTimeInSeconds = (range) => {
 export const getMinOrMaxFromRange = (range, minOrMax = 'max') => {
   if (range) {
     const [min, max] = range.split("-").map((a) => parseInt(a));
-    const response = {min: min, max: max};
+
+    const response = {
+      min: min,
+      max: max
+    };
+
     return response[minOrMax]
   }
 

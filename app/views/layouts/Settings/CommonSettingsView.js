@@ -4,7 +4,7 @@ import {
   idAbStopErrorCodeCount,
   idAutoClearExpired,
   idAutoClearLog,
-  idBypassSoftBan,
+  idBypassSoftBan, idCacheFutBinPriceByElapsedTime,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -53,9 +53,9 @@ export const commonSettingsView = function () {
     "CommonSettings"
   )}
   ${generateToggleInput(
-      "Bypass softban",
-      { idBypassSoftBan },
-      "(Automatically bypass softban)",
+      "Cache FutBin prices by stop after",
+      { idCacheFutBinPriceByElapsedTime },
+      "",
       "CommonSettings"
     )
   }

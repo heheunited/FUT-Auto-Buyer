@@ -81,7 +81,7 @@ export const addFutbinCachePrice = async (players) => {
   const platform = getUserPlatform();
   const playerIds = new Set();
   const playersLookup = [];
-  const cacheMinutes = getValue('cacheFutBinPriceMinutesByElapsedTime');
+  const cacheMinutes = getValue('cacheFutBinPriceMinsByStopAfter');
   for (const player of players) {
     const existingValue = getValue(player.definitionId);
     if (!existingValue) {

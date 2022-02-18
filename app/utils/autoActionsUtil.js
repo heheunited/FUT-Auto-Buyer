@@ -1,5 +1,5 @@
 import {
-  idAutoBuyerFoundLog,
+  idAutoBuyerFoundLog, idCacheFutBinPriceByElapsedTime,
   idProgressAutobuyer
 } from "../elementIds.constants";
 import {autoRestartAutoBuyer, startAutoBuyer, stopAutoBuyer} from "../handlers/autobuyerProcessor";
@@ -33,8 +33,10 @@ export const stopBotIfRequired = (buyerSetting) => {
   const botStartTime = getValue("botStartTime").getTime();
   let time = stopAfter || convertRangeToSeconds(buyerSetting["idAbStopAfter"]);
   setValue(
-      'cacheFutBinPriceMinutesByElapsedTime',
-      buyerSetting["idAbStopAfter"] ? (convertSecondsToMinutes(time) + 1) : 15
+      'cacheFutBinPriceMinsByStopAfter',
+      buyerSetting["idAbStopAfter"] && buyerSetting['idCacheFutBinPriceByElapsedTime']
+          ? (convertSecondsToMinutes(time) + 1)
+          : 15
   );
   if (!stopAfter) {
     stopAfter = time;

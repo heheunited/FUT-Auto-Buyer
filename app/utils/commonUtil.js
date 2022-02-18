@@ -80,6 +80,8 @@ export const convertRangeToSeconds = (val) => {
   return 0;
 };
 
+export const convertSecondsToMinutes = (value) => Math.round(value / 60);
+
 export const convertSecondsToTime = (val) => {
   let totalSeconds = val;
   let hours = Math.floor(totalSeconds / 3600);

@@ -10,7 +10,7 @@ import {
   setValue
 } from "../services/repository";
 import {
-  convertRangeToSeconds, convertSecondsToTime,
+  convertRangeToSeconds, convertSecondsToMinutes, convertSecondsToTime,
   getRandNum,
   getRandNumberInRange,
   hideLoader,
@@ -32,6 +32,10 @@ export const stopBotIfRequired = (buyerSetting) => {
 
   const botStartTime = getValue("botStartTime").getTime();
   let time = stopAfter || convertRangeToSeconds(buyerSetting["idAbStopAfter"]);
+  setValue(
+      'cacheFutBinPriceMinutesByElapsedTime',
+      buyerSetting["idAbStopAfter"] ? (convertSecondsToMinutes(time) + 1) : 15
+  );
   if (!stopAfter) {
     stopAfter = time;
   }

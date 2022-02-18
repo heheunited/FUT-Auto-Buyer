@@ -107,7 +107,7 @@ export const addFutbinCachePrice = async (players) => {
               const futbinLessPrice =
                 futBinPrices[player.definitionId].prices[platform].LCPrice;
               const cacheValue = {
-                expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
+                expiryTimeStamp: new Date(Date.now() + 25 * 60 * 1000),
                 price: parseInt(futbinLessPrice.replace(/[,.]/g, "")),
               };
               setValue(player.definitionId, cacheValue);

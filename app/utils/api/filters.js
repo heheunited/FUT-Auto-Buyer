@@ -1,6 +1,6 @@
 import {sendUINotification} from "../notificationUtil";
 import {saveFilterInDB} from "../userExternalUtil";
-import {getRequestToBackend, postRequestToBackend} from "./apiRequest";
+import {deleteRequestToBackend, getRequestToBackend, postRequestToBackend} from "./apiRequest";
 
 const apiEndpoint = 'https://mysterious-savannah-72408.herokuapp.com/api';
 const filtersPath = '/filters';
@@ -41,4 +41,18 @@ const syncFilters = async () => {
     });
 }
 
-export {uploadFilter, syncFilters}
+const deleteFilterFromCloud = async (filterName) => {
+    let newFiltersEndpoint = filtersEndpoint + `?filterName=${filterName}`;
+
+    await deleteRequestToBackend(newFiltersEndpoint).then(response => {
+        let responseData = response.data;
+
+        if (responseData.success === true) {
+            sendUINotification(`Filter: ${filterName} success deleted`);
+        }
+    }).catch(error => {
+        sendUINotification(`Delete error: ${error}`, UINotificationType.NEGATIVE);
+    })
+}
+
+export {uploadFilter, syncFilters, deleteFilterFromCloud}

@@ -8,6 +8,7 @@ import { updateSettingsView } from "./commonUtil";
 import { deleteFilters, insertFilters } from "./dbUtil";
 import { checkAndAppendOption, updateMultiFilterSettings } from "./filterUtil";
 import { sendUINotification } from "./notificationUtil";
+import {deleteFilterFromCloud} from "./api/filters";
 
 const filterDropdownId = `#${ElementIds.idFilterDropdown}`;
 const selectedFilterId = `#${ElementIds.idSelectedFilter}`;
@@ -132,6 +133,7 @@ export const deleteFilter = async function () {
     $(`${selectedFilterId}` + ` option[value="${filterName}"]`).remove();
     updateMultiFilterSettings();
     deleteFilters(filterName);
+    deleteFilterFromCloud(filterName);
     setValue("currentFilter", null);
     sendUINotification("Changes saved successfully");
   }

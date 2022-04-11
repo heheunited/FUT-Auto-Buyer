@@ -2,7 +2,7 @@ import axios from "axios";
 import {getBuyerSettings} from "../../services/repository";
 
 const getRequestToBackend = (url) => {
-    url += _getApiKey();
+    url = _appendApiKeyToUrl(url);
 
     return axios.get(url, {
         validateStatus: function (status) {
@@ -12,7 +12,7 @@ const getRequestToBackend = (url) => {
 }
 
 const postRequestToBackend = (url, data) => {
-    url += _getApiKey();
+    url = _appendApiKeyToUrl(url);
 
     return axios.post(
         url, data, {
@@ -23,7 +23,7 @@ const postRequestToBackend = (url, data) => {
 }
 
 const deleteRequestToBackend = (url) => {
-    url += _getApiKey();
+    url = _appendApiKeyToUrl(url);
 
     return axios.delete(url, {
         validateStatus: function (status) {
@@ -32,10 +32,14 @@ const deleteRequestToBackend = (url) => {
     });
 }
 
-const _getApiKey = () => {
+const _appendApiKeyToUrl = (url) => {
     const apiKeySetting = getBuyerSettings()['idAbBackendApiKey'];
 
-    return `?apiKey=${apiKeySetting}`
+    let urlObj = new URL(url)
+
+    urlObj.searchParams.set('apiKey', apiKeySetting);
+
+    return urlObj.href;
 };
 
 export {getRequestToBackend, postRequestToBackend, deleteRequestToBackend}

@@ -199,7 +199,7 @@ export const filterHeaderSettingsView = async function () {
                    
                    ${generateButton(
                      idAbDownloadFilter,
-                     "⇧",
+                     "↑",
                      () => {
                        uploadFiltersLocal();
                      },
@@ -208,7 +208,7 @@ export const filterHeaderSettingsView = async function () {
                    )} 
                    ${generateButton(
                      idAbUploadFilter,
-                     "⇩",
+                     "↓",
                      () => {
                        uploadFiltersToServer();
                      },
@@ -216,7 +216,7 @@ export const filterHeaderSettingsView = async function () {
                    )}
                    ${generateButton(
                      idAbUploadFilterToCloud,
-                     "☁",
+                     "⯊",
                      () => {
                        uploadFiltersToCloud();
                      },
@@ -224,7 +224,7 @@ export const filterHeaderSettingsView = async function () {
                    )} 
                    ${generateButton(
                       idAbSyncFiltersWithCloud,
-                     "♺",
+                     "↺",
                      () => {
                          syncFilterWithCloud();
                      },

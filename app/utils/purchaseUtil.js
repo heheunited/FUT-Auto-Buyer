@@ -159,7 +159,7 @@ export const buyPlayer = (
               );
           }
         } else {
-          await wait(getRandWaitTimeInSeconds('3-5'))
+          // await wait(getRandWaitTimeInSeconds('3-5'))
           let lossCount = increAndGetStoreValue("lossCount");
           let sym = " L:" + formatString(lossCount.toString(), 4);
           appendTransactions(
@@ -242,9 +242,7 @@ export const buyPlayer = (
           }
         }
 
-
-        buyerSetting["idAbAddBuyDelay"] &&
-          (await wait(convertToSeconds(buyerSetting["idAbDelayToAdd"])));
+        buyerSetting["idAbAddBuyDelay"] && (await wait(convertToSeconds(buyerSetting["idAbDelayToAdd"])));
         resolve();
       }
     );

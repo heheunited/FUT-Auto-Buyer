@@ -279,9 +279,11 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
             `[@@@] Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
             idProgressAutobuyer
         );
+
         increaseOutbidPlayerRequestsCount();
+
         await buyPlayer(player, playerName, checkPrice, sellPrice);
-        buyerSetting["idAbAddBuyDelay"] && (await wait(1));
+        // buyerSetting["idAbAddBuyDelay"] && (await wait(1));
     }
 };
 

@@ -123,13 +123,14 @@ export const loadFilter = async function (currentFilterName) {
 export const deleteFilter = async function () {
   const filterName = $(`${filterDropdownId} option`).filter(":selected").val();
   if (filterName != "Choose filter to load") {
+    deleteFilterFromCloud(filterName);
+
     $(`${filterDropdownId}` + ` option[value="${filterName}"]`).remove();
     $(`${filterDropdownId}`).prop("selectedIndex", 0);
 
     await clearSettingMenus();
     this.viewDidAppear();
 
-    deleteFilterFromCloud(filterName);
     delete getValue("filters")[filterName];
     $(`${selectedFilterId}` + ` option[value="${filterName}"]`).remove();
     updateMultiFilterSettings();

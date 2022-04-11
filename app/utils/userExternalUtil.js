@@ -129,11 +129,11 @@ export const deleteFilter = async function () {
     await clearSettingMenus();
     this.viewDidAppear();
 
+    deleteFilterFromCloud(filterName);
     delete getValue("filters")[filterName];
     $(`${selectedFilterId}` + ` option[value="${filterName}"]`).remove();
     updateMultiFilterSettings();
     deleteFilters(filterName);
-    deleteFilterFromCloud(filterName);
     setValue("currentFilter", null);
     sendUINotification("Changes saved successfully");
   }

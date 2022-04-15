@@ -3,7 +3,7 @@ import {
     idAutoBuyerFoundLog,
     idProgressAutobuyer,
 } from "../elementIds.constants";
-import {getValue, setValue} from "../services/repository";
+import {getBuyerSettings, getValue, setValue} from "../services/repository";
 import {
     convertToSeconds,
     formatString, getMinOrMaxFromRange,
@@ -13,7 +13,7 @@ import {
 } from "./commonUtil";
 import {getSellPriceFromFutBin} from "./futbinUtil";
 import {writeToLog} from "./logUtil";
-import {sendPinEvents} from "./notificationUtil";
+import {sendErrorNotificationToUser, sendPinEvents} from "./notificationUtil";
 import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import {buyPlayer, isBidOrBuyMakeExpectedProfit} from "./purchaseUtil";
 import {updateProfit} from "./statsUtil";
@@ -25,6 +25,7 @@ import {
     increaseListPlayerRequestCount,
     increaseRemovePlayerRequestCount
 } from "./transferListStatsUtils";
+import {SELL_MOD_AFTER_BOT_PAUSE, SELL_MOD_AUTO_DEFAULT, SELL_MOD_BY_COUNT, SELL_MOD_DISABLED} from "./constants";
 
 const sellBids = new Set();
 
@@ -118,14 +119,10 @@ export const watchListUtil = function (buyerSetting) {
 
                             const useFutBinPrice = buyerSetting["idSellFutBinPrice"];
 
-                            if (
-                                isAutoBuyerActive &&
-                                !buyerSetting["idAbDontMoveWon"] &&
-                                ((sellPrice && !isNaN(sellPrice)) || useFutBinPrice)
-                            ) {
-                                let boughtItems = watchResponse.data.items.filter(function (
-                                    item
-                                ) {
+                            const sellMod = getSellItemsMod(buyerSetting);
+
+                            if (sellMod !== SELL_MOD_DISABLED) {
+                                let boughtItems = watchResponse.data.items.filter(function (item) {
                                     return (
                                         item.getAuctionData().isWon() &&
                                         (!filterName ||
@@ -135,51 +132,59 @@ export const watchListUtil = function (buyerSetting) {
                                     );
                                 });
 
-                                for (var i = 0; i < boughtItems.length; i++) {
-                                    const player = boughtItems[i];
-                                    const price = player._auction.currentBid;
-                                    const ratingThreshold = buyerSetting["idSellRatingThreshold"];
-                                    let playerRating = parseInt(player.rating);
-                                    const isValidRating =
-                                        !ratingThreshold || playerRating <= ratingThreshold;
+                                const isNeedSellWonItemsByCount = sellMod === SELL_MOD_BY_COUNT && boughtItems.length >= buyerSetting['idAbSellWonItemsCount'];
+                                const isNeedSellWonItemsAfterBotPause = sellMod === SELL_MOD_AFTER_BOT_PAUSE && getValue('needSellWonItemsAfterBotPause') === true;
+                                const isNeedSendToTransferList = sellMod === SELL_MOD_AUTO_DEFAULT;
 
-                                    if (isValidRating && useFutBinPrice) {
-                                        let playerName = formatString(player._staticData.name, 15);
-                                        sellPrice = await getSellPriceFromFutBin(
-                                            buyerSetting,
-                                            playerName,
-                                            player
-                                        );
-                                    }
+                                if (isNeedSellWonItemsAfterBotPause || isNeedSellWonItemsByCount || isNeedSendToTransferList) {
+                                    for (var i = 0; i < boughtItems.length; i++) {
+                                        const player = boughtItems[i];
+                                        const price = player._auction.currentBid;
+                                        const ratingThreshold = buyerSetting["idSellRatingThreshold"];
+                                        let playerRating = parseInt(player.rating);
+                                        const isValidRating =
+                                            !ratingThreshold || playerRating <= ratingThreshold;
 
-                                    const checkBuyPrice = buyerSetting["idSellCheckBuyPrice"];
-                                    if (checkBuyPrice && price > (sellPrice * 95) / 100) {
-                                        sellPrice = -1;
-                                    }
+                                        if (isValidRating && useFutBinPrice) {
+                                            let playerName = formatString(player._staticData.name, 15);
+                                            sellPrice = await getSellPriceFromFutBin(
+                                                buyerSetting,
+                                                playerName,
+                                                player
+                                            );
+                                        }
 
-                                    const shouldList =
-                                        sellPrice && !isNaN(sellPrice) && isValidRating;
+                                        const checkBuyPrice = buyerSetting["idSellCheckBuyPrice"];
+                                        if (checkBuyPrice && price > (sellPrice * 95) / 100) {
+                                            sellPrice = -1;
+                                        }
 
-                                    if (sellPrice < 0) {
-                                        services.Item.move(player, ItemPile.TRANSFER);
-                                    } else if (shouldList) {
-                                        const profit =
-                                            sellPrice * 0.95 - player._auction.currentBid;
-                                        updateProfit(profit);
+                                        const shouldList =
+                                            sellPrice && !isNaN(sellPrice) && isValidRating;
 
-                                        await wait(getRandWaitTimeInSeconds(buyerSetting['idAbWaitTime']))
+                                        if (sellPrice < 0) {
+                                            services.Item.move(player, ItemPile.TRANSFER);
+                                        } else if (shouldList) {
+                                            const profit =
+                                                sellPrice * 0.95 - player._auction.currentBid;
+                                            updateProfit(profit);
 
-                                        await sellWonItems(
-                                            player,
-                                            sellPrice,
-                                            buyerSetting["idAbWaitTime"],
-                                            buyerSetting["idFutBinDuration"],
-                                            profit
-                                        );
-                                    } else {
-                                        services.Item.move(player, ItemPile.CLUB);
+                                            await wait(getRandWaitTimeInSeconds(buyerSetting['idAbWaitTime']))
+
+                                            await sellWonItems(
+                                                player,
+                                                sellPrice,
+                                                buyerSetting["idAbWaitTime"],
+                                                buyerSetting["idFutBinDuration"],
+                                                profit
+                                            );
+                                        } else {
+                                            services.Item.move(player, ItemPile.CLUB);
+                                        }
                                     }
                                 }
+
+                                sellMod === SELL_MOD_AFTER_BOT_PAUSE && setValue('needSellWonItemsAfterBotPause', false);
                             }
 
                             let expiredItems = watchResponse.data.items.filter((item) => {
@@ -291,6 +296,54 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
         // buyerSetting["idAbAddBuyDelay"] && (await wait(1));
     }
 };
+
+const getSellItemsMod = (buyerSetting) => {
+    const isAutoBuyerActive = getValue("autoBuyerActive");
+    const sellPrice = buyerSetting["idAbSellPrice"];
+
+    const sellPriceOrFutBinPrice = ((sellPrice && !isNaN(sellPrice)) || buyerSetting["idSellFutBinPrice"])
+
+    let isNeedSendToTransferListItems = false;
+    let inSellItemsAfterBotPause = false;
+    let isSellItemsByCount = false;
+
+    if (!getValue('sellWonItemsMod')) {
+        isNeedSendToTransferListItems = isAutoBuyerActive && !buyerSetting["idAbDontMoveWon"] &&
+            !buyerSetting['idAbSellItemsOnlyAfterBotPause'] && buyerSetting['idAbSellWonItemsCount'] == 0 &&
+            sellPriceOrFutBinPrice;
+
+        inSellItemsAfterBotPause = isAutoBuyerActive && !buyerSetting["idAbDontMoveWon"] &&
+            buyerSetting['idAbSellItemsOnlyAfterBotPause'] && getValue('needSellWonItemsAfterBotPause') === true &&
+            sellPriceOrFutBinPrice;
+
+        isSellItemsByCount = isAutoBuyerActive && !buyerSetting["idAbDontMoveWon"] &&
+            buyerSetting['idAbSellWonItemsCount'] > 0 && !buyerSetting['idAbSellItemsOnlyAfterBotPause'] &&
+            sellPriceOrFutBinPrice;
+
+        let sellItemsMod;
+
+        switch (true) {
+            case isNeedSendToTransferListItems:
+                sellItemsMod = SELL_MOD_AUTO_DEFAULT;
+                break;
+            case inSellItemsAfterBotPause:
+                sellItemsMod = SELL_MOD_AFTER_BOT_PAUSE;
+                break;
+            case isSellItemsByCount:
+                sellItemsMod = SELL_MOD_BY_COUNT;
+                break;
+            default:
+                sellItemsMod = SELL_MOD_DISABLED;
+                break;
+        }
+
+        sendErrorNotificationToUser(`sell mod ${sellItemsMod}`);
+
+        setValue('sellWonItemsMod', sellItemsMod);
+    }
+
+    return getValue('sellWonItemsMod');
+}
 
 const sellWonItems = async (
     player,

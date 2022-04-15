@@ -98,6 +98,7 @@ export const startAutoBuyer = async function (isResume) {
   let pauseBotWithContext = pauseBotIfRequired.bind(this);
   await switchFilterWithContext();
   let buyerSetting = getBuyerSettings();
+  setValue('needSellWonItemsAfterBotPause', buyerSetting['idAbSellItemsOnlyAfterBotPause']);
   !isResume && (await addUserWatchItems());
   sendPinEvents("Hub - Transfers");
   await srchTmWithContext(buyerSetting);
@@ -134,6 +135,7 @@ export const startAutoBuyer = async function (isResume) {
 
 export const autoRestartAutoBuyer = () => {
   let buyerSetting = getBuyerSettings();
+  setValue('needSellWonItemsAfterBotPause', buyerSetting['idAbSellItemsOnlyAfterBotPause']);
   if (buyerSetting["idAbRestartAfter"]){
     const autoRestart = convertRangeToSeconds(
         buyerSetting["idAbRestartAfter"]

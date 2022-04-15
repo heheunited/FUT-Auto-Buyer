@@ -9,7 +9,7 @@ import {
   idSellCheckBuyPrice,
   idFutBinDuration,
   idAbDontMoveWon,
-  idAbRelistUnsoldWithUpdatePrice, idAbMinSellPrice,
+  idAbRelistUnsoldWithUpdatePrice, idAbMinSellPrice, idAbSellItemsOnlyAfterBotPause, idAbSellWonItemsCount,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -73,6 +73,12 @@ export const sellSettingsView = function () {
       "(Keep won items <br /> in Unassigned or Transfer Targets)",
       "BuyerSettings"
     )}
+    ${generateToggleInput(
+      "Sell items only after bot pause",
+      { idAbSellItemsOnlyAfterBotPause},
+      "(Sell Items one time after bot pause)",
+      "BuyerSettings"
+    )}
     ${generateTextInput(
       "Sell Price",
       "",
@@ -110,5 +116,12 @@ export const sellSettingsView = function () {
       "(Rating threshold to list the sniped player)",
       "BuyerSettings"
     )}
+    ${generateTextInput(
+      "Sell won items count",
+      0,
+      {idAbSellWonItemsCount},
+      "(0 - disabled)",
+      "BuyerSettings"
+  )}
     </div>`;
 };

@@ -103,6 +103,6 @@ export const reListWithUpdatedPrice = async (items) => {
         }
 
         await listForPrice(playerPrice, player, sellPercent);
-        await wait(getRandWaitTimeInSeconds('3-7'));
+        await wait(getRandWaitTimeInSeconds(buyerSetting['idAbRelistSellItemsWaitTime']));
     }
 }

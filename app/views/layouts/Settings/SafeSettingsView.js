@@ -6,7 +6,7 @@ import {
   idAbWaitTime,
   idAbAddBuyDelay,
   idAbDelayToAdd,
-  idAbRestartAfter, idAbDelayAfterOutbid
+  idAbRestartAfter, idAbDelayAfterOutbid, idAbRelistSellItemsWaitTime
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -18,13 +18,22 @@ export const safeSettingsView = function () {
     <h1 class="secondary">Safety Settings:</h1>
   </div>
   ${generateTextInput(
-    "Wait Time",
-    "7-15",
-    { idAbWaitTime },
-    "(Random second range eg. 7-15)",
-    "CommonSettings",
-    "text",
-    "\\d+-\\d+$"
+      "Wait Time",
+      "7-15",
+      {idAbWaitTime},
+      "(Random second range eg. 7-15)",
+      "CommonSettings",
+      "text",
+      "\\d+-\\d+$"
+  )}
+  ${generateTextInput(
+      "Relist unsold/Sell won items wait time",
+      "5-10",
+      {idAbRelistSellItemsWaitTime},
+      "(Random second range eg. 5-10)",
+      "CommonSettings",
+      "text",
+      "\\d+-\\d+$"
   )}
   ${generateTextInput(
     "Max purchases per search request",

@@ -64,7 +64,7 @@ export const buySettingsView = function () {
       "BuyerSettings"
        )}
        ${generateTextInput(
-      "Bid if card expires time less than N (Seconds)",
+      "Outbid if card expires time less than N secs",
       120,
       { idAbBidExpiresLessThanSeconds },
       '',

@@ -187,7 +187,12 @@ export const watchListUtil = function (buyerSetting) {
                                 return t.isExpired() || (t.isClosedTrade() && !t.isWon());
                             });
 
-                            if (buyerSetting["idAutoClearExpired"] && expiredItems.length) {
+                            const clearExpiredItemsCount = buyerSetting['idClearExpiredItems'];
+                            const isNeedClearExpiredByCount = buyerSetting["idAutoClearExpired"] &&
+                                clearExpiredItemsCount > 0 &&
+                                expiredItems.length >= clearExpiredItemsCount;
+
+                            if ((buyerSetting["idAutoClearExpired"] && expiredItems.length && clearExpiredItemsCount == 0) || isNeedClearExpiredByCount) {
                                 increaseRemovePlayerRequestCount();
                                 services.Item.untarget(expiredItems);
                                 writeToLog(

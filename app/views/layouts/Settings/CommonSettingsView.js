@@ -4,7 +4,7 @@ import {
   idAbStopErrorCodeCount,
   idAutoClearExpired,
   idAutoClearLog,
-  idBypassSoftBan, idCacheFutBinPriceByElapsedTime,
+  idBypassSoftBan, idCacheFutBinPriceByElapsedTime, idClearExpiredItems,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -51,6 +51,13 @@ export const commonSettingsView = function () {
     { idAutoClearExpired },
     "(Automatically clear expired items <br/> from transfer targets)",
     "CommonSettings"
+  )}
+    ${generateTextInput(
+      "Clear expired items",
+      0,
+      {idClearExpiredItems},
+      "(0 - automatically clear)",
+      "CommonSettings",
   )}
   ${generateToggleInput(
       "Cache FutBin prices by stop after",

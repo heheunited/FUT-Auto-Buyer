@@ -91,12 +91,12 @@ export const startAutoBuyer = async function (isResume) {
     setValue("currentPage", 1);
     _deleteAllCaptchaEntities()
   }
-  let switchFilterWithContext = switchFilterIfRequired.bind(this);
+  // let switchFilterWithContext = switchFilterIfRequired.bind(this);
   let srchTmWithContext = searchTransferMarket.bind(this);
   let watchListWithContext = watchListUtil.bind(this);
   let transferListWithContext = transferListUtil.bind(this);
   let pauseBotWithContext = pauseBotIfRequired.bind(this);
-  await switchFilterWithContext();
+  // await switchFilterWithContext();
   let buyerSetting = getBuyerSettings();
   await setFutBinPricesCacheTime(buyerSetting);
   setValue('needSellWonItemsAfterBotPause', buyerSetting['idAbSellItemsOnlyAfterBotPause']);
@@ -119,7 +119,7 @@ export const startAutoBuyer = async function (isResume) {
       const isBuyerActive = getValue("autoBuyerActive");
       if (isBuyerActive && !operationInProgress) {
         operationInProgress = true;
-        await switchFilterWithContext();
+        // await switchFilterWithContext();
         buyerSetting = getBuyerSettings();
         sendPinEvents("Hub - Transfers");
         await srchTmWithContext(buyerSetting);

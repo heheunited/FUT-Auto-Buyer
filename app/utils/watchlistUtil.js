@@ -140,7 +140,7 @@ export const watchListUtil = function (buyerSetting) {
 
                                 const isNeedSellWonItemsByCount = sellMod === SELL_MOD_BY_COUNT && boughtItems.length >= buyerSetting['idAbSellWonItemsCount'];
                                 const isNeedSellWonItemsAfterBotPause = sellMod === SELL_MOD_AFTER_BOT_PAUSE && getValue('needSellWonItemsAfterBotPause') === true;
-                                const isNeedSendToTransferList = sellMod === SELL_MOD_AUTO_DEFAULT;
+                                const isNeedSendToTransferList = sellMod === SELL_MOD_AUTO_DEFAULT && !isNeedSellWonItemsByCount && !isNeedSellWonItemsAfterBotPause;
 
                                 if (isNeedSellWonItemsAfterBotPause || isNeedSellWonItemsByCount || isNeedSendToTransferList) {
                                     let itemsLength = boughtItems.length;

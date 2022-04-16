@@ -1,6 +1,6 @@
 import { idAutoBuyerFoundLog } from "../elementIds.constants";
 import { getValue, setValue } from "../services/repository";
-import { networkCallWithRetry, getRandNumberInRange } from "./commonUtil";
+import {networkCallWithRetry, getRandNumberInRange, convertRangeToSeconds, convertSecondsToMinutes} from "./commonUtil";
 import { writeToLog } from "./logUtil";
 import { getBuyBidPrice, roundOffPrice } from "./priceUtils";
 import { getUserPlatform } from "./userUtil";
@@ -81,7 +81,7 @@ export const addFutbinCachePrice = async (players) => {
   const platform = getUserPlatform();
   const playerIds = new Set();
   const playersLookup = [];
-  const cacheMinutes = getValue('cacheFutBinPriceMinsByStopAfter');
+  const cacheMinutes = getValue('FutBinPricesCacheTimeMinutes');
   for (const player of players) {
     const existingValue = getValue(player.definitionId);
     if (!existingValue) {
@@ -150,3 +150,13 @@ const getPriceLimits = async (player) => {
     );
   });
 };
+
+export const setFutBinPricesCacheTime = (buyerSetting) => {
+  let time = convertRangeToSeconds(buyerSetting["idAbStopAfter"]);
+
+  let cacheTime = buyerSetting["idAbStopAfter"] && buyerSetting['idCacheFutBinPriceByElapsedTime']
+      ? (convertSecondsToMinutes(time) + 1)
+      : 25
+
+  setValue('FutBinPricesCacheTimeMinutes', cacheTime);
+}

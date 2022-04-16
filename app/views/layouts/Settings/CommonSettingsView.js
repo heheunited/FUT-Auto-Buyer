@@ -60,7 +60,7 @@ export const commonSettingsView = function () {
       "CommonSettings",
   )}
   ${generateToggleInput(
-      "Cache FutBin prices by stop after",
+      "Cache FutBin prices by elapsed time",
       { idCacheFutBinPriceByElapsedTime },
       "",
       "CommonSettings"

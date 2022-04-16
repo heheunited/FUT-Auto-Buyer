@@ -23,7 +23,7 @@ import {
   getRangeValue,
   playAudio,
 } from "../utils/commonUtil";
-import { addFutbinCachePrice } from "../utils/futbinUtil";
+import {addFutbinCachePrice, setFutBinPricesCacheTime} from "../utils/futbinUtil";
 import { writeToDebugLog, writeToLog } from "../utils/logUtil";
 import {
   sendErrorNotificationToUser,
@@ -98,6 +98,7 @@ export const startAutoBuyer = async function (isResume) {
   let pauseBotWithContext = pauseBotIfRequired.bind(this);
   await switchFilterWithContext();
   let buyerSetting = getBuyerSettings();
+  await setFutBinPricesCacheTime(buyerSetting);
   setValue('needSellWonItemsAfterBotPause', buyerSetting['idAbSellItemsOnlyAfterBotPause']);
   !isResume && (await addUserWatchItems());
   sendPinEvents("Hub - Transfers");

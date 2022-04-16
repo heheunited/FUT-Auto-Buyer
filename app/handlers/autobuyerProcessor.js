@@ -109,6 +109,8 @@ export const startAutoBuyer = async function (isResume) {
     buyerSetting["idAbMinDeleteCount"],
     buyerSetting["idAbRelistUnsoldWithUpdatePrice"]
   );
+  sendPinEvents("Hub - Transfers");
+  await watchListWithContext(buyerSetting);
   let operationInProgress = false;
   if (getValue("autoBuyerActive")) {
     interval = setRandomInterval(async () => {

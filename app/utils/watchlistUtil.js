@@ -7,13 +7,12 @@ import {getValue, setValue} from "../services/repository";
 import {
     convertToSeconds,
     formatString, getMinOrMaxFromRange,
-    getRandWaitTime, getRandWaitTimeInSeconds, getTransferListTotalItemsCount,
-    promisifyTimeOut,
+    getRandWaitTimeInSeconds,
     wait,
 } from "./commonUtil";
 import {getSellPriceFromFutBin} from "./futbinUtil";
 import {writeToLog} from "./logUtil";
-import {sendErrorNotificationToUser, sendPinEvents, sendUINotification} from "./notificationUtil";
+import {sendPinEvents, sendUINotification} from "./notificationUtil";
 import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import {buyPlayer, isBidOrBuyMakeExpectedProfit} from "./purchaseUtil";
 import {updateProfit} from "./statsUtil";
@@ -32,7 +31,7 @@ import {
     SELL_MOD_DISABLED,
     TRANSFER_LIST_MAX_COUNT
 } from "./constants";
-import {getStatsValue} from "../handlers/statsProcessor";
+import {getTransferListTotalItemsCount} from "../handlers/statsProcessor";
 
 const sellBids = new Set();
 

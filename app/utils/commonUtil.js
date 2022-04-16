@@ -238,7 +238,3 @@ export const updateSettingsView = function (settings) {
     }
   }
 };
-
-export const getTransferListTotalItemsCount = () => {
-  return getStatsValue('soldItems') + getStatsValue('activeTransfers') + getStatsValue('unsoldItems');
-}

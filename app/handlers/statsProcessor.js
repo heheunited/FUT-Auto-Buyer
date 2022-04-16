@@ -119,3 +119,7 @@ export const getStatsValue = (key) => {
   const currentStats = getValue("sessionStats");
   return currentStats[key] || 0;
 };
+
+export const getTransferListTotalItemsCount = () => {
+  return getStatsValue('soldItems') + getStatsValue('activeTransfers') + getStatsValue('unsoldItems');
+}

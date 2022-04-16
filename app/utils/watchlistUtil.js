@@ -144,9 +144,15 @@ export const watchListUtil = function (buyerSetting) {
                                 const isNeedSendToTransferList = sellMod === SELL_MOD_AUTO_DEFAULT;
 
                                 if (isNeedSellWonItemsAfterBotPause || isNeedSellWonItemsByCount || isNeedSendToTransferList) {
-                                    const totalItemsCount = getTransferListTotalItemsCount();
-                                    const itemsLength = totalItemsCount + boughtItems.length <= TRANSFER_LIST_MAX_COUNT
-                                        ? boughtItems.length : TRANSFER_LIST_MAX_COUNT - totalItemsCount;
+                                    let itemsLength = boughtItems.length;
+
+                                    if (buyerSetting['idAbPreventTransferListOverflow']) {
+                                        const totalItemsCount = getTransferListTotalItemsCount();
+
+                                        itemsLength = totalItemsCount + boughtItems.length <= TRANSFER_LIST_MAX_COUNT
+                                            ? boughtItems.length
+                                            : TRANSFER_LIST_MAX_COUNT - totalItemsCount;
+                                    }
 
                                     for (var i = 0; i < itemsLength; i++) {
                                         const player = boughtItems[i];

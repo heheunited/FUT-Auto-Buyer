@@ -1,6 +1,7 @@
 import { idCapatchaMp3, idWinMp3, idFinishMp3 } from "../elementIds.constants";
 import { getBuyerSettings } from "../services/repository";
 import * as ElementIds from "../elementIds.constants";
+import {getStatsValue} from "../handlers/statsProcessor";
 
 export const generateId = (length) => {
   let result = "";
@@ -237,3 +238,7 @@ export const updateSettingsView = function (settings) {
     }
   }
 };
+
+export const getTransferListTotalItemsCount = () => {
+  return getStatsValue('soldItems') + getStatsValue('activeTransfers') + getStatsValue('unsoldItems');
+}

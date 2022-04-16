@@ -7,7 +7,7 @@ import {getValue, setValue} from "../services/repository";
 import {
     convertToSeconds,
     formatString, getMinOrMaxFromRange,
-    getRandWaitTime, getRandWaitTimeInSeconds,
+    getRandWaitTime, getRandWaitTimeInSeconds, getTransferListTotalItemsCount,
     promisifyTimeOut,
     wait,
 } from "./commonUtil";
@@ -144,9 +144,9 @@ export const watchListUtil = function (buyerSetting) {
                                 const isNeedSendToTransferList = sellMod === SELL_MOD_AUTO_DEFAULT;
 
                                 if (isNeedSellWonItemsAfterBotPause || isNeedSellWonItemsByCount || isNeedSendToTransferList) {
-                                    const currentActiveTransfersCount = getStatsValue('activeTransfers')
-                                    const itemsLength = currentActiveTransfersCount + boughtItems.length <= TRANSFER_LIST_MAX_COUNT
-                                        ? boughtItems.length : TRANSFER_LIST_MAX_COUNT - currentActiveTransfersCount;
+                                    const totalItemsCount = getTransferListTotalItemsCount();
+                                    const itemsLength = totalItemsCount + boughtItems.length <= TRANSFER_LIST_MAX_COUNT
+                                        ? boughtItems.length : TRANSFER_LIST_MAX_COUNT - totalItemsCount;
 
                                     for (var i = 0; i < itemsLength; i++) {
                                         const player = boughtItems[i];

@@ -322,10 +322,6 @@ const getSellWonItemsMod = (buyerSetting) => {
     const sellPrice = buyerSetting["idAbSellPrice"];
     const sellPriceOrFutBinPrice = ((sellPrice && !isNaN(sellPrice)) || buyerSetting["idSellFutBinPrice"])
 
-    const autoMod = isAutoBuyerActive && !buyerSetting["idAbDontMoveWon"] &&
-        !buyerSetting['idAbSellItemsOnlyAfterBotPause'] && buyerSetting['idAbSellWonItemsCount'] == 0 &&
-        sellPriceOrFutBinPrice;
-
     const afterBotPauseMod = isAutoBuyerActive && !buyerSetting["idAbDontMoveWon"] &&
         buyerSetting['idAbSellItemsOnlyAfterBotPause'] && getValue('needSellWonItemsAfterBotPause') === true &&
         sellPriceOrFutBinPrice;
@@ -333,6 +329,8 @@ const getSellWonItemsMod = (buyerSetting) => {
     const sellByCountMod = isAutoBuyerActive && !buyerSetting["idAbDontMoveWon"] &&
         buyerSetting['idAbSellWonItemsCount'] > 0 && !buyerSetting['idAbSellItemsOnlyAfterBotPause'] &&
         sellPriceOrFutBinPrice;
+
+    const autoMod = isAutoBuyerActive && !buyerSetting["idAbDontMoveWon"] && !afterBotPauseMod && !sellByCountMod && sellPriceOrFutBinPrice;
 
     let sellWonItemsMod;
 

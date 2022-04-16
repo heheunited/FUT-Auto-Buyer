@@ -25,7 +25,14 @@ import {
     increaseListPlayerRequestCount,
     increaseRemovePlayerRequestCount
 } from "./transferListStatsUtils";
-import {SELL_MOD_AFTER_BOT_PAUSE, SELL_MOD_AUTO_DEFAULT, SELL_MOD_BY_COUNT, SELL_MOD_DISABLED} from "./constants";
+import {
+    SELL_MOD_AFTER_BOT_PAUSE,
+    SELL_MOD_AUTO_DEFAULT,
+    SELL_MOD_BY_COUNT,
+    SELL_MOD_DISABLED,
+    TRANSFER_LIST_MAX_COUNT
+} from "./constants";
+import {getStatsValue} from "../handlers/statsProcessor";
 
 const sellBids = new Set();
 
@@ -137,7 +144,11 @@ export const watchListUtil = function (buyerSetting) {
                                 const isNeedSendToTransferList = sellMod === SELL_MOD_AUTO_DEFAULT;
 
                                 if (isNeedSellWonItemsAfterBotPause || isNeedSellWonItemsByCount || isNeedSendToTransferList) {
-                                    for (var i = 0; i < boughtItems.length; i++) {
+                                    const currentActiveTransfersCount = getStatsValue('activeTransfers')
+                                    const itemsLength = currentActiveTransfersCount + boughtItems.length <= TRANSFER_LIST_MAX_COUNT
+                                        ? boughtItems.length : TRANSFER_LIST_MAX_COUNT - currentActiveTransfersCount;
+
+                                    for (var i = 0; i < itemsLength; i++) {
                                         const player = boughtItems[i];
                                         const price = player._auction.currentBid;
                                         const ratingThreshold = buyerSetting["idSellRatingThreshold"];

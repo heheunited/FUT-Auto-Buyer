@@ -146,10 +146,10 @@ export const watchListUtil = function (buyerSetting) {
                                     let itemsLength = boughtItems.length;
 
                                     if (buyerSetting['idAbPreventTransferListOverflow']) {
-                                        const totalItemsCount = getTransferListTotalItemsCount();
+                                        let totalItemsCount = getTransferListTotalItemsCount();
 
-                                        itemsLength = totalItemsCount + itemsLength <= TRANSFER_LIST_MAX_COUNT
-                                            ? itemsLength
+                                        itemsLength = (totalItemsCount + boughtItems.length) <= TRANSFER_LIST_MAX_COUNT
+                                            ? boughtItems.length
                                             : TRANSFER_LIST_MAX_COUNT - totalItemsCount;
                                     }
 

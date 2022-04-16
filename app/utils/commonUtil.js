@@ -1,7 +1,6 @@
 import { idCapatchaMp3, idWinMp3, idFinishMp3 } from "../elementIds.constants";
 import { getBuyerSettings } from "../services/repository";
 import * as ElementIds from "../elementIds.constants";
-import {getStatsValue} from "../handlers/statsProcessor";
 
 export const generateId = (length) => {
   let result = "";

@@ -121,5 +121,17 @@ export const getStatsValue = (key) => {
 };
 
 export const getTransferListTotalItemsCount = () => {
-  return getStatsValue('soldItems') + getStatsValue('activeTransfers') + getStatsValue('unsoldItems');
+  const currentStats = getValue("sessionStats");
+  const requiredStats = ['soldItems', 'activeTransfers', 'unsoldItems'];
+
+  let total = 0;
+  requiredStats.map((stat) => {
+    let value = currentStats[stat];
+
+    if (typeof value === 'number') {
+      total += value;
+    }
+  })
+
+  return total;
 }

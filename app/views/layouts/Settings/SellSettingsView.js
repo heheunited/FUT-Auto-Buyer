@@ -84,9 +84,9 @@ export const sellSettingsView = function () {
       "BuyerSettings"
   )}
     ${generateToggleInput(
-      "Sell items only after bot pause",
+      "Sell won items only after bot pause",
       { idAbSellItemsOnlyAfterBotPause},
-      "(Sell Items one time after bot pause)",
+      "",
       "BuyerSettings"
     )}
     ${generateTextInput(

@@ -74,6 +74,7 @@ export const idProxyPassword = "elem_" + generateId(15);
 export const idAutoClearLog = "elem_" + generateId(15);
 export const idAutoClearExpired = "elem_" + generateId(15);
 export const idClearExpiredItems = "elem_" + generateId(15);
+export const idFutBinPricesCacheTime = "elem_" + generateId(15);
 export const idSellRatingThreshold = "elem_" + generateId(15);
 export const idSellFutBinPrice = "elem_" + generateId(15);
 export const idSellFutBinPercent = "elem_" + generateId(15);

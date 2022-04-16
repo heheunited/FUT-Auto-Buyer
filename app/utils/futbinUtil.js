@@ -152,11 +152,13 @@ const getPriceLimits = async (player) => {
 };
 
 export const setFutBinPricesCacheTime = (buyerSetting) => {
-  let time = convertRangeToSeconds(buyerSetting["idAbStopAfter"]);
+  let cacheTime = buyerSetting['idFutBinPricesCacheTime'];
 
-  let cacheTime = buyerSetting["idAbStopAfter"] && buyerSetting['idCacheFutBinPriceByElapsedTime']
-      ? (convertSecondsToMinutes(time) + 1)
-      : 25
+  if (buyerSetting["idAbStopAfter"] && buyerSetting['idCacheFutBinPriceByElapsedTime']) {
+    let time = convertRangeToSeconds(buyerSetting["idAbStopAfter"]);
+
+    cacheTime = (convertSecondsToMinutes(time) + 1);
+  }
 
   setValue('FutBinPricesCacheTimeMinutes', cacheTime);
 }

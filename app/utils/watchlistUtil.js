@@ -124,7 +124,6 @@ export const watchListUtil = function (buyerSetting) {
                             }
 
                             const useFutBinPrice = buyerSetting["idSellFutBinPrice"];
-
                             const sellMod = getSellWonItemsMod(buyerSetting);
 
                             if (sellMod !== SELL_MOD_DISABLED) {

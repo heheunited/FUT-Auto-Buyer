@@ -4,7 +4,7 @@ import {
   idAbStopErrorCodeCount,
   idAutoClearExpired,
   idAutoClearLog,
-  idBypassSoftBan, idCacheFutBinPriceByElapsedTime, idClearExpiredItems,
+  idCacheFutBinPriceByElapsedTime, idClearExpiredItems, idFutBinPricesCacheTime,
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -66,5 +66,12 @@ export const commonSettingsView = function () {
       "CommonSettings"
     )
   }
+  ${generateTextInput(
+      "FutBin price cache time",
+      25,
+      {idFutBinPricesCacheTime},
+      "(eg. 25 minutes)",
+      "CommonSettings",
+  )}
   </div>`;
 };

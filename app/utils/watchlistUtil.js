@@ -149,6 +149,10 @@ export const watchListUtil = function (buyerSetting) {
                                             : TRANSFER_LIST_MAX_COUNT - totalItemsCount;
                                     }
 
+                                    if (itemsLength > 0) {
+                                        writeToLog('[✔✔✔] Sell won items count: ' + itemsLength, idProgressAutobuyer)
+                                    }
+
                                     for (var i = 0; i < itemsLength; i++) {
                                         const player = boughtItems[i];
                                         const price = player._auction.currentBid;

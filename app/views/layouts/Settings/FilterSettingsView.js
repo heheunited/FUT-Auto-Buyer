@@ -31,6 +31,7 @@ import {
   saveFilterDetails,
 } from "../../../utils/userExternalUtil";
 import { createButton } from "../ButtonView";
+import {sendUINotification} from "../../../utils/notificationUtil";
 
 $(document).on(
   {
@@ -174,9 +175,9 @@ export const filterHeaderSettingsView = async function () {
               <div class="buyer-settings" style="display:flex;justify-content:center">
               ${generateButton(
                 idAbReportProblem,
-                "Report a problem",
+                "Test Market Soft Ban",
                 () => {
-                  handleReportProblem();
+                    sendUINotification('TEST')
                 },
                 "call-to-action mrgRgt10"
               )}

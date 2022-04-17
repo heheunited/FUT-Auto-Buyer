@@ -52,10 +52,10 @@ export const getSellPriceFromFutBin = async (
         }
       }
       calculatedPrice = roundOffPrice(calculatedPrice);
-      writeToLog(
-        `= Futbin price for ${playerName}: ${sellPrice}: ${futBinPercent}% of sale price: ${calculatedPrice}`,
-        idAutoBuyerFoundLog
-      );
+      // writeToLog(
+      //   `= Futbin price for ${playerName}: ${sellPrice}: ${futBinPercent}% of sale price: ${calculatedPrice}`,
+      //   idAutoBuyerFoundLog
+      // );
       sellPrice = calculatedPrice;
     } else {
       sellPrice = null;

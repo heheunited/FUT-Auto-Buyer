@@ -79,11 +79,13 @@ export const showCaptchaLogs = function (captchaCloseTab) {
   );
 };
 
-export const writeToLog = function (message, log) {
-  var $log = $("#" + log);
-  message = "[" + new Date().toLocaleTimeString() + "] " + message + "\n";
+export const writeToLog = function (message, log, lineBreak = '') {
+  let $log = $("#" + log);
+
+  message = lineBreak + "[" + new Date().toLocaleTimeString() + "] " + message + "\n";
   $log.val($log.val() + message);
   if ($log[0]) $log.scrollTop($log[0].scrollHeight);
+
   return message;
 };
 

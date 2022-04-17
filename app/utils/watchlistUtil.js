@@ -300,7 +300,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
 
     if (isAutoBuyerActive && currentBid <= priceToBid) {
         writeToLog(
-            `[@@@] Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
+            ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
             idProgressAutobuyer
         );
 

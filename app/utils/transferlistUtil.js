@@ -87,7 +87,7 @@ export const reListWithUpdatedPrice = async (items) => {
     let sellPercent = buyerSetting["idSellFutBinPercent"];
 
     if (items.length > 0) {
-        writeToLog('[✘✘✘] Relist unsold items count: ' + items.length, idProgressAutobuyer)
+        writeToLog('[↺↺↺] Relist unsold items count: ' + items.length, idProgressAutobuyer)
     }
 
     await addFutbinCachePrice(items);

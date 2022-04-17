@@ -235,12 +235,14 @@ export const watchListUtil = function (buyerSetting) {
                                     countExpiredItemsWithCurrentBidGreaterThanUserMaxBid
                                 );
 
+                                writeToLog('[✘✘✘] Clear expired items count: ' + expiredItems.length, idProgressAutobuyer)
+
                                 expiredItems.map(player => {
                                     let auction = player._auction;
                                     let currentBid = (auction.currentBid || auction.startingBid);
 
                                     writeToLog(
-                                        `[---] Removed Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
+                                        ` (---) Remove Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
                                         idProgressAutobuyer
                                     );
                                 })
@@ -365,17 +367,11 @@ const sellWonItems = async (
     let auction = player._auction;
     let playerName = formatString(player._staticData.name, 14);
     sellBids.add(auction.tradeId);
-    writeToLog(
-        " ($$$) " +
-        playerName +
-        "[" +
-        player._auction.tradeId +
-        "] -- Selling for: " +
-        sellPrice + `. FB price: ${getFutBinPlayerPrice(player.definitionId)}` +
-        ". Profit: " +
-        profit,
-        idProgressAutobuyer
-    );
+
+    const logMessage = " ($$$) Selling Player: " + playerName + ". Price: " + sellPrice + `. FB price: ${getFutBinPlayerPrice(player.definitionId)}` + ". Profit: " + profit;
+
+    writeToLog(logMessage, idProgressAutobuyer);
+
     player.clearAuction();
     increaseSentToTransferListCount();
     increaseEstimatedProfit(profit);

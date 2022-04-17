@@ -86,6 +86,10 @@ export const reListWithUpdatedPrice = async (items) => {
     const buyerSetting = getBuyerSettings();
     let sellPercent = buyerSetting["idSellFutBinPercent"];
 
+    if (items.length > 0) {
+        writeToLog('[✘✘✘] Relist unsold items count: ' + items.length, idProgressAutobuyer)
+    }
+
     await addFutbinCachePrice(items);
     for (var itmIndex = 0; itmIndex < items.length; itmIndex++) {
         let player = items[itmIndex];

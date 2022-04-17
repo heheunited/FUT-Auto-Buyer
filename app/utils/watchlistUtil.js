@@ -150,7 +150,7 @@ export const watchListUtil = function (buyerSetting) {
                                     }
 
                                     if (itemsLength > 0) {
-                                        writeToLog('[✔✔✔] SELL WON ITEMS COUNT: ' + itemsLength, idProgressAutobuyer)
+                                        writeToLog("\n[✔✔✔] SELL WON ITEMS COUNT: " + itemsLength, idProgressAutobuyer)
                                     }
 
                                     for (var i = 0; i < itemsLength; i++) {
@@ -235,14 +235,14 @@ export const watchListUtil = function (buyerSetting) {
                                     countExpiredItemsWithCurrentBidGreaterThanUserMaxBid
                                 );
 
-                                writeToLog('[✘✘✘] CLEAR EXPIRED ITEMS COUNT: ' + expiredItems.length, idProgressAutobuyer)
+                                writeToLog("\n[✘✘✘] CLEAR EXPIRED ITEMS COUNT: " + expiredItems.length, idProgressAutobuyer)
 
                                 expiredItems.map(player => {
                                     let auction = player._auction;
                                     let currentBid = (auction.currentBid || auction.startingBid);
 
                                     writeToLog(
-                                        ` (---) Remove Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
+                                        ` (---) Remove Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
                                         idProgressAutobuyer
                                     );
                                 })
@@ -302,7 +302,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
 
     if (isAutoBuyerActive && currentBid <= priceToBid) {
         writeToLog(
-            ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB price: ${getFutBinPlayerPrice(player.definitionId)}.`,
+            ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
             idProgressAutobuyer
         );
 
@@ -368,7 +368,7 @@ const sellWonItems = async (
     sellBids.add(auction.tradeId);
     const boughtPrice = (auction.currentBid || auction.startingBid);
 
-    const logMessage = ` ($$$) Selling Player: ${player._staticData.name}.` + ` Bought price: ${boughtPrice}.` + ` Sell price: ${sellPrice}.` + ` FB price: ${getFutBinPlayerPrice(player.definitionId)}.` + ` Profit: ${profit}.`;
+    const logMessage = ` ($$$) Selling Player: ${player._staticData.name}.` + ` Bought: ${boughtPrice}.` + ` Sell: ${sellPrice}.` + ` FB: ${getFutBinPlayerPrice(player.definitionId)}.` + ` Profit: ${profit}.`;
 
     writeToLog(logMessage, idProgressAutobuyer);
 

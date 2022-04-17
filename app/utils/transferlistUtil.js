@@ -79,7 +79,7 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
 
 
                     writeToLog(
-                        "\n[⍟⍟⍟] CLEAR TRANSFER LIST. SOLD ITEMS COUNT: " + soldItems + `. PROFIT: ${totalProfit}.`,
+                        "[⍟⍟⍟] CLEAR TRANSFER LIST. SOLD ITEMS COUNT: " + soldItems + `. PROFIT: ${totalProfit}.`,
                         idProgressAutobuyer
                     );
                     UTTransferListViewController.prototype._clearSold();
@@ -96,7 +96,7 @@ export const reListWithUpdatedPrice = async (items) => {
     let sellPercent = buyerSetting["idSellFutBinPercent"];
 
     if (items.length > 0) {
-        writeToLog("\n[↺↺↺] RELIST UNSOLD ITEMS COUNT: " + items.length, idProgressAutobuyer)
+        writeToLog("[↺↺↺] RELIST UNSOLD ITEMS COUNT: " + items.length, idProgressAutobuyer)
     }
 
     await addFutbinCachePrice(items);

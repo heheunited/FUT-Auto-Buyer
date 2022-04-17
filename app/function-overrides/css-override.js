@@ -80,6 +80,12 @@ export const cssOverride = () => {
     font-size: 1.2em;
     text-overflow: unset;
   }
+  .btn-standard-resize {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px !important;
+  }
   .filter-header-settings {
     width: 100%;
     padding: 10px;

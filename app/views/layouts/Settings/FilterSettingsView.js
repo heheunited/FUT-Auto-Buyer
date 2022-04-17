@@ -203,7 +203,7 @@ export const filterHeaderSettingsView = async function () {
                      () => {
                        uploadFiltersLocal();
                      },
-                     "filterSync",
+                     "filterSync btn-standard-resize",
                      "Upload filters"
                    )} 
                    ${generateButton(
@@ -212,15 +212,17 @@ export const filterHeaderSettingsView = async function () {
                      () => {
                        uploadFiltersToServer();
                      },
-                     "filterSync"
+                     "filterSync btn-standard-resize",
+                    "Download filters"
                    )}
                    ${generateButton(
                      idAbUploadFilterToCloud,
-                     "⯊",
+                     "☁",
                      () => {
                        uploadFiltersToCloud();
                      },
-                     "filterSync",
+                     "filterSync btn-standard-resize",
+                    "Cloud filters"
                    )} 
                    ${generateButton(
                       idAbSyncFiltersWithCloud,
@@ -228,7 +230,8 @@ export const filterHeaderSettingsView = async function () {
                      () => {
                          syncFilterWithCloud();
                      },
-                     "filterSync",
+                     "filterSync btn-standard-resize",
+                    "Sync filters"
                    )} 
                </div>
                <div id="btn-actions" style="width:100%;margin-top: 1%;" class="button-container"> 

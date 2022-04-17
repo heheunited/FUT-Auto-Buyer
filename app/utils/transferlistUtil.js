@@ -69,8 +69,17 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                 updateStats("coins", userCoins.toLocaleString());
 
                 if (shouldClearSold) {
+                    let totalProfit = 0;
+
+                    soldItemsList.map((player) => {
+                        const auction = player.getAuctionData();
+
+                        totalProfit += (auction.currentBid || auction.startingBid);
+                    })
+
+
                     writeToLog(
-                        "[TRANSFER-LIST] > " + soldItems + " item(s) sold\n",
+                        "[⍟⍟⍟] Clear transfer list. Sold items count: " + soldItems + `. Profit: ${totalProfit}.` + "\n",
                         idProgressAutobuyer
                     );
                     UTTransferListViewController.prototype._clearSold();
@@ -87,7 +96,7 @@ export const reListWithUpdatedPrice = async (items) => {
     let sellPercent = buyerSetting["idSellFutBinPercent"];
 
     if (items.length > 0) {
-        writeToLog('[↺↺↺] Relist unsold items count: ' + items.length, idProgressAutobuyer)
+        writeToLog('[↺↺↺] Relist unsold items count: ' + items.length + "\n", idProgressAutobuyer)
     }
 
     await addFutbinCachePrice(items);

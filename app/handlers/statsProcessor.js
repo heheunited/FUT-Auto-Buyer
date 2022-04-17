@@ -122,7 +122,7 @@ export const getStatsValue = (key) => {
 
 export const getTransferListTotalItemsCount = () => {
   const currentStats = getValue("sessionStats");
-  const requiredStats = ['soldItems', 'activeTransfers', 'unsoldItems'];
+  const requiredStats = ['soldItems', 'activeTransfers', 'unsoldItems', 'availableItems'];
 
   let total = 0;
   requiredStats.map((stat) => {

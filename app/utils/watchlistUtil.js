@@ -63,10 +63,9 @@ export const watchListUtil = function (buyerSetting) {
                         this,
                         async function (t, watchResponse) {
                             const isAutoBuyerActive = getValue("autoBuyerActive");
-                            const filterName = getValue("currentFilter");
-                            const bidItemsByFilter = getValue("filterBidItems") || new Map();
-                            const filterWatchList =
-                                bidItemsByFilter.get(filterName) || new Set();
+                            // const filterName = getValue("currentFilter");
+                            // const bidItemsByFilter = getValue("filterBidItems") || new Map();
+                            // const filterWatchList = bidItemsByFilter.get(filterName) || new Set();
 
                             const userWatchItems = getValue("userWatchItems");
                             if (isAutoBuyerActive && bidPrice) {
@@ -85,6 +84,7 @@ export const watchListUtil = function (buyerSetting) {
                                     let expireTimeLessThan = buyerSetting['idAbBidExpiresLessThanSeconds'] > 0
                                         ? auction.expires <= buyerSetting['idAbBidExpiresLessThanSeconds']
                                         : true;
+
                                     let expectedPercentProfit = isExpectedProfitInPercentProvided
                                         ? isBidOrBuyMakeExpectedProfit(
                                             null,
@@ -96,7 +96,7 @@ export const watchListUtil = function (buyerSetting) {
 
                                     return (
                                         auction._bidState === "outbid" &&
-                                        (!filterName || filterWatchList.has(auction.tradeId)) &&
+                                        // (!filterName || filterWatchList.has(auction.tradeId)) &&
                                         !userWatchItems.has(auction.tradeId) &&
                                         auction._tradeState === "active" &&
                                         bidPrice > currentBid &&
@@ -110,9 +110,7 @@ export const watchListUtil = function (buyerSetting) {
                                 for (var i = 0; i < outBidItems.length; i++) {
                                     const currentItem = outBidItems[i];
 
-                                    if (delayAfterOutbid != '0') {
-                                        await wait(getRandWaitTimeInSeconds(delayAfterOutbid));
-                                    }
+                                    delayAfterOutbid != '0' && await wait(getRandWaitTimeInSeconds(delayAfterOutbid));
 
                                     await tryBidItems(
                                         currentItem,
@@ -130,8 +128,7 @@ export const watchListUtil = function (buyerSetting) {
                                 let boughtItems = watchResponse.data.items.filter(function (item) {
                                     return (
                                         item.getAuctionData().isWon() &&
-                                        (!filterName ||
-                                            filterWatchList.has(item._auction.tradeId)) &&
+                                        // (!filterName || filterWatchList.has(item._auction.tradeId)) &&
                                         !userWatchItems.has(item._auction.tradeId) &&
                                         !sellBids.has(item._auction.tradeId)
                                     );

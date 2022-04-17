@@ -20,9 +20,6 @@ import { writeToLog } from "./logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser, sendUINotification} from "./notificationUtil";
 import bypassSoftban from "./softbanUtil";
 import { loadFilter } from "./userExternalUtil";
-import {
-  getSummaryTransferListStats
-} from "./transferListStatsUtils";
 
 let stopAfter, pauseCycle;
 

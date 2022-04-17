@@ -150,7 +150,7 @@ export const watchListUtil = function (buyerSetting) {
                                     }
 
                                     if (itemsLength > 0) {
-                                        writeToLog('[✔✔✔] Sell won items count: ' + itemsLength + "\n", idProgressAutobuyer)
+                                        writeToLog('[✔✔✔] SELL WON ITEMS COUNT: ' + itemsLength + "\n", idProgressAutobuyer)
                                     }
 
                                     for (var i = 0; i < itemsLength; i++) {
@@ -235,7 +235,7 @@ export const watchListUtil = function (buyerSetting) {
                                     countExpiredItemsWithCurrentBidGreaterThanUserMaxBid
                                 );
 
-                                writeToLog('[✘✘✘] Clear expired items count: ' + expiredItems.length + "\n", idProgressAutobuyer)
+                                writeToLog('[✘✘✘] CLEAR EXPIRED ITEMS COUNT: ' + expiredItems.length + "\n", idProgressAutobuyer)
 
                                 expiredItems.map(player => {
                                     let auction = player._auction;

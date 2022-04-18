@@ -146,7 +146,7 @@ export const watchListUtil = function (buyerSetting) {
 
                                         itemsLength = (totalItemsCount + boughtItems.length) <= TRANSFER_LIST_MAX_COUNT
                                             ? boughtItems.length
-                                            : TRANSFER_LIST_MAX_COUNT - totalItemsCount;
+                                            : (TRANSFER_LIST_MAX_COUNT - totalItemsCount) - 1;
                                     }
 
                                     if (itemsLength > 0) {

@@ -103,7 +103,7 @@ export const watchListUtil = function (buyerSetting) {
                                         expireTimeLessThan &&
                                         expectedPercentProfit &&
                                         bidPrice > checkPrice &&
-                                        auction.expires > 5
+                                        auction.expires > 10
                                     );
                                 }).sort((a, b) => a._auction.expires - b._auction.expires);
 

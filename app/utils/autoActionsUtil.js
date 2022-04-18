@@ -88,30 +88,36 @@ export const stopBotIfRequired = (buyerSetting) => {
 
 export const pauseBotIfRequired = async function (buyerSetting) {
   const isBuyerActive = getValue("autoBuyerActive");
-  if (!isBuyerActive) return;
+
+  if (!isBuyerActive) {
+    return;
+  }
+
   const pauseFor = convertRangeToSeconds(buyerSetting["idAbPauseFor"]) * 1000;
-  const cycleAmount =
-      pauseCycle || getRandNumberInRange(buyerSetting["idAbCycleAmount"]);
+  const cycleAmount = pauseCycle || getRandNumberInRange(buyerSetting["idAbCycleAmount"]);
+
   if (!pauseCycle) {
     pauseCycle = cycleAmount;
   }
+
   const { searchCount, previousPause } = getValue("sessionStats");
 
-  if (getValue("softbanDetected") === true && buyerSetting["idBypassSoftBan"])
-  {
-    setValue("softbanDetected", false)
-    showLoader()
-    stopAutoBuyer(true);
-    const isBypassed = await bypassSoftban()
-    hideLoader()
-    if (isBypassed)
-    {
-      sendUINotification("Softban successfully bypassed");
-      startAutoBuyer.call(this, true);
-    }
-    else
-      sendUINotification("Softban cant be bypassed");
-  }
+  // if (getValue("softbanDetected") === true && buyerSetting["idBypassSoftBan"])
+  // {
+  //   setValue("softbanDetected", false)
+  //   showLoader()
+  //   stopAutoBuyer(true);
+  //   const isBypassed = await bypassSoftban()
+  //   hideLoader()
+  //   if (isBypassed)
+  //   {
+  //     sendUINotification("Softban successfully bypassed");
+  //     startAutoBuyer.call(this, true);
+  //   }
+  //   else
+  //     sendUINotification("Softban cant be bypassed");
+  // }
+
   if (searchCount && !((searchCount - previousPause) % cycleAmount)) {
     updateStats("previousPause", searchCount);
     stopAutoBuyer(true);

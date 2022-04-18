@@ -100,7 +100,7 @@ export const idFutBinDuration = "elem_" + generateId(15);
 export const idAbSortBy = "elem_" + generateId(15);
 export const idAbSortOrder = "elem_" + generateId(15);
 export const idAbShouldSort = "elem_" + generateId(15);
-export const idBypassSoftBan = "elem_" + generateId(15);
+// export const idBypassSoftBan = "elem_" + generateId(15);
 export const idCacheFutBinPriceByElapsedTime = "elem_" + generateId(15);
 
 export const idAbIgnoreAllowToggle = "elem_" + generateId(15);

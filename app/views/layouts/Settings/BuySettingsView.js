@@ -60,7 +60,7 @@ export const buySettingsView = function () {
       "Minimum expected profit in percent",
       0,
       { idAbExpectedProfitInPercent },
-      '(0 - disabled)',
+      '(Including 5% commission, 0 - disabled)',
       "BuyerSettings"
        )}
        ${generateTextInput(

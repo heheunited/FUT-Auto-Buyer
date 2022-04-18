@@ -81,10 +81,6 @@ export const watchListUtil = function (buyerSetting) {
                                             ? getBuyBidPrice(currentBid)
                                             : currentBid;
 
-                                    let expireTimeLessThan = buyerSetting['idAbBidExpiresLessThanSeconds'] > 0
-                                        ? auction.expires <= buyerSetting['idAbBidExpiresLessThanSeconds']
-                                        : true;
-
                                     let expectedPercentProfit = isExpectedProfitInPercentProvided
                                         ? isBidOrBuyMakeExpectedProfit(
                                             null,
@@ -92,6 +88,10 @@ export const watchListUtil = function (buyerSetting) {
                                             getFutBinPlayerPrice(item.definitionId, 95),
                                             expectedProfitPercent
                                         )
+                                        : true;
+
+                                    let expireTimeLessThan = buyerSetting['idAbBidExpiresLessThanSeconds'] > 0
+                                        ? auction.expires <= buyerSetting['idAbBidExpiresLessThanSeconds']
                                         : true;
 
                                     return (
@@ -105,7 +105,12 @@ export const watchListUtil = function (buyerSetting) {
                                         bidPrice > checkPrice &&
                                         auction.expires >= (getMinOrMaxFromRange(delayAfterOutbid, 'max') + 3)
                                     );
-                                }).sort((a, b) => a._auction.expires - b._auction.expires);
+                                }).sort((a, b) => {
+                                    let priceA = (a._auction.currentBid || a._auction.startingBid);
+                                    let priceB = (b._auction.currentBid || b._auction.startingBid);
+
+                                    return priceA - priceB;
+                                });
 
                                 for (var i = 0; i < outBidItems.length; i++) {
                                     const currentItem = outBidItems[i];

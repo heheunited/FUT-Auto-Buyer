@@ -27,5 +27,5 @@ export const getErrorsCountInterval = () => {
                 updateErrorsCountStats(responseData.count)
             }
         }).catch(error => sendUINotification(error, UINotificationType.NEGATIVE))
-    }, 180000)
+    }, 120000)
 }

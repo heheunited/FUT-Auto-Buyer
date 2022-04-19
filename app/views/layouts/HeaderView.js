@@ -11,7 +11,7 @@ import {
   idAbActiveTransfers,
   idAbProfit,
   idAbCountDown,
-  idAbDownloadStats, idTodayTlErrors,
+  idAbDownloadStats, id24hTlErrors,
 } from "../../elementIds.constants";
 import { downloadStats } from "../../utils/statsUtil";
 import { generateButton } from "../../utils/uiUtils/generateButton";
@@ -61,7 +61,7 @@ export const HeaderView = () => {
   </div>
      <div class="view-navbar-clubinfo">
     <div class="view-navbar-clubinfo-data">
-       <span class="view-navbar-clubinfo-name">Today TL errors: <span id=${idTodayTlErrors}></span></span>
+       <span class="view-navbar-clubinfo-name">24h errors: <span id=${id24hTlErrors}></span></span>
     </div>
   </div>
   <div class="view-navbar-currency" style="margin-left: 10px;">

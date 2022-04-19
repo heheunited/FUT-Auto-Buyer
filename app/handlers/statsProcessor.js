@@ -8,7 +8,7 @@ import {
   idAbSearchProgress,
   idAbSoldItems,
   idAbStatisticsProgress,
-  idAbUnsoldItems, idTodayTlErrors,
+  idAbUnsoldItems, id24hTlErrors,
 } from "../elementIds.constants";
 import { sendMessageToDiscord } from "../services/discordService";
 import { getValue, setValue } from "../services/repository";
@@ -19,18 +19,18 @@ setValue("sessionStats", {
   unsoldItems: "-",
   activeTransfers: "-",
   availableItems: "-",
-  todayTransferlistErrors: 0,
   coins: "-",
   coinsNumber: 0,
   searchCount: 0,
   previousPause: 0,
   profit: 0,
+  tl24hErrors: 0,
   sessionId: Date.now().toString(36) + Math.random().toString(36).substr(2),
   transactions: [],
 });
 
 export const statsProcessor = () => {
-  exportStatsExternal();
+  // exportStatsExternal();
   setInterval(() => {
     const nextRefresh = getTimerProgress(getValue("searchInterval"));
     const currentStats = getValue("sessionStats");
@@ -44,7 +44,7 @@ export const statsProcessor = () => {
     $("#" + idAbAvailableItems).html(currentStats.availableItems);
     $("#" + idAbActiveTransfers).html(currentStats.activeTransfers);
     $("#" + idAbProfit).html(currentStats.profit);
-    $("#" + idTodayTlErrors).html(currentStats.todayTransferlistErrors);
+    $("#" + id24hTlErrors).html(currentStats.tl24hErrors);
 
     updateTimer();
 

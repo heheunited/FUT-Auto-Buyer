@@ -1,5 +1,6 @@
-import {postRequestToBackend} from "./apiRequest";
+import {getRequestToBackend, postRequestToBackend} from "./apiRequest";
 import {sendUINotification} from "../notificationUtil";
+import {updateErrorsCountStats} from "../statsUtil";
 
 const apiEndpoint = 'https://mysterious-savannah-72408.herokuapp.com/api';
 const errorsStatisticPath = '/autobuyer/statistic/errors';
@@ -12,4 +13,19 @@ export const create = (data) => {
 
     postRequestToBackend(errorsEndpoint, postData)
         .catch(errors => sendUINotification(errors, UINotificationType.NEGATIVE));
+}
+
+export const getErrorsCountInterval = () => {
+    const errorsCountPath = '/autobuyer/statistic/errors-count';
+    const url = apiEndpoint + errorsCountPath;
+
+    setInterval(() => {
+        getRequestToBackend(url).then(response => {
+            const responseData = response.data;
+
+            if (responseData.success === true) {
+                updateErrorsCountStats(responseData.count)
+            }
+        }).catch(error => sendUINotification(error, UINotificationType.NEGATIVE))
+    }, 180000)
 }

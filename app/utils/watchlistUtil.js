@@ -224,7 +224,7 @@ export const watchListUtil = function (buyerSetting) {
                                         let playerAuction = player._auction;
                                         let currentBid = (playerAuction.currentBid || playerAuction.startingBid);
 
-                                        return currentBid <= userMaxBid;
+                                        return currentBid < userMaxBid;
                                     }
                                 ).length
 

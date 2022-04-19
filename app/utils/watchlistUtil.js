@@ -235,7 +235,11 @@ export const watchListUtil = function (buyerSetting) {
                                     countExpiredItemsWithCurrentBidGreaterThanUserMaxBid
                                 );
 
-                                writeToLog("[✘✘✘] CLEAR EXPIRED ITEMS COUNT: " + expiredItems.length, idProgressAutobuyer, "\n")
+                                writeToLog(
+                                    "[✘✘✘] CLEAR EXPIRED ITEMS COUNT: " + expiredItems.length + `. LAST BID <  ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. LAST BID >= ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`,
+                                    idProgressAutobuyer,
+                                    "\n"
+                                );
 
                                 expiredItems.map(player => {
                                     let auction = player._auction;

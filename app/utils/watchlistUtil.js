@@ -71,7 +71,6 @@ export const watchListUtil = function (buyerSetting) {
                             if (isAutoBuyerActive && bidPrice) {
 
                                 let outBidItems = watchResponse.data.items.filter(function (item) {
-
                                     let auction = item._auction;
                                     let currentBid = (auction.currentBid || auction.startingBid);
 

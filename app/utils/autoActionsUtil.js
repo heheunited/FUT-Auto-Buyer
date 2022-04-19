@@ -12,13 +12,10 @@ import {
 import {
   convertRangeToSeconds, convertSecondsToMinutes, convertSecondsToTime,
   getRandNum,
-  getRandNumberInRange,
-  hideLoader,
-  showLoader
+  getRandNumberInRange
 } from "./commonUtil";
 import { writeToLog } from "./logUtil";
-import {sendErrorNotificationToUser, sendNotificationToUser, sendUINotification} from "./notificationUtil";
-import bypassSoftban from "./softbanUtil";
+import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
 import { loadFilter } from "./userExternalUtil";
 
 let stopAfter, pauseCycle;
@@ -29,12 +26,6 @@ export const stopBotIfRequired = (buyerSetting) => {
 
   const botStartTime = getValue("botStartTime").getTime();
   let time = stopAfter || convertRangeToSeconds(buyerSetting["idAbStopAfter"]);
-  setValue(
-      'cacheFutBinPriceMinsByStopAfter',
-      buyerSetting["idAbStopAfter"] && buyerSetting['idCacheFutBinPriceByElapsedTime']
-          ? (convertSecondsToMinutes(time) + 1)
-          : 15
-  );
   if (!stopAfter) {
     stopAfter = time;
   }

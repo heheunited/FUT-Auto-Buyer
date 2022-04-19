@@ -26,6 +26,7 @@ import {
   increaseTotalBuyPlayerRequestsCount
 } from "./transferListStatsUtils";
 import {create as saveErrorStatistic} from "./api/errorsStatistic";
+import {getStatsValue} from "../handlers/statsProcessor";
 
 export const checkRating = (
   cardRating,
@@ -171,7 +172,9 @@ export const buyPlayer = (
            if (status == 429 || status == 521 || status == 512) {
              let logMessage = `***Too many request from this user. Status ${status} triggered. Bot stopped.`;
 
-             saveErrorStatistic({code: status});
+             if (getStatsValue("searchCount") > 2) {
+               saveErrorStatistic({code: status});
+             }
 
              writeToLog(logMessage, idProgressAutobuyer);
 

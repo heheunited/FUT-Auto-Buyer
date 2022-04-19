@@ -8,7 +8,7 @@ import {
   idAbSearchProgress,
   idAbSoldItems,
   idAbStatisticsProgress,
-  idAbUnsoldItems,
+  idAbUnsoldItems, idTodayTlErrors,
 } from "../elementIds.constants";
 import { sendMessageToDiscord } from "../services/discordService";
 import { getValue, setValue } from "../services/repository";
@@ -19,6 +19,7 @@ setValue("sessionStats", {
   unsoldItems: "-",
   activeTransfers: "-",
   availableItems: "-",
+  todayTransferlistErrors: 0,
   coins: "-",
   coinsNumber: 0,
   searchCount: 0,
@@ -43,6 +44,7 @@ export const statsProcessor = () => {
     $("#" + idAbAvailableItems).html(currentStats.availableItems);
     $("#" + idAbActiveTransfers).html(currentStats.activeTransfers);
     $("#" + idAbProfit).html(currentStats.profit);
+    $("#" + idTodayTlErrors).html(currentStats.todayTransferlistErrors);
 
     updateTimer();
 

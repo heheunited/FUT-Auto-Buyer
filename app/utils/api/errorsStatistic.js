@@ -1,6 +1,5 @@
 import {getRequestToBackend, postRequestToBackend} from "./apiRequest";
 import {sendUINotification} from "../notificationUtil";
-import {updateErrorsCountStats} from "../statsUtil";
 import {updateStats} from "../../handlers/statsProcessor";
 
 const apiEndpoint = 'https://mysterious-savannah-72408.herokuapp.com/api';

@@ -13,13 +13,6 @@ export const updateProfit = (val) => {
   setValue("sessionStats", currentStats);
 };
 
-export const updateErrorsCountStats = (value) => {
-  let currentStats = getValue("sessionStats");
-  currentStats["tl24hErrors"] = value;
-
-  setValue("sessionStats", currentStats);
-}
-
 export const appendTransactions = (val) => {
   const currentStats = getValue("sessionStats");
   currentStats["transactions"] = currentStats["transactions"] || [];

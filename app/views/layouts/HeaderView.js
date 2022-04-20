@@ -78,8 +78,8 @@ export const HeaderView = () => {
   <div class="view-navbar-clubinfo">
     <div class="view-navbar-clubinfo-data">
        <span class="view-navbar-clubinfo-name">Won items: <span id=${idLastWonItemsCount}></span></span>
-       <span class="view-navbar-clubinfo-name">< Max Bid: <span id=${idLastLessMaxBidItemsCount}></span></span>
-       <span class="view-navbar-clubinfo-name">>= Max Bid: <span id=${idLastGreaterMaxBidItemsCount}></span></span>
+       <span class="view-navbar-clubinfo-name">[<]  Max Bid: <span id=${idLastLessMaxBidItemsCount}></span></span>
+       <span class="view-navbar-clubinfo-name">[>=] Max Bid: <span id=${idLastGreaterMaxBidItemsCount}></span></span>
     </div>
   </div>
   <div class="view-navbar-clubinfo">

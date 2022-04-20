@@ -73,7 +73,7 @@ export const HeaderView = () => {
   <div class="view-navbar-currency" style="margin-left: 10px;">
     <div class="view-navbar-currency-coins">Coins: <span  id=${idAbCoins}></span></div>
     <div class="view-navbar-currency-coins">Profit: <span  id=${idAbProfit}></span></div>
-    <div class="view-navbar-currency-coins">Last Profit: <span  id=${idAbLastProfit}></span></div>
+    <div class="view-navbar-currency-coins">Last TL Profit: <span  id=${idAbLastProfit}></span></div>
   </div>
   <div class="view-navbar-clubinfo">
     <div class="view-navbar-clubinfo-data">

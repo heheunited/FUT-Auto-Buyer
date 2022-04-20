@@ -11,7 +11,12 @@ import {
   idAbActiveTransfers,
   idAbProfit,
   idAbCountDown,
-  idAbDownloadStats, id24hTlErrors, idLastWonItemsCount, idLastLessMaxBidItemsCount, idLastGreaterMaxBidItemsCount,
+  idAbDownloadStats,
+  id24hTlErrors,
+  idLastWonItemsCount,
+  idLastLessMaxBidItemsCount,
+  idLastGreaterMaxBidItemsCount,
+  id24hTlCaptcha, idAbLastProfit,
 } from "../../elementIds.constants";
 import { downloadStats } from "../../utils/statsUtil";
 import { generateButton } from "../../utils/uiUtils/generateButton";
@@ -61,12 +66,14 @@ export const HeaderView = () => {
   </div>
      <div class="view-navbar-clubinfo">
     <div class="view-navbar-clubinfo-data">
-       <span class="view-navbar-clubinfo-name">24h errors: <span id=${id24hTlErrors}></span></span>
+       <span class="view-navbar-clubinfo-name">Errors: <span id=${id24hTlErrors}></span></span>
+       <span class="view-navbar-clubinfo-name">Captcha: <span id=${id24hTlCaptcha}></span></span>
     </div>
   </div>
   <div class="view-navbar-currency" style="margin-left: 10px;">
     <div class="view-navbar-currency-coins">Coins: <span  id=${idAbCoins}></span></div>
     <div class="view-navbar-currency-coins">Profit: <span  id=${idAbProfit}></span></div>
+    <div class="view-navbar-currency-coins">Last Profit: <span  id=${idAbLastProfit}></span></div>
   </div>
   <div class="view-navbar-clubinfo">
     <div class="view-navbar-clubinfo-data">

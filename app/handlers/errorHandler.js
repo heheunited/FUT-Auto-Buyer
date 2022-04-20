@@ -11,6 +11,7 @@ import {sendErrorNotificationToUser, sendNotificationToUser} from "../utils/noti
 import { stopAutoBuyer } from "./autobuyerProcessor";
 import { solveCaptcha } from "./captchaSolver";
 import {longPollingCaptchaResolve} from "../utils/captchaUtil";
+import {createCaptcha} from "../utils/api/errorsStatistic";
 
 export const searchErrorHandler = (
   response,
@@ -69,6 +70,7 @@ export const searchErrorHandler = (
     stopAutoBuyer();
 
     if (isCaptchaTriggered) {
+      createCaptcha();
       longPollingCaptchaResolve();
     }
   }

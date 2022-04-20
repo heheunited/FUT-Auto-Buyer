@@ -1,6 +1,7 @@
 import {getRequestToBackend, postRequestToBackend} from "./apiRequest";
 import {sendUINotification} from "../notificationUtil";
 import {updateErrorsCountStats} from "../statsUtil";
+import {updateStats} from "../../handlers/statsProcessor";
 
 const apiEndpoint = 'https://mysterious-savannah-72408.herokuapp.com/api';
 const errorsStatisticPath = '/autobuyer/statistic/errors';
@@ -11,8 +12,13 @@ export const create = (data) => {
         code: data.code
     }
 
-    postRequestToBackend(errorsEndpoint, postData)
-        .catch(errors => sendUINotification(errors, UINotificationType.NEGATIVE));
+    postRequestToBackend(errorsEndpoint, postData).catch(errors => sendUINotification(errors, UINotificationType.NEGATIVE));
+}
+
+export const createCaptcha = () => {
+    let newUrl = errorsEndpoint + '/captcha'
+    
+    postRequestToBackend(newUrl, {}).catch(errors => sendUINotification(errors, UINotificationType.NEGATIVE));
 }
 
 export const getErrorsCountInterval = () => {
@@ -24,7 +30,22 @@ export const getErrorsCountInterval = () => {
             const responseData = response.data;
 
             if (responseData.success === true) {
-                updateErrorsCountStats(responseData.count)
+                updateStats('tl24hErrors', responseData.count);
+            }
+        }).catch(error => sendUINotification(error, UINotificationType.NEGATIVE))
+    }, 120000)
+}
+
+export const getCaptchaCountInterval = () => {
+    const errorsCountPath = '/autobuyer/statistic/captcha-count';
+    const url = apiEndpoint + errorsCountPath;
+
+    setInterval(() => {
+        getRequestToBackend(url).then(response => {
+            const responseData = response.data;
+
+            if (responseData.success === true) {
+                updateStats('tl24hCaptcha', responseData.count);
             }
         }).catch(error => sendUINotification(error, UINotificationType.NEGATIVE))
     }, 120000)

@@ -79,6 +79,8 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
 
 
                     writeToLog("[⍟⍟⍟] CLEAR TRANSFER LIST. SOLD ITEMS COUNT: " + soldItems + `. PROFIT: ${totalProfit}.`, idProgressAutobuyer, "\n");
+                    updateStats('lastProfit', totalProfit);
+
                     UTTransferListViewController.prototype._clearSold();
                     saveStatisticAboutTransferListPlayers(soldItemsList);
                 }

@@ -8,7 +8,12 @@ import {
   idAbSearchProgress,
   idAbSoldItems,
   idAbStatisticsProgress,
-  idAbUnsoldItems, id24hTlErrors, idLastWonItemsCount, idLastLessMaxBidItemsCount, idLastGreaterMaxBidItemsCount,
+  idAbUnsoldItems,
+  id24hTlErrors,
+  idLastWonItemsCount,
+  idLastLessMaxBidItemsCount,
+  idLastGreaterMaxBidItemsCount,
+  id24hTlCaptcha, idAbLastProfit,
 } from "../elementIds.constants";
 import { sendMessageToDiscord } from "../services/discordService";
 import { getValue, setValue } from "../services/repository";
@@ -24,7 +29,9 @@ setValue("sessionStats", {
   searchCount: 0,
   previousPause: 0,
   profit: 0,
+  lastProfit: 0,
   tl24hErrors: 0,
+  tl24hCaptcha: 0,
   lastWonItemsCount: 0,
   lastLessMaxBidItemsCount: 0,
   lastGreaterMaxBidItemsCount: 0,
@@ -41,6 +48,7 @@ export const statsProcessor = () => {
     $("#" + idAbStatisticsProgress).css("width", nextRefresh);
 
     $("#" + idAbCoins).html(currentStats.coins);
+    $("#" + idAbLastProfit).html(currentStats.lastProfit);
     $("#" + idAbRequestCount).html(currentStats.searchCount);
     $("#" + idAbSoldItems).html(currentStats.soldItems);
     $("#" + idAbUnsoldItems).html(currentStats.unsoldItems);
@@ -49,6 +57,8 @@ export const statsProcessor = () => {
     $("#" + idAbProfit).html(currentStats.profit);
 
     $("#" + id24hTlErrors).html(currentStats.tl24hErrors);
+    $("#" + id24hTlCaptcha).html(currentStats.tl24hCaptcha);
+
     $("#" + idLastWonItemsCount).html(currentStats.lastWonItemsCount);
     $("#" + idLastLessMaxBidItemsCount).html(currentStats.lastLessMaxBidItemsCount);
     $("#" + idLastGreaterMaxBidItemsCount).html(currentStats.lastGreaterMaxBidItemsCount);

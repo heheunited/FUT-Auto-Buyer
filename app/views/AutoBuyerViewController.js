@@ -14,7 +14,7 @@ import {
   setDefaultActiveTab,
 } from "./layouts/MenuItemView";
 import { filterHeaderSettingsView } from "./layouts/Settings/FilterSettingsView";
-import {getErrorsCountInterval} from "../utils/api/errorsStatistic";
+import {getCaptchaCountInterval, getErrorsCountInterval} from "../utils/api/errorsStatistic";
 
 export const AutoBuyerViewController = function (t) {
   UTMarketSearchFiltersViewController.call(this);
@@ -52,6 +52,7 @@ AutoBuyerViewController.prototype.init = function () {
 
   statsProcessor();
   getErrorsCountInterval();
+  getCaptchaCountInterval();
 
   root.addClass("auto-buyer");
   const btnContainer = root.find(".button-container");

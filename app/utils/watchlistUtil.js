@@ -31,7 +31,7 @@ import {
     SELL_MOD_DISABLED,
     TRANSFER_LIST_MAX_COUNT
 } from "./constants";
-import {getTransferListTotalItemsCount} from "../handlers/statsProcessor";
+import {getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";
 
 const sellBids = new Set();
 
@@ -155,7 +155,8 @@ export const watchListUtil = function (buyerSetting) {
                                     }
 
                                     if (itemsLength > 0) {
-                                        writeToLog("[✔✔✔] SELL WON ITEMS COUNT: " + itemsLength, idProgressAutobuyer, "\n")
+                                        writeToLog("[✔✔✔] SELL WON ITEMS COUNT: " + itemsLength, idProgressAutobuyer, "\n");
+                                        updateStats('lastWonItemsCount', itemsLength);
                                     }
 
                                     for (var i = 0; i < itemsLength; i++) {
@@ -245,6 +246,9 @@ export const watchListUtil = function (buyerSetting) {
                                     idProgressAutobuyer,
                                     "\n"
                                 );
+
+                                updateStats('lastLessMaxBidItemsCount', countExpiredItemsWithCurrentBidLessThanUserMaxBid)
+                                updateStats('lastGreaterMaxBidItemsCount', countExpiredItemsWithCurrentBidGreaterThanUserMaxBid);
 
                                 expiredItems.map(player => {
                                     let auction = player._auction;

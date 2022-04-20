@@ -8,7 +8,7 @@ import {
   idAbSearchProgress,
   idAbSoldItems,
   idAbStatisticsProgress,
-  idAbUnsoldItems, id24hTlErrors,
+  idAbUnsoldItems, id24hTlErrors, idLastWonItemsCount, idLastLessMaxBidItemsCount, idLastGreaterMaxBidItemsCount,
 } from "../elementIds.constants";
 import { sendMessageToDiscord } from "../services/discordService";
 import { getValue, setValue } from "../services/repository";
@@ -25,6 +25,9 @@ setValue("sessionStats", {
   previousPause: 0,
   profit: 0,
   tl24hErrors: 0,
+  lastWonItemsCount: 0,
+  lastLessMaxBidItemsCount: 0,
+  lastGreaterMaxBidItemsCount: 0,
   sessionId: Date.now().toString(36) + Math.random().toString(36).substr(2),
   transactions: [],
 });
@@ -44,7 +47,11 @@ export const statsProcessor = () => {
     $("#" + idAbAvailableItems).html(currentStats.availableItems);
     $("#" + idAbActiveTransfers).html(currentStats.activeTransfers);
     $("#" + idAbProfit).html(currentStats.profit);
+
     $("#" + id24hTlErrors).html(currentStats.tl24hErrors);
+    $("#" + idLastWonItemsCount).html(currentStats.lastWonItemsCount);
+    $("#" + idLastLessMaxBidItemsCount).html(currentStats.lastLessMaxBidItemsCount);
+    $("#" + idLastGreaterMaxBidItemsCount).html(currentStats.lastGreaterMaxBidItemsCount);
 
     updateTimer();
 

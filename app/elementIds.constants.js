@@ -21,6 +21,7 @@ export const idAbWaitTime = "elem_" + generateId(15);
 export const idAbRelistSellItemsWaitTime = "elem_" + generateId(15);
 export const idAbDelayAfterOutbid = "elem_" + generateId(15);
 export const idAbMaxPurchases = "elem_" + generateId(15);
+export const idAbBidLimitPerPlayer = "elem_" + generateId(15);
 export const idAbCycleAmount = "elem_" + generateId(15);
 export const idAbPauseFor = "elem_" + generateId(15);
 export const idAbStopAfter = "elem_" + generateId(15);

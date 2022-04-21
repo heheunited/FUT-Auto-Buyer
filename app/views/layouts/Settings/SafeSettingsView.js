@@ -6,7 +6,7 @@ import {
   idAbWaitTime,
   idAbAddBuyDelay,
   idAbDelayToAdd,
-  idAbRestartAfter, idAbDelayAfterOutbid, idAbRelistSellItemsWaitTime
+  idAbRestartAfter, idAbDelayAfterOutbid, idAbRelistSellItemsWaitTime, idAbBidLimitPerPlayer
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -40,6 +40,13 @@ export const safeSettingsView = function () {
     1,
     { idAbMaxPurchases },
     "<br/>",
+    "CommonSettings"
+  )}
+  ${generateTextInput(
+    "Outbid limit per player",
+    0,
+    { idAbBidLimitPerPlayer },
+    "(0 - disabled)",
     "CommonSettings"
   )}
   ${generateTextInput(

@@ -34,6 +34,7 @@ import {
 import {getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";
 
 const sellBids = new Set();
+const outbidLimitPerPlayerMap = new Map();
 
 export const watchListUtil = function (buyerSetting) {
     sendPinEvents("Transfer Targets - List View");
@@ -47,6 +48,7 @@ export const watchListUtil = function (buyerSetting) {
             let delayAfterOutbid = buyerSetting['idAbDelayAfterOutbid'];
             let expectedProfitPercent = buyerSetting["idAbExpectedProfitInPercent"];
             let isExpectedProfitInPercentProvided = expectedProfitPercent > 0;
+            let isIssetOutbidLimitPerPlayer = buyerSetting['idAbBidLimitPerPlayer'] > 0;
 
             let activeItems = response.data.items.filter(function (item) {
                 return item._auction && item._auction._tradeState === "active";
@@ -93,11 +95,16 @@ export const watchListUtil = function (buyerSetting) {
                                         ? auction.expires <= buyerSetting['idAbBidExpiresLessThanSeconds']
                                         : true;
 
+                                    let isOutbidLimitValid = isIssetOutbidLimitPerPlayer
+                                        ? isOutbidLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
+                                        : true;
+
                                     return (
                                         auction._bidState === "outbid" &&
                                         // (!filterName || filterWatchList.has(auction.tradeId)) &&
                                         !userWatchItems.has(auction.tradeId) &&
                                         auction._tradeState === "active" &&
+                                        isOutbidLimitValid &&
                                         bidPrice > currentBid &&
                                         expireTimeLessThan &&
                                         expectedPercentProfit &&
@@ -117,6 +124,14 @@ export const watchListUtil = function (buyerSetting) {
                                         sellPrice,
                                         buyerSetting
                                     );
+
+                                    if (isIssetOutbidLimitPerPlayer) {
+                                        increaseOutbidPerPlayerCount(currentItem._auction.tradeId)
+                                    }
+
+                                    if (outbidLimitPerPlayerMap.size > 500) {
+                                        outbidLimitPerPlayerMap.clear();
+                                    }
                                 }
                             }
 
@@ -392,3 +407,27 @@ const sellWonItems = async (
         convertToSeconds(sellDuration || "1H") || 3600
     );
 };
+
+const isOutbidLimitPerPlayerNotExceeded = (outbidLimit, playerTradeId) => {
+    const playerLimitValue = outbidLimitPerPlayerMap.get(playerTradeId);
+
+    if (playerLimitValue === undefined) {
+        return true;
+    }
+
+    if (playerLimitValue == outbidLimit) {
+        outbidLimitPerPlayerMap.delete(playerTradeId);
+    }
+
+    return playerLimitValue != outbidLimit;
+}
+
+const increaseOutbidPerPlayerCount = (playerTradeId) => {
+    let playerLimitValue = outbidLimitPerPlayerMap.get(playerTradeId);
+
+    if (playerLimitValue === undefined) {
+        outbidLimitPerPlayerMap.set(playerTradeId, 1);
+    } else {
+        outbidLimitPerPlayerMap.set(playerTradeId, ++playerLimitValue)
+    }
+}

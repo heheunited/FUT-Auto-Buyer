@@ -161,7 +161,9 @@ export const watchListUtil = function (buyerSetting) {
                                         increaseOutbidPerPlayerAttemptCount(currentItem._auction.tradeId)
                                     }
 
-                                    delayAfterOutbid != '0' && await wait(getRandWaitTimeInSeconds(delayAfterOutbid));
+                                    if (delayAfterOutbid != '0') {
+                                        await wait(getRandWaitTimeInSeconds(delayAfterOutbid));
+                                    }
 
                                     await tryBidItems(
                                         currentItem,

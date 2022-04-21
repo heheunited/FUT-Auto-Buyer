@@ -113,7 +113,6 @@ export const watchListUtil = function (buyerSetting) {
                                     }
 
                                     setValue('watchlistPlayerCount', watchListItemsCount);
-                                    sendUINotification(`WATCHLIST PLAYER COUNT ${watchListItemsCount}`);
                                 }
 
                                 let outBidItems = watchResponse.data.items.filter((item) => {

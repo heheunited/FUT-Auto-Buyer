@@ -125,7 +125,7 @@ export const startAutoBuyer = async function (isResume) {
   await srchTmWithContext(buyerSetting);
 
   let operationInProgress = false;
-  let isWatchlistLimitActive;
+  let isWatchlistLimitActive = false;
 
   if (getValue("autoBuyerActive")) {
     interval = setRandomInterval(async () => {
@@ -142,7 +142,7 @@ export const startAutoBuyer = async function (isResume) {
           const watchlistPlayerCount = getValue('watchlistPlayerCount');
 
           if (watchlistPlayerCount >= buyerSetting['idAbWatchlistPlayersLimit']) {
-            writeToLog(`WATCHLIST PLAYER LIMIT TRIGGERED. CURRENT COUNT: ${watchlistPlayerCount}`, idProgressAutobuyer);
+            writeToLog(`WATCHLIST PLAYER LIMIT TRIGGERED.`, idProgressAutobuyer);
             isWatchlistLimitActive = true;
           } else {
             sendPinEvents("Hub - Transfers");

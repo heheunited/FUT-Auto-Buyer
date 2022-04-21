@@ -248,7 +248,7 @@ export const watchListUtil = function (buyerSetting) {
                                 );
 
                                 writeToLog(
-                                    "[✘✘✘] CLEAR EXPIRED ITEMS COUNT: " + expiredItems.length + `. LAST BID <  ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. LAST BID >= ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`,
+                                    "[✘✘✘] CLEAR EXPIRED ITEMS COUNT: " + expiredItems.length + `. LAST BID < ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. LAST BID >= ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`,
                                     idProgressAutobuyer,
                                     "\n"
                                 );

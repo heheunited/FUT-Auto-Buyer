@@ -6,8 +6,8 @@ import {
 import {getValue, setValue} from "../services/repository";
 import {
     convertToSeconds,
-    formatString, getMinOrMaxFromRange,
-    getRandWaitTimeInSeconds,
+    formatString,
+    getRandWaitTimeInSeconds, getRangeValue, setWaitTimeObj,
     wait,
 } from "./commonUtil";
 import {getSellPriceFromFutBin} from "./futbinUtil";
@@ -49,6 +49,7 @@ export const watchListUtil = function (buyerSetting) {
             let expectedProfitPercent = buyerSetting["idAbExpectedProfitInPercent"];
             let isExpectedProfitInPercentProvided = expectedProfitPercent > 0;
             let isIssetOutbidLimitPerPlayer = buyerSetting['idAbBidLimitPerPlayer'] > 0;
+            let watchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'];
 
             let activeItems = response.data.items.filter(function (item) {
                 return item._auction && item._auction._tradeState === "active";
@@ -72,7 +73,50 @@ export const watchListUtil = function (buyerSetting) {
                             const userWatchItems = getValue("userWatchItems");
                             if (isAutoBuyerActive && bidPrice) {
 
-                                let outBidItems = watchResponse.data.items.filter(function (item) {
+                                if (watchlistPlayerLimit > 0) {
+                                    let watchListItemsCount = watchResponse.data.items.filter((item) => {
+                                        let auction = item._auction;
+                                        let currentBid = (auction.currentBid || auction.startingBid);
+
+                                        let checkPrice = buyerSetting["idAbBidExact"]
+                                            ? bidPrice
+                                            : auction.currentBid
+                                                ? getBuyBidPrice(currentBid)
+                                                : currentBid;
+
+                                        let expectedPercentProfit = isExpectedProfitInPercentProvided
+                                            ? isBidOrBuyMakeExpectedProfit(
+                                                null,
+                                                checkPrice,
+                                                getFutBinPlayerPrice(item.definitionId, 95),
+                                                expectedProfitPercent
+                                            )
+                                            : true;
+
+                                        let isOutbidLimitValid = isIssetOutbidLimitPerPlayer
+                                            ? isOutbidAttemptLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
+                                            : true;
+
+                                        return (
+                                            (auction._bidState === "outbid" || auction._tradeState === "active") &&
+                                            isOutbidLimitValid &&
+                                            bidPrice > currentBid &&
+                                            expectedPercentProfit &&
+                                            bidPrice > checkPrice
+                                        );
+                                    }).length;
+
+                                    if (watchListItemsCount >= watchlistPlayerLimit) {
+                                        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']));
+                                    } else {
+                                        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
+                                    }
+
+                                    setValue('watchlistPlayerCount', watchListItemsCount);
+                                    sendUINotification(`WATCHLIST PLAYER COUNT ${watchListItemsCount}`);
+                                }
+
+                                let outBidItems = watchResponse.data.items.filter((item) => {
                                     let auction = item._auction;
                                     let currentBid = (auction.currentBid || auction.startingBid);
 
@@ -101,15 +145,12 @@ export const watchListUtil = function (buyerSetting) {
 
                                     return (
                                         auction._bidState === "outbid" &&
-                                        // (!filterName || filterWatchList.has(auction.tradeId)) &&
-                                        !userWatchItems.has(auction.tradeId) &&
                                         auction._tradeState === "active" &&
                                         isOutbidLimitValid &&
                                         bidPrice > currentBid &&
                                         expireTimeLessThan &&
                                         expectedPercentProfit &&
-                                        bidPrice > checkPrice &&
-                                        auction.expires >= (getMinOrMaxFromRange(delayAfterOutbid, 'max') + 3)
+                                        bidPrice > checkPrice
                                     );
                                 }).sort((a, b) => a._auction.expires - b._auction.expires);
 

@@ -6,7 +6,12 @@ import {
   idAbWaitTime,
   idAbAddBuyDelay,
   idAbDelayToAdd,
-  idAbRestartAfter, idAbDelayAfterOutbid, idAbRelistSellItemsWaitTime, idAbBidLimitPerPlayer
+  idAbRestartAfter,
+  idAbDelayAfterOutbid,
+  idAbRelistSellItemsWaitTime,
+  idAbBidLimitPerPlayer,
+  idAbWatchlistPlayersLimit,
+  idAbWatchlistPlayersLimitWaitTime
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -48,6 +53,22 @@ export const safeSettingsView = function () {
     { idAbBidLimitPerPlayer },
     "(0 - disabled)",
     "CommonSettings"
+  )}
+  ${generateTextInput(
+    "Watchlist player limit",
+    0,
+    { idAbWatchlistPlayersLimit },
+    "(0 - disabled)",
+    "CommonSettings"
+  )}
+    ${generateTextInput(
+      "Watchlist player limit wait time",
+      "5-7",
+      {idAbWatchlistPlayersLimitWaitTime},
+      "(Random second range eg. 5-7)",
+      "CommonSettings",
+      "text",
+      "\\d+-\\d+$"
   )}
   ${generateTextInput(
     "Pause Cycle",

@@ -1,10 +1,15 @@
 import {setValue} from "../services/repository";
+import {getWaitTimeObj} from "./commonUtil";
 
-export const setRandomInterval = (intervalFunction, start, end) => {
+export const setRandomInterval = (intervalFunction) => {
     let timeout;
     let isCleared = false;
 
     const runInterval = () => {
+        let timeObj = getWaitTimeObj();
+        let start = timeObj.start;
+        let end = timeObj.end;
+
         if (isCleared) {
           return;
         }

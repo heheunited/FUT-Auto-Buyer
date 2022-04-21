@@ -1,5 +1,5 @@
 import { idCapatchaMp3, idWinMp3, idFinishMp3 } from "../elementIds.constants";
-import { getBuyerSettings } from "../services/repository";
+import {getBuyerSettings, getValue, setValue} from "../services/repository";
 import * as ElementIds from "../elementIds.constants";
 
 export const generateId = (length) => {
@@ -237,3 +237,16 @@ export const updateSettingsView = function (settings) {
     }
   }
 };
+
+export const setWaitTimeObj = (start, end) => {
+  let timeObj = {
+    start: start,
+    end: end
+  }
+
+  setValue('waitTimeObj', timeObj);
+}
+
+export const getWaitTimeObj = () => {
+  return getValue('waitTimeObj');
+}

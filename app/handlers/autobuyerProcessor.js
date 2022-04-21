@@ -21,7 +21,7 @@ import {
   formatString,
   getRandNum,
   getRangeValue,
-  playAudio,
+  playAudio, setWaitTimeObj,
 } from "../utils/commonUtil";
 import {addFutbinCachePrice, setFutBinPricesCacheTime} from "../utils/futbinUtil";
 import { writeToDebugLog, writeToLog } from "../utils/logUtil";
@@ -79,11 +79,13 @@ export const startAutoBuyer = async function (isResume) {
     .css("color", "#2cbe2d")
     .html("RUNNING");
 
+  let buyerSetting = getBuyerSettings();
   const isActive = getValue("autoBuyerActive");
   if (isActive) return;
   sendUINotification(isResume ? "Autobuyer Resumed" : "Autobuyer Started");
   setValue("autoBuyerActive", true);
   setValue("autoBuyerState", STATE_ACTIVE);
+  setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
   if (!isResume) {
     setValue("botStartTime", new Date());
     setValue("purchasedCardCount", 0);
@@ -97,7 +99,11 @@ export const startAutoBuyer = async function (isResume) {
   let transferListWithContext = transferListUtil.bind(this);
   let pauseBotWithContext = pauseBotIfRequired.bind(this);
   // await switchFilterWithContext();
-  let buyerSetting = getBuyerSettings();
+  let isIssetWatchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'] > 0;
+  if (isIssetWatchlistPlayerLimit) {
+    setValue('watchlistPlayerCount', 0);
+  }
+
   await setFutBinPricesCacheTime(buyerSetting);
   setValue('needSellWonItemsAfterBotPause', buyerSetting['idAbSellItemsOnlyAfterBotPause']);
   !isResume && (await addUserWatchItems());
@@ -125,8 +131,21 @@ export const startAutoBuyer = async function (isResume) {
         operationInProgress = true;
         // await switchFilterWithContext();
         buyerSetting = getBuyerSettings();
-        sendPinEvents("Hub - Transfers");
-        await srchTmWithContext(buyerSetting);
+
+        if (isIssetWatchlistPlayerLimit) {
+          const watchlistPlayerCount = getValue('watchlistPlayerCount');
+
+          if (watchlistPlayerCount >= buyerSetting['idAbWatchlistPlayersLimit']) {
+            writeToLog(`WATCHLIST PLAYER LIMIT TRIGGERED. CURRENT COUNT: ${watchlistPlayerCount}`, idProgressAutobuyer);
+          } else {
+            sendPinEvents("Hub - Transfers");
+            await srchTmWithContext(buyerSetting);
+          }
+        } else {
+          sendPinEvents("Hub - Transfers");
+          await srchTmWithContext(buyerSetting);
+        }
+
         sendPinEvents("Hub - Transfers");
         await watchListWithContext(buyerSetting);
         sendPinEvents("Hub - Transfers");
@@ -134,9 +153,10 @@ export const startAutoBuyer = async function (isResume) {
           buyerSetting["idAbSellToggle"],
           buyerSetting["idAbMinDeleteCount"]
         );
+
         operationInProgress = false;
       }
-    }, ...getRangeValue(buyerSetting["idAbWaitTime"]));
+    });
   }
 };
 

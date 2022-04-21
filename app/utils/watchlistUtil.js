@@ -96,7 +96,7 @@ export const watchListUtil = function (buyerSetting) {
                                         : true;
 
                                     let isOutbidLimitValid = isIssetOutbidLimitPerPlayer
-                                        ? isOutbidLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
+                                        ? isOutbidAttemptLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
                                         : true;
 
                                     return (
@@ -116,6 +116,10 @@ export const watchListUtil = function (buyerSetting) {
                                 for (var i = 0; i < outBidItems.length; i++) {
                                     const currentItem = outBidItems[i];
 
+                                    if (isIssetOutbidLimitPerPlayer) {
+                                        increaseOutbidPerPlayerAttemptCount(currentItem._auction.tradeId)
+                                    }
+
                                     delayAfterOutbid != '0' && await wait(getRandWaitTimeInSeconds(delayAfterOutbid));
 
                                     await tryBidItems(
@@ -124,14 +128,6 @@ export const watchListUtil = function (buyerSetting) {
                                         sellPrice,
                                         buyerSetting
                                     );
-
-                                    if (isIssetOutbidLimitPerPlayer) {
-                                        increaseOutbidPerPlayerCount(currentItem._auction.tradeId)
-                                    }
-
-                                    if (outbidLimitPerPlayerMap.size > 500) {
-                                        outbidLimitPerPlayerMap.clear();
-                                    }
                                 }
                             }
 
@@ -268,7 +264,15 @@ export const watchListUtil = function (buyerSetting) {
                                         ` (---) Remove Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
                                         idProgressAutobuyer
                                     );
+
+                                    if (isIssetOutbidLimitPerPlayer) {
+                                        outbidLimitPerPlayerMap.delete(auction.tradeId);
+                                    }
                                 })
+
+                                if (isIssetOutbidLimitPerPlayer && outbidLimitPerPlayerMap.size > 500) {
+                                    outbidLimitPerPlayerMap.clear();
+                                }
                             }
 
                             services.Item.clearTransferMarketCache();
@@ -324,10 +328,13 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
             : currentBid;
 
     if (isAutoBuyerActive && currentBid <= priceToBid) {
-        writeToLog(
-            ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
-            idProgressAutobuyer
-        );
+        let logMessage = ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`;
+
+        if (buyerSetting['idAbBidLimitPerPlayer'] > 0) {
+            logMessage += `'Attempt: ${outbidLimitPerPlayerMap.get(auction.tradeId)}.`;
+        }
+
+        writeToLog(logMessage, idProgressAutobuyer);
 
         increaseOutbidPlayerRequestsCount();
 
@@ -408,21 +415,17 @@ const sellWonItems = async (
     );
 };
 
-const isOutbidLimitPerPlayerNotExceeded = (outbidLimit, playerTradeId) => {
+const isOutbidAttemptLimitPerPlayerNotExceeded = (outbidLimit, playerTradeId) => {
     const playerLimitValue = outbidLimitPerPlayerMap.get(playerTradeId);
 
     if (playerLimitValue === undefined) {
         return true;
     }
 
-    if (playerLimitValue == outbidLimit) {
-        outbidLimitPerPlayerMap.delete(playerTradeId);
-    }
-
     return playerLimitValue != outbidLimit;
 }
 
-const increaseOutbidPerPlayerCount = (playerTradeId) => {
+const increaseOutbidPerPlayerAttemptCount = (playerTradeId) => {
     let playerLimitValue = outbidLimitPerPlayerMap.get(playerTradeId);
 
     if (playerLimitValue === undefined) {

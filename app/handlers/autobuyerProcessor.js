@@ -11,9 +11,7 @@ import {
   setValue,
 } from "../services/repository";
 import {
-  pauseBotIfRequired,
-  stopBotIfRequired,
-  switchFilterIfRequired,
+  pauseBotIfRequired, stopBotIfRequired,
 } from "../utils/autoActionsUtil";
 import {
   convertRangeToSeconds,
@@ -81,11 +79,16 @@ export const startAutoBuyer = async function (isResume) {
 
   let buyerSetting = getBuyerSettings();
   const isActive = getValue("autoBuyerActive");
-  if (isActive) return;
+
+  if (isActive) {
+    return;
+  }
+
   sendUINotification(isResume ? "Autobuyer Resumed" : "Autobuyer Started");
   setValue("autoBuyerActive", true);
   setValue("autoBuyerState", STATE_ACTIVE);
   setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
+
   if (!isResume) {
     setValue("botStartTime", new Date());
     setValue("purchasedCardCount", 0);
@@ -93,13 +96,13 @@ export const startAutoBuyer = async function (isResume) {
     setValue("currentPage", 1);
     _deleteAllCaptchaEntities()
   }
-  // let switchFilterWithContext = switchFilterIfRequired.bind(this);
+
   let srchTmWithContext = searchTransferMarket.bind(this);
   let watchListWithContext = watchListUtil.bind(this);
   let transferListWithContext = transferListUtil.bind(this);
   let pauseBotWithContext = pauseBotIfRequired.bind(this);
-  // await switchFilterWithContext();
   let isIssetWatchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'] > 0;
+
   if (isIssetWatchlistPlayerLimit) {
     setValue('watchlistPlayerCount', 0);
   }
@@ -122,14 +125,17 @@ export const startAutoBuyer = async function (isResume) {
   await srchTmWithContext(buyerSetting);
 
   let operationInProgress = false;
+  let isWatchlistLimitActive;
+
   if (getValue("autoBuyerActive")) {
     interval = setRandomInterval(async () => {
       passInterval = await pauseBotWithContext(buyerSetting);
       stopBotIfRequired(buyerSetting);
       const isBuyerActive = getValue("autoBuyerActive");
+
       if (isBuyerActive && !operationInProgress) {
         operationInProgress = true;
-        // await switchFilterWithContext();
+        isWatchlistLimitActive = false;
         buyerSetting = getBuyerSettings();
 
         if (isIssetWatchlistPlayerLimit) {
@@ -137,6 +143,7 @@ export const startAutoBuyer = async function (isResume) {
 
           if (watchlistPlayerCount >= buyerSetting['idAbWatchlistPlayersLimit']) {
             writeToLog(`WATCHLIST PLAYER LIMIT TRIGGERED. CURRENT COUNT: ${watchlistPlayerCount}`, idProgressAutobuyer);
+            isWatchlistLimitActive = true;
           } else {
             sendPinEvents("Hub - Transfers");
             await srchTmWithContext(buyerSetting);
@@ -148,11 +155,14 @@ export const startAutoBuyer = async function (isResume) {
 
         sendPinEvents("Hub - Transfers");
         await watchListWithContext(buyerSetting);
-        sendPinEvents("Hub - Transfers");
-        await transferListWithContext(
-          buyerSetting["idAbSellToggle"],
-          buyerSetting["idAbMinDeleteCount"]
-        );
+
+        if (isWatchlistLimitActive === false) {
+          sendPinEvents("Hub - Transfers");
+          await transferListWithContext(
+              buyerSetting["idAbSellToggle"],
+              buyerSetting["idAbMinDeleteCount"]
+          );
+        }
 
         operationInProgress = false;
       }

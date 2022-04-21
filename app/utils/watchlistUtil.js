@@ -76,6 +76,7 @@ export const watchListUtil = function (buyerSetting) {
                                 if (watchlistPlayerLimit > 0) {
                                     let watchListItemsCount = watchResponse.data.items.filter((item) => {
                                         let auction = item._auction;
+                                        let tAuction = item.getAuctionData();
                                         let currentBid = (auction.currentBid || auction.startingBid);
 
                                         let checkPrice = buyerSetting["idAbBidExact"]
@@ -98,7 +99,7 @@ export const watchListUtil = function (buyerSetting) {
                                             : true;
 
                                         return (
-                                            (auction._bidState === "outbid" || auction._tradeState === "active") &&
+                                            !tAuction.isExpired() && !tAuction.isClosedTrade() && !tAuction.isWon() &&
                                             isOutbidLimitValid &&
                                             bidPrice > currentBid &&
                                             expectedPercentProfit &&

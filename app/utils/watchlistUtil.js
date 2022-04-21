@@ -270,7 +270,7 @@ export const watchListUtil = function (buyerSetting) {
                                     }
                                 })
 
-                                if (isIssetOutbidLimitPerPlayer && outbidLimitPerPlayerMap.size > 500) {
+                                if (isIssetOutbidLimitPerPlayer && outbidLimitPerPlayerMap.size > 100) {
                                     outbidLimitPerPlayerMap.clear();
                                 }
                             }

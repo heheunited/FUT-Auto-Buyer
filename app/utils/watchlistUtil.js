@@ -331,7 +331,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
         let logMessage = ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`;
 
         if (buyerSetting['idAbBidLimitPerPlayer'] > 0) {
-            logMessage += `Attempt: ${outbidLimitPerPlayerMap.get(auction.tradeId)}.`;
+            logMessage += ` Attempt: ${outbidLimitPerPlayerMap.get(auction.tradeId)}.`;
         }
 
         writeToLog(logMessage, idProgressAutobuyer);

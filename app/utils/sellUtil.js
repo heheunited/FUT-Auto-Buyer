@@ -30,7 +30,7 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
         increaseReListPlayerRequestCount();
 
         writeToLog(
-            ` (###) Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}`,
+            ` (###) Relist /w FutBin. Player: ${player._staticData.name}. Price: ${calculatedPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
             idProgressAutobuyer
         )
 

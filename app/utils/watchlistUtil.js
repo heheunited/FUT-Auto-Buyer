@@ -477,17 +477,19 @@ const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => 
     let currentWatchlistLimitActiveState = getValue('WatchlistLimitActive');
     let newWatchlistLimitActiveState = watchListItemsCount >= watchlistPlayerLimit;
 
-    if (currentWatchlistLimitActiveState !== newWatchlistLimitActiveState) {
-        setValue('WatchlistLimitActive', newWatchlistLimitActiveState);
-
-        newWatchlistLimitActiveState === true
-            ? setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
-            : setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
-
-        let logMessage = newWatchlistLimitActiveState
-            ? 'WATCHLIST PLAYER LIMIT ACTIVATED.'
-            : 'WATCHLIST PLAYER LIMIT DISABLED.';
-
-        writeToLog(logMessage, idProgressAutobuyer);
+    if (currentWatchlistLimitActiveState === newWatchlistLimitActiveState) {
+        return;
     }
+
+    setValue('WatchlistLimitActive', newWatchlistLimitActiveState);
+
+    newWatchlistLimitActiveState === true
+        ? setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
+        : setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
+
+    let logMessage = newWatchlistLimitActiveState
+        ? 'WATCHLIST PLAYER LIMIT ACTIVATED.'
+        : 'WATCHLIST PLAYER LIMIT DISABLED.';
+
+    writeToLog(logMessage, idProgressAutobuyer);
 }

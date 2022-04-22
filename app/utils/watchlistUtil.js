@@ -492,5 +492,5 @@ const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => 
 
     let logMessage = `WATCHLIST PLAYER LIMIT: ${newWatchlistLimitActiveState ? 'ACTIVATED' : 'DISABLED'}.`;
 
-    writeToLog(logMessage, idProgressAutobuyer);
+    writeToLog(logMessage, idProgressAutobuyer, "\n");
 }

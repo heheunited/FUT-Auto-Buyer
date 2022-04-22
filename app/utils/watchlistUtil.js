@@ -475,18 +475,14 @@ const increaseOutbidPerPlayerAttemptCount = (playerTradeId) => {
 const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => {
     let watchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'];
     let currentWatchlistLimitActiveState = getValue('WatchlistLimitActive');
-    let newWatchlistLimitActiveState;
-
-    if (watchListItemsCount >= watchlistPlayerLimit) {
-        newWatchlistLimitActiveState = true;
-        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']));
-    } else {
-        newWatchlistLimitActiveState = false;
-        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
-    }
+    let newWatchlistLimitActiveState = watchListItemsCount >= watchlistPlayerLimit;
 
     if (currentWatchlistLimitActiveState !== newWatchlistLimitActiveState) {
         setValue('WatchlistLimitActive', newWatchlistLimitActiveState);
+
+        newWatchlistLimitActiveState === true
+            ? setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
+            : setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
 
         let logMessage = newWatchlistLimitActiveState
             ? 'WATCHLIST PLAYER LIMIT ACTIVATED.'

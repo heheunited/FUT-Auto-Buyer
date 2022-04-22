@@ -121,8 +121,8 @@ export const startAutoBuyer = async function (isResume) {
   sendPinEvents("Hub - Transfers");
   await watchListWithContext(buyerSetting);
 
-  sendPinEvents("Hub - Transfers");
-  await srchTmWithContext(buyerSetting);
+  // sendPinEvents("Hub - Transfers");
+  // await srchTmWithContext(buyerSetting);
 
   let operationInProgress = false;
   let isWatchlistLimitActive = false;

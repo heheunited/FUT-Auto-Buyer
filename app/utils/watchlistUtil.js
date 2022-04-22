@@ -201,6 +201,8 @@ export const watchListUtil = function (buyerSetting) {
                                         }
                                     }
 
+                                    itemsLength = Number(itemsLength);
+
                                     if (itemsLength > 0) {
                                         writeToLog("[✔✔✔] SELL WON ITEMS COUNT: " + itemsLength, idProgressAutobuyer, "\n");
                                         updateStats('lastWonItemsCount', itemsLength);

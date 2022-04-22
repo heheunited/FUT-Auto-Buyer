@@ -194,7 +194,7 @@ export const watchListUtil = function (buyerSetting) {
                                         let num;
                                         itemsLength = (totalItemsCount + boughtItems.length) <= TRANSFER_LIST_MAX_COUNT
                                             ? boughtItems.length
-                                            : (num = TRANSFER_LIST_MAX_COUNT - totalItemsCount) - Number(num * 0.25) ;
+                                            : (num = (TRANSFER_LIST_MAX_COUNT - totalItemsCount)) - Number(num * 0.1) ;
 
                                         if (itemsLength !== boughtItems.length) {
                                             writeToLog(`PREVENT TRANSFER LIST OVERFLOW ACTIVATED. OLD ITEMS COUNT: ${boughtItems.length}. NEW ITEMS COUNT: ${itemsLength >= 0 ? itemsLength : 0}.`, idProgressAutobuyer, "\n");

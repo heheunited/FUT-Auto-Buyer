@@ -107,13 +107,7 @@ export const watchListUtil = function (buyerSetting) {
                                         );
                                     }).length;
 
-                                    if (watchListItemsCount >= watchlistPlayerLimit) {
-                                        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']));
-                                    } else {
-                                        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
-                                    }
-
-                                    setValue('watchlistPlayerCount', watchListItemsCount);
+                                    controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
                                 }
 
                                 let outBidItems = watchResponse.data.items.filter((item) => {
@@ -475,5 +469,28 @@ const increaseOutbidPerPlayerAttemptCount = (playerTradeId) => {
         outbidLimitPerPlayerMap.set(playerTradeId, 1);
     } else {
         outbidLimitPerPlayerMap.set(playerTradeId, ++playerLimitValue)
+    }
+}
+
+const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => {
+    let watchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'];
+    let currentWatchlistLimitActiveState = getValue('WatchlistLimitActive');
+
+    if (watchListItemsCount >= watchlistPlayerLimit) {
+        setValue('WatchlistLimitActive', true);
+        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']));
+    } else {
+        setValue('WatchlistLimitActive', false);
+        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
+    }
+
+    let newWatchlistLimitActiveState = getValue('WatchlistLimitActive');
+
+    if (currentWatchlistLimitActiveState !== newWatchlistLimitActiveState) {
+        let logMessage = newWatchlistLimitActiveState
+            ? 'WATCHLIST PLAYER LIMIT ACTIVATED.'
+            : 'WATCHLIST PLAYER LIMIT DISABLED.';
+
+        writeToLog(logMessage, idProgressAutobuyer);
     }
 }

@@ -88,6 +88,7 @@ export const startAutoBuyer = async function (isResume) {
   setValue("autoBuyerActive", true);
   setValue("autoBuyerState", STATE_ACTIVE);
   setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
+  setValue('WatchlistLimitActive', false);
 
   if (!isResume) {
     setValue("botStartTime", new Date());
@@ -102,10 +103,6 @@ export const startAutoBuyer = async function (isResume) {
   let transferListWithContext = transferListUtil.bind(this);
   let pauseBotWithContext = pauseBotIfRequired.bind(this);
   let isIssetWatchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'] > 0;
-
-  if (isIssetWatchlistPlayerLimit) {
-    setValue('watchlistPlayerCount', 0);
-  }
 
   await setFutBinPricesCacheTime(buyerSetting);
   setValue('needSellWonItemsAfterBotPause', buyerSetting['idAbSellItemsOnlyAfterBotPause']);
@@ -125,26 +122,20 @@ export const startAutoBuyer = async function (isResume) {
   await srchTmWithContext(buyerSetting);
 
   let operationInProgress = false;
-  let isWatchlistLimitActive = false;
 
   if (getValue("autoBuyerActive")) {
     interval = setRandomInterval(async () => {
       passInterval = await pauseBotWithContext(buyerSetting);
       stopBotIfRequired(buyerSetting);
       const isBuyerActive = getValue("autoBuyerActive");
+      const watchlistLimitActiveState = getValue('WatchlistLimitActive');
 
       if (isBuyerActive && !operationInProgress) {
         operationInProgress = true;
-        isWatchlistLimitActive = false;
         buyerSetting = getBuyerSettings();
 
         if (isIssetWatchlistPlayerLimit) {
-          const watchlistPlayerCount = getValue('watchlistPlayerCount');
-
-          if (watchlistPlayerCount >= buyerSetting['idAbWatchlistPlayersLimit']) {
-            writeToLog(`WATCHLIST PLAYER LIMIT TRIGGERED.`, idProgressAutobuyer);
-            isWatchlistLimitActive = true;
-          } else {
+          if (watchlistLimitActiveState === false) {
             sendPinEvents("Hub - Transfers");
             await srchTmWithContext(buyerSetting);
           }
@@ -156,7 +147,7 @@ export const startAutoBuyer = async function (isResume) {
         sendPinEvents("Hub - Transfers");
         await watchListWithContext(buyerSetting);
 
-        if (isWatchlistLimitActive === false) {
+        if (watchlistLimitActiveState === false) {
           sendPinEvents("Hub - Transfers");
           await transferListWithContext(
               buyerSetting["idAbSellToggle"],

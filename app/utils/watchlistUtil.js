@@ -191,9 +191,9 @@ export const watchListUtil = function (buyerSetting) {
                                     if (buyerSetting['idAbPreventTransferListOverflow']) {
                                         let totalItemsCount = getTransferListTotalItemsCount();
 
-                                        itemsLength = (totalItemsCount + itemsLength) <= TRANSFER_LIST_MAX_COUNT
-                                            ? itemsLength
-                                            : ((TRANSFER_LIST_MAX_COUNT - totalItemsCount) - 1);
+                                        if (totalItemsCount + itemsLength >= TRANSFER_LIST_MAX_COUNT) {
+                                            itemsLength = TRANSFER_LIST_MAX_COUNT - totalItemsCount - 2;
+                                        }
 
                                         if (itemsLength !== boughtItems.length) {
                                             writeToLog(`PREVENT TRANSFER LIST OVERFLOW ACTIVATED. OLD ITEMS COUNT: ${boughtItems.length}. NEW ITEMS COUNT: ${itemsLength >= 0 ? itemsLength : 0}.`, idProgressAutobuyer, "\n");

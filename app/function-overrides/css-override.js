@@ -4,6 +4,15 @@ export const cssOverride = () => {
   .buyer-header {
       font-size: 20px !important;
   }
+  .ut-navigation-bar-view.navbar-style-landscape {
+    height: 5rem !important;
+  }
+  .ut-navigation-container-view--content {
+    top: 80px !important;
+  }
+  .font16 {
+    font-size: 16px !important;
+  }  
   .buyer-settings {
       width: 100%;
   }

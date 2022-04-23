@@ -490,7 +490,7 @@ const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => 
         ? setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
         : setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
 
-    let logMessage = `WATCHLIST PLAYER LIMIT: ${newWatchlistLimitActiveState ? 'ACTIVATED' : 'DISABLED'}.`;
+    let logMessage = `WATCHLIST PLAYER LIMIT STATE: ${newWatchlistLimitActiveState ? 'ACTIVATED' : 'DISABLED'}.`;
 
     writeToLog(logMessage, idProgressAutobuyer);
 }

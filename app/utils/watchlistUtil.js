@@ -312,7 +312,7 @@ export const watchListUtil = function (buyerSetting) {
 
                                 let logMessage = `[✘✘✘] CLEAR EXPIRED ITEMS COUNT: ${expiredItems.length}.`;
                                 if (isExpectedProfitInPercentProvided) {
-                                    logMessage += ` [<] EXPECTED % PROFIT, CNT: ${countNotExpectedProfitPercent}.`;
+                                    logMessage += ` [<] EXPECTED ${buyerSetting["idAbExpectedProfitInPercent"]}% PROFIT, CNT: ${countNotExpectedProfitPercent}.`;
                                 }
                                 logMessage += ` [<] ${userMaxBid}, CNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. [>=] ${userMaxBid}, CNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`;
                                 writeToLog(logMessage, idProgressAutobuyer, "\n");

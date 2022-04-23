@@ -290,9 +290,11 @@ export const watchListUtil = function (buyerSetting) {
                                         return currentBid < userMaxBid;
                                     }
                                 ).length;
+                                let countExpiredItemsWithCurrentBidGreaterThanUserMaxBid = expiredItems.length - countExpiredItemsWithCurrentBidLessThanUserMaxBid;
 
+                                let countNotExpectedProfitPercent = 0;
                                 if (isExpectedProfitInPercentProvided) {
-                                    let countNotExpectedProfitPercent = expiredItems.filter((player) => {
+                                    countNotExpectedProfitPercent = expiredItems.filter((player) => {
                                         let playerAuction = player._auction;
                                         let currentBid = (playerAuction.currentBid || playerAuction.startingBid);
 
@@ -304,21 +306,22 @@ export const watchListUtil = function (buyerSetting) {
                                         );
                                     }).length;
 
+                                    countExpiredItemsWithCurrentBidLessThanUserMaxBid -= countNotExpectedProfitPercent;
                                     updateStats('lastLessExpectedPercentItemsCount', countNotExpectedProfitPercent)
                                 }
-
-                                let countExpiredItemsWithCurrentBidGreaterThanUserMaxBid = expiredItems.length - countExpiredItemsWithCurrentBidLessThanUserMaxBid;
 
                                 increaseTotalLosedTransferListCount(
                                     countExpiredItemsWithCurrentBidLessThanUserMaxBid,
                                     countExpiredItemsWithCurrentBidGreaterThanUserMaxBid
                                 );
 
-                                writeToLog(
-                                    "[✘✘✘] CLEAR EXPIRED ITEMS COUNT: " + expiredItems.length + `. LAST BID < ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. LAST BID >= ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`,
-                                    idProgressAutobuyer,
-                                    "\n"
-                                );
+                                let logMessage = `[✘✘✘] CLEAR EXPIRED ITEMS COUNT: ${expiredItems.length}.`;
+                                if (isExpectedProfitInPercentProvided) {
+                                    logMessage += ` [<] EXPECTED ${expectedProfitPercent}% PROFIT, COUNT: ${countNotExpectedProfitPercent}.`;
+                                }
+                                logMessage += ` [<] ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. [>=] ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`;
+
+                                writeToLog(logMessage, idProgressAutobuyer, "\n");
 
                                 updateStats('lastLessMaxBidItemsCount', countExpiredItemsWithCurrentBidLessThanUserMaxBid)
                                 updateStats('lastGreaterMaxBidItemsCount', countExpiredItemsWithCurrentBidGreaterThanUserMaxBid);

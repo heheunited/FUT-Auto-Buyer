@@ -63,62 +63,62 @@ const filters = async () => {
   return filters;
 };
 
-const handleSequenceToggle = (evt) => {
-  let runSequentially = getValue("runSequentially");
-  if (runSequentially) {
-    runSequentially = false;
-    $(evt.currentTarget).removeClass("toggled");
-  } else {
-    runSequentially = true;
-    $(evt.currentTarget).addClass("toggled");
-  }
-  setValue("runSequentially", runSequentially);
-  return runSequentially;
-};
+// const handleSequenceToggle = (evt) => {
+//   let runSequentially = getValue("runSequentially");
+//   if (runSequentially) {
+//     runSequentially = false;
+//     $(evt.currentTarget).removeClass("toggled");
+//   } else {
+//     runSequentially = true;
+//     $(evt.currentTarget).addClass("toggled");
+//   }
+//   setValue("runSequentially", runSequentially);
+//   return runSequentially;
+// };
 
-export const filterSettingsView = async function () {
-  if (getValue("runSequentially")) {
-    setValue("runSequentially", false);
-    setTimeout(() => {
-      $(`#${idRunFilterSequential}`).click();
-    });
-  }
-  return `<div style='display : none' class='buyer-settings-wrapper filter-settings-view'>  
-                <hr class="search-price-header header-hr">
-                <div class="search-price-header">
-                  <h1 class="secondary">Filter Settings:</h1>
-                </div>
-                <div class="price-filter buyer-settings-field multiple-filter">
-                    <select  multiple="multiple" class="multiselect-filter filter-header-settings" id="${idSelectedFilter}"
-                     name="selectedFilters" style="overflow-y : scroll;width: 50%;">
-                     ${Object.keys(await filters()).map(
-                       (value) => `<option value='${value}'>${value}</option>`
-                     )}
-                    </select>
-                    <label style="white-space: nowrap;width: 50%;" id="${idSelectFilterCount}" >No Filter Selected</label>
-                </div>
-                ${generateTextInput(
-                  "No. of search For each filter",
-                  getValue("fiterSearchCount") || 3,
-                  { idAbNumberFilterSearch },
-                  "(Count of searches performed before <br/> switching to another filter)",
-                  "CommonSettings",
-                  "number",
-                  null,
-                  "buyer-settings-field",
-                  (value) => setValue("fiterSearchCount", parseInt(value) || 3)
-                )}
-                ${generateToggleInput(
-                  "Switch filter sequentially",
-                  { idRunFilterSequential },
-                  "",
-                  "CommonSettings",
-                  "buyer-settings-field",
-                  handleSequenceToggle
-                )}
-            </div>
-    `;
-};
+// export const filterSettingsView = async function () {
+//   if (getValue("runSequentially")) {
+//     setValue("runSequentially", false);
+//     setTimeout(() => {
+//       $(`#${idRunFilterSequential}`).click();
+//     });
+//   }
+//   return `<div style='display : none' class='buyer-settings-wrapper filter-settings-view'>
+//                 <hr class="search-price-header header-hr">
+//                 <div class="search-price-header">
+//                   <h1 class="secondary">Filter Settings:</h1>
+//                 </div>
+//                 <div class="price-filter buyer-settings-field multiple-filter">
+//                     <select  multiple="multiple" class="multiselect-filter filter-header-settings" id="${idSelectedFilter}"
+//                      name="selectedFilters" style="overflow-y : scroll;width: 50%;">
+//                      ${Object.keys(await filters()).map(
+//                        (value) => `<option value='${value}'>${value}</option>`
+//                      )}
+//                     </select>
+//                     <label style="white-space: nowrap;width: 50%;" id="${idSelectFilterCount}" >No Filter Selected</label>
+//                 </div>
+//                 ${generateTextInput(
+//                   "No. of search For each filter",
+//                   getValue("fiterSearchCount") || 3,
+//                   { idAbNumberFilterSearch },
+//                   "(Count of searches performed before <br/> switching to another filter)",
+//                   "CommonSettings",
+//                   "number",
+//                   null,
+//                   "buyer-settings-field",
+//                   (value) => setValue("fiterSearchCount", parseInt(value) || 3)
+//                 )}
+//                 ${generateToggleInput(
+//                   "Switch filter sequentially",
+//                   { idRunFilterSequential },
+//                   "",
+//                   "CommonSettings",
+//                   "buyer-settings-field",
+//                   handleSequenceToggle
+//                 )}
+//             </div>
+//     `;
+// };
 
 const handleReportProblem = () => {
   showPopUp(

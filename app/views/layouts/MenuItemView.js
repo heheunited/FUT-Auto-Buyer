@@ -1,14 +1,14 @@
 import { buySettingsView } from "./Settings/BuySettingsView";
 import { sellSettingsView } from "./Settings/SellSettingsView";
 import { safeSettingsView } from "./Settings/SafeSettingsView";
-import { captchaSettingsView } from "./Settings/CaptchaSettingsView";
+// import { captchaSettingsView } from "./Settings/CaptchaSettingsView";
 import { notificationSettingsView } from "./Settings/NotificationSettingsView";
 import { commonSettingsView } from "./Settings/CommonSettingsView";
 import {
   destoryPlayerInput,
   searchSettingsView,
 } from "./Settings/SearchSettingsView";
-import { filterSettingsView } from "./Settings/FilterSettingsView";
+// import { filterSettingsView } from "./Settings/FilterSettingsView";
 import { getValue, setValue } from "../../services/repository";
 import { updateMultiFilterSettings } from "../../utils/filterUtil";
 import { getUserFilters } from "../../utils/dbUtil";
@@ -33,23 +33,23 @@ settingsLookup.set(3, {
   label: "Safety Settings",
   selector: ".safety-settings-view",
 });
+// settingsLookup.set(4, {
+//   label: "Filter Settings",
+//   selector: ".filter-settings-view",
+// });
+// settingsLookup.set(5, {
+//   label: "Captcha Settings",
+//   selector: ".captcha-settings-view",
+// });
 settingsLookup.set(4, {
-  label: "Filter Settings",
-  selector: ".filter-settings-view",
-});
-settingsLookup.set(5, {
-  label: "Captcha Settings",
-  selector: ".captcha-settings-view",
-});
-settingsLookup.set(6, {
   label: "Notification Settings",
   selector: ".notification-settings-view",
 });
-settingsLookup.set(7, {
+settingsLookup.set(5, {
   label: "Common Settings",
   selector: ".common-settings-view",
 });
-settingsLookup.set(8, {
+settingsLookup.set(6, {
   label: "Backend Settings",
   selector: ".backend-settings-view",
 });
@@ -109,9 +109,9 @@ const appendMenuItems = async (isInit) => {
   menuRoot.append(sellSettingsView.call(this));
   menuRoot.append(searchSettingsView.call(this));
   menuRoot.append(safeSettingsView.call(this));
-  const filterVal = await filterSettingsView.call(this);
-  menuRoot.append(filterVal);
-  menuRoot.append(captchaSettingsView.call(this));
+  // const filterVal = await filterSettingsView.call(this);
+  // menuRoot.append(filterVal);
+  // menuRoot.append(captchaSettingsView.call(this));
   menuRoot.append(notificationSettingsView.call(this));
   menuRoot.append(commonSettingsView.call(this));
   menuRoot.append(backendSettingsView.call(this));

@@ -34,7 +34,7 @@ export const commonSettingsView = function () {
     "CommonSettings"
   )}
   ${generateTextInput(
-    "Resume bot after",
+    "Resume bot after error occurred",
     "",
     { idAbResumeAfterErrorOccured },
     "(S for seconds, M for Minutes, H for hours eg. 0-0S)<br/><br/>",

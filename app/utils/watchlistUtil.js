@@ -186,26 +186,26 @@ export const watchListUtil = function (buyerSetting) {
                                 const isNeedSendToTransferList = sellMod === SELL_MOD_AUTO_DEFAULT && !isNeedSellWonItemsByCount && !isNeedSellWonItemsAfterBotPause;
 
                                 if (isNeedSellWonItemsAfterBotPause || isNeedSellWonItemsByCount || isNeedSendToTransferList) {
-                                    let itemsLength = boughtItems.length;
+                                    let boughtItemsLength = boughtItems.length;
 
-                                    if (buyerSetting['idAbPreventTransferListOverflow']) {
+                                    if (buyerSetting['idAbPreventTransferListOverflow'] && boughtItemsLength > 0) {
                                         let totalItemsCount = getTransferListTotalItemsCount();
 
-                                        if (totalItemsCount + itemsLength >= TRANSFER_LIST_MAX_COUNT) {
-                                            itemsLength = TRANSFER_LIST_MAX_COUNT - totalItemsCount - 2;
+                                        if (totalItemsCount + boughtItemsLength >= TRANSFER_LIST_MAX_COUNT) {
+                                            boughtItemsLength = TRANSFER_LIST_MAX_COUNT - totalItemsCount - 2;
                                         }
 
-                                        if (itemsLength !== boughtItems.length) {
-                                            writeToLog(`PREVENT TRANSFER LIST OVERFLOW ACTIVATED. OLD ITEMS COUNT: ${boughtItems.length}. NEW ITEMS COUNT: ${itemsLength >= 0 ? itemsLength : 0}.`, idProgressAutobuyer, "\n");
+                                        if (boughtItemsLength !== boughtItems.length) {
+                                            writeToLog(`PREVENT TRANSFER LIST OVERFLOW ACTIVATED. OLD ITEMS COUNT: ${boughtItems.length}. NEW ITEMS COUNT: ${boughtItemsLength >= 0 ? boughtItemsLength : 0}.`, idProgressAutobuyer, "\n");
                                         }
                                     }
 
-                                    if (itemsLength > 0) {
-                                        writeToLog("[✔✔✔] SELL WON ITEMS COUNT: " + itemsLength, idProgressAutobuyer, "\n");
-                                        updateStats('lastWonItemsCount', itemsLength);
+                                    if (boughtItemsLength > 0) {
+                                        writeToLog("[✔✔✔] SELL WON ITEMS COUNT: " + boughtItemsLength, idProgressAutobuyer, "\n");
+                                        updateStats('lastWonItemsCount', boughtItemsLength);
                                     }
 
-                                    for (var i = 0; i < itemsLength; i++) {
+                                    for (var i = 0; i < boughtItemsLength; i++) {
                                         const player = boughtItems[i];
                                         const price = player._auction.currentBid;
                                         const ratingThreshold = buyerSetting["idSellRatingThreshold"];

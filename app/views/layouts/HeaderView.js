@@ -84,10 +84,10 @@ export const HeaderView = () => {
   </div>
   <div class="view-navbar-clubinfo font16" style="border: none;">
     <div class="view-navbar-clubinfo-data">
-       <span class="view-navbar-clubinfo-name">Sold Items: <span id=${idAbSoldItems}></span></span>
-       <span class="view-navbar-clubinfo-name">Unsold Items: <span id=${idAbUnsoldItems}></span></span>
-       <span class="view-navbar-clubinfo-name">Available Items: <span id=${idAbAvailableItems}></span></span>
-       <span class="view-navbar-clubinfo-name">Active transfers: <span id=${idAbActiveTransfers}></span></span>
+       <span class="view-navbar-clubinfo-name">Sold: <span id=${idAbSoldItems}></span></span>
+       <span class="view-navbar-clubinfo-name">Unsold: <span id=${idAbUnsoldItems}></span></span>
+       <span class="view-navbar-clubinfo-name">Available: <span id=${idAbAvailableItems}></span></span>
+       <span class="view-navbar-clubinfo-name">Active: <span id=${idAbActiveTransfers}></span></span>
     </div>
   </div>`;
 };

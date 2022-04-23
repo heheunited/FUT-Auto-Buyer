@@ -212,7 +212,7 @@ export const watchListUtil = function (buyerSetting) {
                                     }
 
                                     if (boughtItemsLength > 0) {
-                                        writeToLog("[✔✔✔] SELL WON ITEMS COUNT: " + boughtItemsLength, idProgressAutobuyer, "\n");
+                                        writeToLog(`[✔✔✔] SELL WON ITEMS COUNT: ${boughtItemsLength}. DURATION: ${buyerSetting['idFutBinDuration']}.`, idProgressAutobuyer, "\n");
                                         updateStats('lastWonItemsCount', boughtItemsLength);
                                     }
 
@@ -312,9 +312,9 @@ export const watchListUtil = function (buyerSetting) {
 
                                 let logMessage = `[✘✘✘] CLEAR EXPIRED ITEMS COUNT: ${expiredItems.length}.`;
                                 if (isExpectedProfitInPercentProvided) {
-                                    logMessage += ` [<] EXPECTED ${buyerSetting["idAbExpectedProfitInPercent"]}% PROFIT, CNT: ${countNotExpectedProfitPercent}.`;
+                                    logMessage += ` [<] EXPECTED ${buyerSetting["idAbExpectedProfitInPercent"]}% PROFIT, COUNT: ${countNotExpectedProfitPercent}.`;
                                 }
-                                logMessage += ` [<] ${userMaxBid}, CNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. [>=] ${userMaxBid}, CNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`;
+                                logMessage += ` [<] ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. [>=] ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`;
                                 writeToLog(logMessage, idProgressAutobuyer, "\n");
 
                                 updateStats('lastLessMaxBidItemsCount', countExpiredItemsWithCurrentBidLessThanUserMaxBid)

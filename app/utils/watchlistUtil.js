@@ -14,7 +14,7 @@ import {getSellPriceFromFutBin} from "./futbinUtil";
 import {writeToLog} from "./logUtil";
 import {sendErrorNotificationToUser, sendPinEvents, sendUINotification} from "./notificationUtil";
 import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
-import {buyPlayer, isBidOrBuyMakeExpectedProfit} from "./purchaseUtil";
+import {buyPlayer, isBidOrBuyMakeExpectedPercentProfit} from "./purchaseUtil";
 import {updateProfit} from "./statsUtil";
 import {
     increaseTotalLosedTransferListCount,
@@ -97,7 +97,7 @@ export const watchListUtil = function (buyerSetting) {
                                                 : currentBid;
 
                                         let expectedPercentProfit = isExpectedProfitInPercentProvided
-                                            ? isBidOrBuyMakeExpectedProfit(
+                                            ? isBidOrBuyMakeExpectedPercentProfit(
                                                 null,
                                                 checkPrice,
                                                 getFutBinPlayerPrice(item.definitionId, 95),
@@ -132,7 +132,7 @@ export const watchListUtil = function (buyerSetting) {
                                             : currentBid;
 
                                     let expectedPercentProfit = isExpectedProfitInPercentProvided
-                                        ? isBidOrBuyMakeExpectedProfit(
+                                        ? isBidOrBuyMakeExpectedPercentProfit(
                                             null,
                                             checkPrice,
                                             getFutBinPlayerPrice(item.definitionId, 95),
@@ -289,7 +289,23 @@ export const watchListUtil = function (buyerSetting) {
 
                                         return currentBid < userMaxBid;
                                     }
-                                ).length
+                                ).length;
+
+                                if (isExpectedProfitInPercentProvided) {
+                                    let countNotExpectedProfitPercent = expiredItems.filter((player) => {
+                                        let playerAuction = player._auction;
+                                        let currentBid = (playerAuction.currentBid || playerAuction.startingBid);
+
+                                        return isBidOrBuyMakeExpectedPercentProfit(
+                                            null,
+                                            currentBid,
+                                            getFutBinPlayerPrice(player.definitionId, 95),
+                                            expectedProfitPercent
+                                        );
+                                    }).length;
+
+                                    updateStats('lastLessExpectedPercentItemsCount', countNotExpectedProfitPercent)
+                                }
 
                                 let countExpiredItemsWithCurrentBidGreaterThanUserMaxBid = expiredItems.length - countExpiredItemsWithCurrentBidLessThanUserMaxBid;
 

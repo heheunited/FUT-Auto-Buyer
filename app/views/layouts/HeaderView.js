@@ -1,7 +1,6 @@
 import {
   idAbStatus,
   idAbRequestCount,
-  idInfoWrapper,
   idAbSearchProgress,
   idAbStatisticsProgress,
   idAbCoins,
@@ -16,7 +15,7 @@ import {
   idLastWonItemsCount,
   idLastLessMaxBidItemsCount,
   idLastGreaterMaxBidItemsCount,
-  id24hTlCaptcha, idAbLastProfit,
+  id24hTlCaptcha, idAbLastProfit, idLessExpectedPercentItemsCount,
 } from "../../elementIds.constants";
 import { downloadStats } from "../../utils/statsUtil";
 import { generateButton } from "../../utils/uiUtils/generateButton";
@@ -75,11 +74,12 @@ export const HeaderView = () => {
     <div class="view-navbar-currency-coins">Est. Profit: <span  id=${idAbProfit}></span></div>
     <div class="view-navbar-currency-coins">Last TL Profit: <span  id=${idAbLastProfit}></span></div>
   </div>
-  <div class="view-navbar-clubinfo">
+  <div class="view-navbar-clubinfo font14">
     <div class="view-navbar-clubinfo-data">
        <span class="view-navbar-clubinfo-name">Won items: <span id=${idLastWonItemsCount}></span></span>
        <span class="view-navbar-clubinfo-name">[<]  Max Bid: <span id=${idLastLessMaxBidItemsCount}></span></span>
        <span class="view-navbar-clubinfo-name">[>=] Max Bid: <span id=${idLastGreaterMaxBidItemsCount}></span></span>
+       <span class="view-navbar-clubinfo-name">[<] Expected %: <span id=${idLessExpectedPercentItemsCount}></span></span>
     </div>
   </div>
   <div class="view-navbar-clubinfo">

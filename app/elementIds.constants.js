@@ -66,6 +66,7 @@ export const id24hTlCaptcha = "elem_" + generateId(15);
 export const idLastWonItemsCount = "elem_" + generateId(15);
 export const idLastLessMaxBidItemsCount = "elem_" + generateId(15);
 export const idLastGreaterMaxBidItemsCount = "elem_" + generateId(15);
+export const idLessExpectedPercentItemsCount = "elem_" + generateId(15);
 export const idAbUnsoldItems = "elem_" + generateId(15);
 export const idAbAvailableItems = "elem_" + generateId(15);
 export const idAbActiveTransfers = "elem_" + generateId(15);

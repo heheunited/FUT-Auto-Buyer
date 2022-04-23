@@ -255,7 +255,7 @@ export const buyPlayer = (
   });
 };
 
-export const isBidOrBuyMakeExpectedProfit = (
+export const isBidOrBuyMakeExpectedPercentProfit = (
     userMaxBuyNow,
     priceToBid,
     futBinPrice,

@@ -13,7 +13,7 @@ import {
   idLastWonItemsCount,
   idLastLessMaxBidItemsCount,
   idLastGreaterMaxBidItemsCount,
-  id24hTlCaptcha, idAbLastProfit,
+  id24hTlCaptcha, idAbLastProfit, idLessExpectedPercentItemsCount,
 } from "../elementIds.constants";
 import { sendMessageToDiscord } from "../services/discordService";
 import { getValue, setValue } from "../services/repository";
@@ -35,6 +35,7 @@ setValue("sessionStats", {
   lastWonItemsCount: 0,
   lastLessMaxBidItemsCount: 0,
   lastGreaterMaxBidItemsCount: 0,
+  lastLessExpectedPercentItemsCount: 0,
   sessionId: Date.now().toString(36) + Math.random().toString(36).substr(2),
   transactions: [],
 });
@@ -62,6 +63,7 @@ export const statsProcessor = () => {
     $("#" + idLastWonItemsCount).html(currentStats.lastWonItemsCount);
     $("#" + idLastLessMaxBidItemsCount).html(currentStats.lastLessMaxBidItemsCount);
     $("#" + idLastGreaterMaxBidItemsCount).html(currentStats.lastGreaterMaxBidItemsCount);
+    $("#" + idLessExpectedPercentItemsCount).html(currentStats.lastLessExpectedPercentItemsCount);
 
     updateTimer();
 

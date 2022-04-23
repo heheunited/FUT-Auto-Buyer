@@ -33,7 +33,7 @@ import {
   getSellBidPrice,
   roundOffPrice,
 } from "../utils/priceUtils";
-import {buyPlayer, checkRating, isBidOrBuyMakeExpectedProfit} from "../utils/purchaseUtil";
+import {buyPlayer, checkRating, isBidOrBuyMakeExpectedPercentProfit} from "../utils/purchaseUtil";
 import { updateRequestCount } from "../utils/statsUtil";
 import { setRandomInterval } from "../utils/timeOutUtil";
 import { transferListUtil } from "../utils/transferlistUtil";
@@ -449,7 +449,7 @@ const searchTransferMarket = function (buyerSetting) {
 
             if (
                 isExpectedProfitInPercentProvided &&
-                !isBidOrBuyMakeExpectedProfit(
+                !isBidOrBuyMakeExpectedPercentProfit(
                     userBuyNowPrice,
                     checkPrice,
                     getFutBinPlayerPrice(player.definitionId, 95),

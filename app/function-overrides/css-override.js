@@ -164,6 +164,9 @@ export const cssOverride = () => {
   }
   .font15 {
     font-size: 15px;
+  }
+  .font14 {
+    font-size: 14px;
   }  
   .action-icons {
     width: 10%

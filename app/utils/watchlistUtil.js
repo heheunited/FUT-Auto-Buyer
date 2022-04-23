@@ -296,7 +296,7 @@ export const watchListUtil = function (buyerSetting) {
                                         let playerAuction = player._auction;
                                         let currentBid = (playerAuction.currentBid || playerAuction.startingBid);
 
-                                        return isBidOrBuyMakeExpectedPercentProfit(
+                                        return currentBid < userMaxBid && !isBidOrBuyMakeExpectedPercentProfit(
                                             null,
                                             currentBid,
                                             getFutBinPlayerPrice(player.definitionId, 95),

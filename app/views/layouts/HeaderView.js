@@ -82,14 +82,10 @@ export const HeaderView = () => {
        <span class="view-navbar-clubinfo-name">[<] Expected %: <span id=${idLessExpectedPercentItemsCount}></span></span>
     </div>
   </div>
-  <div class="view-navbar-clubinfo font16">
+  <div class="view-navbar-clubinfo font16" style="border: none;">
     <div class="view-navbar-clubinfo-data">
        <span class="view-navbar-clubinfo-name">Sold Items: <span id=${idAbSoldItems}></span></span>
        <span class="view-navbar-clubinfo-name">Unsold Items: <span id=${idAbUnsoldItems}></span></span>
-    </div>
-  </div>
-  <div class="view-navbar-clubinfo font16" style="border: none;">
-    <div class="view-navbar-clubinfo-data">
        <span class="view-navbar-clubinfo-name">Available Items: <span id=${idAbAvailableItems}></span></span>
        <span class="view-navbar-clubinfo-name">Active transfers: <span id=${idAbActiveTransfers}></span></span>
     </div>

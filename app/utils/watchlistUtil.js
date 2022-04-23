@@ -300,7 +300,7 @@ export const watchListUtil = function (buyerSetting) {
 
                                         return currentBid < userMaxBid && !isBidOrBuyMakeExpectedPercentProfit(
                                             null,
-                                            currentBid,
+                                            getBuyBidPrice(currentBid),
                                             getFutBinPlayerPrice(player.definitionId, 95),
                                             expectedProfitPercent
                                         );
@@ -312,9 +312,9 @@ export const watchListUtil = function (buyerSetting) {
 
                                 let logMessage = `[✘✘✘] CLEAR EXPIRED ITEMS COUNT: ${expiredItems.length}.`;
                                 if (isExpectedProfitInPercentProvided) {
-                                    logMessage += ` [<] EXPECTED ${expectedProfitPercent}% PROFIT, COUNT: ${countNotExpectedProfitPercent}.`;
+                                    logMessage += ` [<] EXPECTED % PROFIT, CNT: ${countNotExpectedProfitPercent}.`;
                                 }
-                                logMessage += ` [<] ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. [>=] ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`;
+                                logMessage += ` [<] ${userMaxBid}, CNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. [>=] ${userMaxBid}, CNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`;
                                 writeToLog(logMessage, idProgressAutobuyer, "\n");
 
                                 updateStats('lastLessMaxBidItemsCount', countExpiredItemsWithCurrentBidLessThanUserMaxBid)

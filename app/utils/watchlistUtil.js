@@ -310,21 +310,17 @@ export const watchListUtil = function (buyerSetting) {
                                     updateStats('lastLessExpectedPercentItemsCount', countNotExpectedProfitPercent)
                                 }
 
-                                increaseTotalLosedTransferListCount(
-                                    countExpiredItemsWithCurrentBidLessThanUserMaxBid,
-                                    countExpiredItemsWithCurrentBidGreaterThanUserMaxBid
-                                );
-
                                 let logMessage = `[✘✘✘] CLEAR EXPIRED ITEMS COUNT: ${expiredItems.length}.`;
                                 if (isExpectedProfitInPercentProvided) {
                                     logMessage += ` [<] EXPECTED ${expectedProfitPercent}% PROFIT, COUNT: ${countNotExpectedProfitPercent}.`;
                                 }
                                 logMessage += ` [<] ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidLessThanUserMaxBid}. [>=] ${userMaxBid}, COUNT: ${countExpiredItemsWithCurrentBidGreaterThanUserMaxBid}.`;
-
                                 writeToLog(logMessage, idProgressAutobuyer, "\n");
 
                                 updateStats('lastLessMaxBidItemsCount', countExpiredItemsWithCurrentBidLessThanUserMaxBid)
                                 updateStats('lastGreaterMaxBidItemsCount', countExpiredItemsWithCurrentBidGreaterThanUserMaxBid);
+
+                                increaseTotalLosedTransferListCount(countExpiredItemsWithCurrentBidLessThanUserMaxBid, countExpiredItemsWithCurrentBidGreaterThanUserMaxBid);
 
                                 expiredItems.map(player => {
                                     let auction = player._auction;

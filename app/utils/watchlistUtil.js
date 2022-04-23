@@ -12,7 +12,7 @@ import {
 } from "./commonUtil";
 import {getSellPriceFromFutBin} from "./futbinUtil";
 import {writeToLog} from "./logUtil";
-import {sendPinEvents, sendUINotification} from "./notificationUtil";
+import {sendErrorNotificationToUser, sendPinEvents, sendUINotification} from "./notificationUtil";
 import {getBuyBidPrice, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
 import {buyPlayer, isBidOrBuyMakeExpectedProfit} from "./purchaseUtil";
 import {updateProfit} from "./statsUtil";
@@ -29,9 +29,10 @@ import {
     SELL_MOD_AUTO_DEFAULT,
     SELL_MOD_BY_COUNT,
     SELL_MOD_DISABLED,
-    TRANSFER_LIST_MAX_COUNT
+    TRANSFER_LIST_MAX_COUNT, WATCH_LIST_MAX_COUNT
 } from "./constants";
 import {getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";
+import {stopAutoBuyer} from "../handlers/autobuyerProcessor";
 
 const sellBids = new Set();
 const outbidLimitPerPlayerMap = new Map();
@@ -56,6 +57,16 @@ export const watchListUtil = function (buyerSetting) {
             });
 
             if (!activeItems.length) {
+                return resolve();
+            }
+
+            if (buyerSetting['idAbPreventWatchListOverflow'] && response.data.items.length >= WATCH_LIST_MAX_COUNT) {
+                let logMessage = 'WATCHLIST IS FULL. AUTOBUYER IS STOPPED.';
+
+                writeToLog(logMessage, idProgressAutobuyer);
+                sendErrorNotificationToUser(logMessage);
+
+                stopAutoBuyer();
                 return resolve();
             }
 

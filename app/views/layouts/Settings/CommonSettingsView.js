@@ -1,4 +1,6 @@
 import {
+  idAbPreventTransferListOverflow,
+  idAbPreventWatchListOverflow,
   idAbResumeAfterErrorOccured,
   idAbStopErrorCode,
   idAbStopErrorCodeCount,
@@ -72,6 +74,18 @@ export const commonSettingsView = function () {
       {idFutBinPricesCacheTime},
       "(eg. 25 minutes)",
       "CommonSettings",
+  )}
+  ${generateToggleInput(
+      "Prevent watch list overflow",
+      {idAbPreventWatchListOverflow},
+      "",
+      "CommonSettings"
+  )}
+  ${generateToggleInput(
+      "Prevent transfer list overflow",
+      {idAbPreventTransferListOverflow},
+      "",
+      "BuyerSettings"
   )}
   </div>`;
 };

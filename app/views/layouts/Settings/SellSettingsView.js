@@ -12,8 +12,7 @@ import {
   idAbRelistUnsoldWithUpdatePrice,
   idAbMinSellPrice,
   idAbSellItemsOnlyAfterBotPause,
-  idAbSellWonItemsCount,
-  idAbPreventTransferListOverflow,
+  idAbSellWonItemsCount
 } from "../../../elementIds.constants";
 import { generateTextInput } from "../../../utils/uiUtils/generateTextInput";
 import { generateToggleInput } from "../../../utils/uiUtils/generateToggleInput";
@@ -77,12 +76,6 @@ export const sellSettingsView = function () {
       "(Keep won items <br /> in Unassigned or Transfer Targets)",
       "BuyerSettings"
     )}
-    ${generateToggleInput(
-      "Prevent transfer list overflow",
-      { idAbPreventTransferListOverflow },
-      "",
-      "BuyerSettings"
-  )}
     ${generateToggleInput(
       "Sell won items only after bot pause",
       { idAbSellItemsOnlyAfterBotPause},

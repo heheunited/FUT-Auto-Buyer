@@ -118,6 +118,7 @@ export const idBuyFutBinPercent = "elem_" + generateId(15);
 export const idAbBidFutBin = "elem_" + generateId(15);
 export const idAbDontMoveWon = "elem_" + generateId(15);
 export const idAbPreventTransferListOverflow = "elem_" + generateId(15);
+export const idAbPreventWatchListOverflow = "elem_" + generateId(15);
 export const idAbSellItemsOnlyAfterBotPause = "elem_" + generateId(15);
 export const idAbSellWonItemsCount = "elem_" + generateId(15);
 export const idAbResumeAfterErrorOccured = "elem_" + generateId(15);

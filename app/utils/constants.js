@@ -4,3 +4,4 @@ export const SELL_MOD_AUTO_DEFAULT = 1;
 export const SELL_MOD_DISABLED = 4;
 
 export const TRANSFER_LIST_MAX_COUNT = 100;
+export const WATCH_LIST_MAX_COUNT = 50;

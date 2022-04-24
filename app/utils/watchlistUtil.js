@@ -184,12 +184,7 @@ export const watchListUtil = function (buyerSetting) {
 
                             if (sellMod !== SELL_MOD_DISABLED) {
                                 let boughtItems = watchResponse.data.items.filter(function (item) {
-                                    return (
-                                        item.getAuctionData().isWon() &&
-                                        // (!filterName || filterWatchList.has(item._auction.tradeId)) &&
-                                        !userWatchItems.has(item._auction.tradeId) &&
-                                        !sellBids.has(item._auction.tradeId)
-                                    );
+                                    return item.getAuctionData().isWon() && !sellBids.has(item._auction.tradeId) && !userWatchItems.has(item._auction.tradeId);
                                 });
 
                                 const isNeedSellWonItemsByCount = sellMod === SELL_MOD_BY_COUNT && boughtItems.length >= buyerSetting['idAbSellWonItemsCount'];

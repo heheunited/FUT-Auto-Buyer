@@ -304,6 +304,7 @@ const searchTransferMarket = function (buyerSetting) {
           }
 
           let maxPurchases = buyerSetting["idAbMaxPurchases"];
+
           if (
             currentPage < buyerSetting["idAbMaxSearchPage"] &&
             response.data.items.length === 21
@@ -312,25 +313,22 @@ const searchTransferMarket = function (buyerSetting) {
           } else {
             setValue("currentPage", 1);
           }
-          if (buyerSetting["idAbShouldSort"])
+
+          if (buyerSetting["idAbShouldSort"]) {
             response.data.items = sortPlayers(
-              response.data.items,
-              buyerSetting["idAbSortBy"] || "buy",
-              buyerSetting["idAbSortOrder"]
+                response.data.items,
+                buyerSetting["idAbSortBy"] || "buy",
+                buyerSetting["idAbSortOrder"]
             );
-          for (
-            let i = response.data.items.length - 1;
-            i >= 0 && getValue("autoBuyerActive");
-            i--
-          ) {
+          }
+
+          for (let i = response.data.items.length - 1; i >= 0 && getValue("autoBuyerActive"); i--) {
             let player = response.data.items[i];
             let auction = player._auction;
             let type = player.type;
             let { id } = player._metaData || {};
             let playerRating = parseInt(player.rating);
-            let expires = services.Localization.localizeAuctionTimeRemaining(
-              auction.expires
-            );
+            let expires = services.Localization.localizeAuctionTimeRemaining(auction.expires);
 
             let currentPlayerFutBinPrice = -1;
             if (type === "player") {
@@ -350,13 +348,11 @@ const searchTransferMarket = function (buyerSetting) {
                   bidPrice = futBinBuyPrice;
                 }
               } else {
-                writeToLog(
-                  `Error fetch fetching Price for ${player._staticData.name}`,
-                  idProgressAutobuyer
-                );
+                writeToLog(`Error fetch fetching Price for ${player._staticData.name}`, idProgressAutobuyer);
                 continue;
               }
             }
+
             let buyNowPrice = auction.buyNowPrice;
             let currentBid = auction.currentBid || auction.startingBid;
             let isBid = auction.currentBid;
@@ -393,9 +389,7 @@ const searchTransferMarket = function (buyerSetting) {
 
             const shouldCheckRating = minRating || maxRating;
 
-            const isValidRating =
-              !shouldCheckRating ||
-              checkRating(playerRating, minRating, maxRating);
+            const isValidRating = !shouldCheckRating || checkRating(playerRating, minRating, maxRating);
             const ratingTxt = !isValidRating ? "no" : "ok";
 
             const logWrite = writeToLogClosure(
@@ -464,6 +458,7 @@ const searchTransferMarket = function (buyerSetting) {
             }
 
             const userCoins = services.User.getUser().coins.amount;
+
             if (
               userCoins < buyNowPrice ||
               (bidPrice && userCoins < checkPrice)

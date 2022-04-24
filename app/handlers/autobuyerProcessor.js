@@ -289,11 +289,14 @@ const searchTransferMarket = function (buyerSetting) {
               "| rating   | player name     | bid    | buy    | FutBin     | time            | action",
               idAutoBuyerFoundLog
             );
-            currentPage === 1 &&
-              sendPinEvents("Transfer Market Results - List View");
-            if (response.data.items[0].type === "player") {
+
+            currentPage === 1 && sendPinEvents("Transfer Market Results - List View");
+
+            if (buyerSetting['idAbIsPlayerTypeSearch']) {
               await addFutbinCachePrice(response.data.items);
             }
+          } else {
+            return resolve();
           }
 
           if (response.data.items.length > buyerSetting["idAbSearchResult"]) {

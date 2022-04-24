@@ -261,6 +261,10 @@ export const isBidOrBuyMakeExpectedPercentProfit = (
     futBinPrice,
     expectedProfitPercent
 ) => {
+  if (!futBinPrice) {
+    return true;
+  }
+
   if (userMaxBuyNow && userMaxBuyNow > 0 && calculateProfitPercent(futBinPrice, userMaxBuyNow) >= expectedProfitPercent) {
     return true;
   }

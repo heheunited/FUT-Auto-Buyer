@@ -111,10 +111,7 @@ export const watchListUtil = function (buyerSetting) {
 
                                         return (
                                             !tAuction.isExpired() && !tAuction.isClosedTrade() && !tAuction.isWon() &&
-                                            isOutbidLimitValid &&
-                                            bidPrice > currentBid &&
-                                            expectedPercentProfit &&
-                                            bidPrice > checkPrice
+                                            ((auction._bidState === "outbid" && expectedPercentProfit &&  bidPrice > currentBid && bidPrice > checkPrice && isOutbidLimitValid) || auction._tradeState === "active")
                                         );
                                     }).length;
 

@@ -122,7 +122,7 @@ export const watchListUtil = function (buyerSetting) {
                                         );
                                     }).length;
 
-                                    controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
+                                    getValue('waitUntilWatchlistWillBeEmpty') !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
 
                                     if (getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS && watchListItemsCount === 0) {
                                         setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_PROCESSED_STATUS);

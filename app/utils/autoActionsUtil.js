@@ -12,7 +12,7 @@ import {
 import {
   convertRangeToSeconds, convertSecondsToTime,
   getRandNum,
-  getRandNumberInRange
+  getRandNumberInRange, getRangeValue, setWaitTimeObj
 } from "./commonUtil";
 import { writeToLog } from "./logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
@@ -48,14 +48,15 @@ export const stopBotIfRequired = (buyerSetting) => {
           : "Max purchases count reached";
 
   if (timeElapsed){
-    let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
 
+    let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
         (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS ||
             waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WAIT_STATUS)
     ) {
 
       if (waitUntilWatchlistWillBeEmptyStatus !== WAIT_UNTIL_WAIT_STATUS) {
+        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
         setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WAIT_STATUS);
         writeToLog("PAUSE/STOP TRIGGERED. WAIT UNTIL WATCHLIST WILL BE EMPTY.", idProgressAutobuyer, "\n");
       }
@@ -126,14 +127,15 @@ export const pauseBotIfRequired = async function (buyerSetting) {
   // }
 
   if (searchCount && !((searchCount - previousPause) % cycleAmount)) {
-    let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
 
+    let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
         (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS ||
             waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WAIT_STATUS)
     ) {
 
       if (waitUntilWatchlistWillBeEmptyStatus !== WAIT_UNTIL_WAIT_STATUS) {
+        setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
         setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WAIT_STATUS);
         writeToLog("PAUSE/STOP TRIGGERED. WAIT UNTIL WATCHLIST WILL BE EMPTY.", idProgressAutobuyer, "\n");
       }

@@ -149,12 +149,9 @@ export const watchListUtil = function (buyerSetting) {
                                         : true;
 
                                     return (
-                                        auction._bidState === "outbid" &&
-                                        auction._tradeState === "active" &&
-                                        isOutbidLimitValid &&
-                                        bidPrice > currentBid &&
-                                        expireTimeLessThan &&
-                                        expectedPercentProfit &&
+                                        auction._bidState === "outbid" && auction._tradeState === "active" &&
+                                        isOutbidLimitValid && bidPrice > currentBid &&
+                                        expireTimeLessThan && expectedPercentProfit &&
                                         bidPrice > checkPrice
                                     );
                                 }).sort((a, b) => a._auction.expires - b._auction.expires);

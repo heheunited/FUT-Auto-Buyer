@@ -1,4 +1,4 @@
-import {idAbIsPlayerTypeSearch} from "../../../elementIds.constants";
+import {idAbIsPlayerTypeSearch, idAbWaitUntilWatchlistWillBeEmpty} from "../../../elementIds.constants";
 import {generateToggleInput} from "../../../utils/uiUtils/generateToggleInput";
 
 export const generalSettingsView = function () {
@@ -11,6 +11,12 @@ export const generalSettingsView = function () {
         "Is player type search",
         {idAbIsPlayerTypeSearch},
         "",
+        "BuyerSettings"
+    )}
+         ${generateToggleInput(
+        "Wait until watch list will be empty",
+        {idAbWaitUntilWatchlistWillBeEmpty},
+        "Pause, if watch list is empty",
         "BuyerSettings"
     )}
     `;

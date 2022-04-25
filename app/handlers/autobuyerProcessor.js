@@ -48,6 +48,7 @@ import {
 import {recordItemTradeStatistics} from "../utils/api/autobuyerItemsTradeStatistic";
 import {recordRequestsStatistics} from "../utils/api/autobuyerRequestsStatistic";
 import {_deleteAllCaptchaEntities} from "../utils/captchaUtil";
+import {WAIT_UNTIL_WORK_STATUS} from "../utils/constants";
 
 let interval = null;
 let passInterval = null;
@@ -89,6 +90,7 @@ export const startAutoBuyer = async function (isResume) {
   setValue("autoBuyerState", STATE_ACTIVE);
   setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
   setValue('WatchlistLimitActive', false);
+  setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
 
   if (!isResume) {
     setValue("botStartTime", new Date());
@@ -134,8 +136,8 @@ export const startAutoBuyer = async function (isResume) {
         operationInProgress = true;
         buyerSetting = getBuyerSettings();
 
-        if (isIssetWatchlistPlayerLimit) {
-          if (watchlistLimitActiveState === false) {
+        if (isIssetWatchlistPlayerLimit || buyerSetting['idAbWaitUntilWatchlistWillBeEmpty']) {
+          if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
             sendPinEvents("Hub - Transfers");
             await srchTmWithContext(buyerSetting);
           }
@@ -147,7 +149,7 @@ export const startAutoBuyer = async function (isResume) {
         sendPinEvents("Hub - Transfers");
         await watchListWithContext(buyerSetting);
 
-        if (watchlistLimitActiveState === false) {
+        if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
           sendPinEvents("Hub - Transfers");
           await transferListWithContext(
               buyerSetting["idAbSellToggle"],

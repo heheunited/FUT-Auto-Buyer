@@ -29,7 +29,11 @@ import {
     SELL_MOD_AUTO_DEFAULT,
     SELL_MOD_BY_COUNT,
     SELL_MOD_DISABLED,
-    TRANSFER_LIST_MAX_COUNT, WATCH_LIST_MAX_COUNT
+    TRANSFER_LIST_MAX_COUNT,
+    WAIT_UNTIL_PROCESSED_STATUS,
+    WAIT_UNTIL_WAIT_STATUS,
+    WAIT_UNTIL_WORK_STATUS,
+    WATCH_LIST_MAX_COUNT
 } from "./constants";
 import {getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";
 import {stopAutoBuyer} from "../handlers/autobuyerProcessor";
@@ -119,6 +123,10 @@ export const watchListUtil = function (buyerSetting) {
                                     }).length;
 
                                     controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
+
+                                    if (getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS && watchListItemsCount === 0) {
+                                        setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_PROCESSED_STATUS);
+                                    }
                                 }
 
                                 let outBidItems = watchResponse.data.items.filter((item) => {

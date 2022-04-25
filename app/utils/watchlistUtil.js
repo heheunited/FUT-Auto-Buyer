@@ -126,6 +126,7 @@ export const watchListUtil = function (buyerSetting) {
 
                                     if (getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS && watchListItemsCount === 0) {
                                         setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_PROCESSED_STATUS);
+                                        writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.')
                                     }
                                 }
 

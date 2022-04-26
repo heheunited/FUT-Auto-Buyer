@@ -87,8 +87,8 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                 }
 
                 if (getTransferListTotalItemsCount() >= TRANSFER_LIST_MAX_COUNT) {
-                    writeToLog('TRANSFER LIST IS FULL.', idProgressAutobuyer, "\n");
                     setValue('transferListOverflowed', true);
+                    writeToLog('TRANSFER LIST IS FULL.', idProgressAutobuyer, "\n");
                 } else {
                     setValue('transferListOverflowed', false);
                 }

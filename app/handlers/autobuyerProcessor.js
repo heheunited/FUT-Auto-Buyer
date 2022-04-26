@@ -127,7 +127,6 @@ export const startAutoBuyer = async function (isResume) {
   let operationInProgress = false;
 
   if (getValue("autoBuyerActive")) {
-
     interval = setRandomInterval(async () => {
       passInterval = await pauseBotWithContext(buyerSetting);
       stopBotIfRequired(buyerSetting);
@@ -167,12 +166,7 @@ export const startAutoBuyer = async function (isResume) {
             );
           }
 
-        if (buyerSetting['idAbOverflowingPassiveMod'] && getValue('transferListOverflowed') === true && getValue('watchListOverflowed') === true) {
-          writeToLog('OVERFLOWING PASSIVE MOD ACTIVATED.', idProgressAutobuyer, "\n")
-          setValue('marketsOverflowed', true);
-        } else {
-          setValue('marketsOverflowed', false);
-        }
+        controlMarketsOverflowedState(buyerSetting);
 
         operationInProgress = false;
       }
@@ -245,6 +239,15 @@ export const stopAutoBuyer = (isPaused) => {
     writeToLog(summaryStatsMsg, idProgressAutobuyer);
   }
 };
+
+const controlMarketsOverflowedState = (buyerSetting) => {
+  if (buyerSetting['idAbOverflowingPassiveMod'] && getValue('transferListOverflowed') === true && getValue('watchListOverflowed') === true) {
+    writeToLog('OVERFLOWING PASSIVE MOD ACTIVATED.', idProgressAutobuyer, "\n")
+    setValue('marketsOverflowed', true);
+  } else {
+    setValue('marketsOverflowed', false);
+  }
+}
 
 const searchTransferMarket = function (buyerSetting) {
   return new Promise((resolve) => {
@@ -506,6 +509,7 @@ const searchTransferMarket = function (buyerSetting) {
                 logWrite("skip >>> (Waiting for specified expiry time)");
                 continue;
               }
+
               logWrite("attempt bid: " + checkPrice);
               currentBids.add(auction.tradeId);
               maxPurchases--;
@@ -537,6 +541,7 @@ const searchTransferMarket = function (buyerSetting) {
             buyerSetting["idAbCloseTabToggle"]
           );
         }
+
         sendPinEvents("Transfer Market Search");
         resolve();
       }

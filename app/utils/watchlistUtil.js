@@ -220,7 +220,7 @@ export const watchListUtil = function (buyerSetting) {
                                         let totalItemsCount = getTransferListTotalItemsCount();
 
                                         if (totalItemsCount + boughtItemsLength >= TRANSFER_LIST_MAX_COUNT) {
-                                            boughtItemsLength = TRANSFER_LIST_MAX_COUNT - totalItemsCount - 2;
+                                            boughtItemsLength = TRANSFER_LIST_MAX_COUNT - totalItemsCount;
                                         }
 
                                         if (boughtItemsLength !== boughtItems.length) {

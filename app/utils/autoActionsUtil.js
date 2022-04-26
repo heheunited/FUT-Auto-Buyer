@@ -48,8 +48,8 @@ export const stopBotIfRequired = (buyerSetting) => {
           : "Max purchases count reached";
 
   if (timeElapsed){
-
     let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
+
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
         (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS ||
             waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WAIT_STATUS)
@@ -127,8 +127,8 @@ export const pauseBotIfRequired = async function (buyerSetting) {
   // }
 
   if (searchCount && !((searchCount - previousPause) % cycleAmount)) {
-
     let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
+
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
         (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS ||
             waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WAIT_STATUS)

@@ -133,38 +133,38 @@ export const startAutoBuyer = async function (isResume) {
       const isBuyerActive = getValue("autoBuyerActive");
       const watchlistLimitActiveState = getValue('WatchlistLimitActive');
 
-      if (getValue('marketsOverflowed') === false) {
         if (isBuyerActive && !operationInProgress) {
           operationInProgress = true;
           buyerSetting = getBuyerSettings();
 
-          if (isIssetWatchlistPlayerLimit || buyerSetting['idAbWaitUntilWatchlistWillBeEmpty']) {
-            if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+          if (getValue('marketsOverflowed') === false) {
+            if (isIssetWatchlistPlayerLimit || buyerSetting['idAbWaitUntilWatchlistWillBeEmpty']) {
+              if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+                sendPinEvents("Hub - Transfers");
+                await srchTmWithContext(buyerSetting);
+              }
+            } else {
               sendPinEvents("Hub - Transfers");
               await srchTmWithContext(buyerSetting);
             }
-          } else {
+
             sendPinEvents("Hub - Transfers");
-            await srchTmWithContext(buyerSetting);
-          }
+            await watchListWithContext(buyerSetting);
 
-          sendPinEvents("Hub - Transfers");
-          await watchListWithContext(buyerSetting);
-
-          if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+            if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+              sendPinEvents("Hub - Transfers");
+              await transferListWithContext(
+                  buyerSetting["idAbSellToggle"],
+                  buyerSetting["idAbMinDeleteCount"]
+              );
+            }
+          } else {
             sendPinEvents("Hub - Transfers");
             await transferListWithContext(
                 buyerSetting["idAbSellToggle"],
                 buyerSetting["idAbMinDeleteCount"]
             );
           }
-        } else {
-          sendPinEvents("Hub - Transfers");
-          await transferListWithContext(
-              buyerSetting["idAbSellToggle"],
-              buyerSetting["idAbMinDeleteCount"]
-          );
-        }
 
         if (getValue('transferListOverflowed') === true && getValue('watchListOverflowed') === true && buyerSetting['idAbOverflowingPassiveMod']) {
           writeToLog('OVERFLOWING PASSIVE MOD ACTIVATED.', idProgressAutobuyer, "\n")

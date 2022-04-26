@@ -127,3 +127,17 @@ export const reListWithUpdatedPrice = async (items) => {
         await wait(getRandWaitTimeInSeconds(buyerSetting['idAbRelistSellItemsWaitTime']));
     }
 }
+
+export const setTransferListTotalItemsCountInterval = () => {
+    setInterval(() => {
+        sendPinEvents("Transfer List - List View");
+        return new Promise((resolve) => {
+            services.Item.requestTransferItems().observe(this, async (t, response) => {
+                    setValue('transferListTotalItemsCount', response.data.items.length);
+
+                    return resolve();
+                }
+            );
+        });
+    }, 30000)
+}

@@ -1,23 +1,25 @@
 import {
+  id24hTlCaptcha,
+  id24hTlErrors,
   idAbActiveTransfers,
   idAbAvailableItems,
   idAbCoins,
   idAbCountDown,
+  idAbLastProfit,
   idAbProfit,
   idAbRequestCount,
   idAbSearchProgress,
   idAbSoldItems,
   idAbStatisticsProgress,
   idAbUnsoldItems,
-  id24hTlErrors,
-  idLastWonItemsCount,
-  idLastLessMaxBidItemsCount,
   idLastGreaterMaxBidItemsCount,
-  id24hTlCaptcha, idAbLastProfit, idLessExpectedPercentItemsCount,
+  idLastLessMaxBidItemsCount,
+  idLastWonItemsCount,
+  idLessExpectedPercentItemsCount,
 } from "../elementIds.constants";
-import { sendMessageToDiscord } from "../services/discordService";
-import { getValue, setValue } from "../services/repository";
-import { getTimerProgress } from "../utils/commonUtil";
+import {sendMessageToDiscord} from "../services/discordService";
+import {getValue, setValue} from "../services/repository";
+import {getTimerProgress} from "../utils/commonUtil";
 
 setValue("sessionStats", {
   soldItems: "-",
@@ -142,6 +144,10 @@ export const getStatsValue = (key) => {
 };
 
 export const getTransferListTotalItemsCount = () => {
+  return getValue('transferListTotalItemsCount') || getTransferListTotalItemsCountExternal();
+}
+
+export const getTransferListTotalItemsCountExternal = () => {
   const currentStats = getValue("sessionStats");
   const requiredStats = ['soldItems', 'activeTransfers', 'unsoldItems', 'availableItems'];
 

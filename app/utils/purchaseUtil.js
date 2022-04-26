@@ -142,7 +142,7 @@ export const buyPlayer = (
                 formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
                 "bid",
                 "success",
-                "waiting  ",
+                formatString('waiting', 9),
                 timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires)),
                 formatString(price ? getEstimatedProfitPercentString(player.definitionId, price.toString()) : 'null', 9)
             );
@@ -197,8 +197,9 @@ export const buyPlayer = (
             formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
             isBin ? "buy" : "bid",
             "failure",
-            `ERR: (${errorCodeLookUp[status] + "(" + status + ")" || status})`
+            `ERR: ${status}`
           );
+
           if (notificationType === "L" || notificationType === "A") {
             if (sendDetailedNotification) sendNotificationToUser(logMessage);
             else

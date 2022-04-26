@@ -407,7 +407,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
             : currentBid;
 
     if (isAutoBuyerActive && currentBid <= priceToBid) {
-        let logMessage = ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}. Est. Profit %: ${getEstimatedProfitPercentString(player.definitionId, checkPrice)}.`;
+        let logMessage = ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`;
 
         if (buyerSetting['idAbBidLimitPerPlayer'] > 0) {
             logMessage += ` Attempt: ${outbidLimitPerPlayerMap.get(auction.tradeId)}.`;

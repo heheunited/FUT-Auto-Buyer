@@ -91,6 +91,7 @@ export const startAutoBuyer = async function (isResume) {
   setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
   setValue('WatchlistLimitActive', false);
   setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
+  setValue('marketsOverflowed', false);
 
   if (!isResume) {
     setValue("botStartTime", new Date());
@@ -132,29 +133,44 @@ export const startAutoBuyer = async function (isResume) {
       const isBuyerActive = getValue("autoBuyerActive");
       const watchlistLimitActiveState = getValue('WatchlistLimitActive');
 
-      if (isBuyerActive && !operationInProgress) {
-        operationInProgress = true;
-        buyerSetting = getBuyerSettings();
+      if (getValue('marketsOverflowed') === false) {
+        if (isBuyerActive && !operationInProgress) {
+          operationInProgress = true;
+          buyerSetting = getBuyerSettings();
 
-        if (isIssetWatchlistPlayerLimit || buyerSetting['idAbWaitUntilWatchlistWillBeEmpty']) {
-          if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+          if (isIssetWatchlistPlayerLimit || buyerSetting['idAbWaitUntilWatchlistWillBeEmpty']) {
+            if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+              sendPinEvents("Hub - Transfers");
+              await srchTmWithContext(buyerSetting);
+            }
+          } else {
             sendPinEvents("Hub - Transfers");
             await srchTmWithContext(buyerSetting);
           }
-        } else {
+
           sendPinEvents("Hub - Transfers");
-          await srchTmWithContext(buyerSetting);
-        }
+          await watchListWithContext(buyerSetting);
 
-        sendPinEvents("Hub - Transfers");
-        await watchListWithContext(buyerSetting);
-
-        if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+          if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+            sendPinEvents("Hub - Transfers");
+            await transferListWithContext(
+                buyerSetting["idAbSellToggle"],
+                buyerSetting["idAbMinDeleteCount"]
+            );
+          }
+        } else {
           sendPinEvents("Hub - Transfers");
           await transferListWithContext(
               buyerSetting["idAbSellToggle"],
               buyerSetting["idAbMinDeleteCount"]
           );
+        }
+
+        if (getValue('transferListOverflowed') === true && getValue('watchListOverflowed') === true && buyerSetting['idAbOverflowingPassiveMod']) {
+          writeToLog('OVERFLOWING PASSIVE MOD ACTIVATED.', idProgressAutobuyer, "\n")
+          setValue('marketsOverflowed', true);
+        } else {
+          setValue('marketsOverflowed', false);
         }
 
         operationInProgress = false;

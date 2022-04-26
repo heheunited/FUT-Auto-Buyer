@@ -1,5 +1,5 @@
 import {idProgressAutobuyer, idSellFutBinPercent} from "../elementIds.constants";
-import {getStatsValue, updateStats} from "../handlers/statsProcessor";
+import {getStatsValue, getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";
 import {writeToLog} from "./logUtil";
 import {sendPinEvents} from "./notificationUtil";
 import {updateUserCredits} from "./userUtil";
@@ -8,6 +8,7 @@ import {addFutbinCachePrice} from "./futbinUtil";
 import {listForPrice} from "./sellUtil";
 import {getRandWaitTimeInSeconds, wait} from "./commonUtil";
 import {saveStatisticAboutTransferListPlayers} from "./api/transferListPlayers";
+import {TRANSFER_LIST_MAX_COUNT} from "./constants";
 
 export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReListWithUpdatedPrice) {
     sendPinEvents("Transfer List - List View");
@@ -84,6 +85,14 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                     UTTransferListViewController.prototype._clearSold();
                     saveStatisticAboutTransferListPlayers(soldItemsList);
                 }
+
+                if (getTransferListTotalItemsCount() >= TRANSFER_LIST_MAX_COUNT) {
+                    writeToLog('TRANSFER LIST IS FULL.', idProgressAutobuyer, "\n");
+                    setValue('transferListOverflowed', true);
+                } else {
+                    setValue('transferListOverflowed', false);
+                }
+
                 resolve();
             }
         );

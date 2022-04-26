@@ -64,7 +64,7 @@ export const watchListUtil = function (buyerSetting) {
                 return resolve();
             }
 
-            if (buyerSetting['idAbPreventWatchListOverflow'] && response.data.items.length >= WATCH_LIST_MAX_COUNT) {
+            if (buyerSetting['idAbPreventWatchListOverflow'] && response.data.items.length >= WATCH_LIST_MAX_COUNT && !buyerSetting['idAbOverflowingPassiveMod']) {
                 let logMessage = 'WATCHLIST IS FULL. AUTOBUYER IS STOPPED.';
 
                 writeToLog(logMessage, idProgressAutobuyer);
@@ -72,6 +72,13 @@ export const watchListUtil = function (buyerSetting) {
 
                 stopAutoBuyer();
                 return resolve();
+            }
+
+            if (response.data.items.length >= WATCH_LIST_MAX_COUNT) {
+                setValue('watchListOverflowed', true);
+                writeToLog('WATCH LIST IS FULL.', idProgressAutobuyer, "\n");
+            } else {
+                setValue('watchListOverflowed', false);
             }
 
             services.Item.refreshAuctions(activeItems).observe(

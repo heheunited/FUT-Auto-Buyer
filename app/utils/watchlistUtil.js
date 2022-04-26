@@ -136,7 +136,9 @@ export const watchListUtil = function (buyerSetting) {
 
                                     getValue('waitUntilWatchlistWillBeEmpty') !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
 
-                                    if (getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS && watchListItemsCount === 0) {
+                                    if (
+                                        getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS && (watchListItemsCount === 0 || getValue('waitStatusRequestCounter') > 7)
+                                    ) {
                                         setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_PROCESSED_STATUS);
                                         writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
                                     }
@@ -356,6 +358,10 @@ export const watchListUtil = function (buyerSetting) {
 
                             services.Item.clearTransferMarketCache();
                             resolve();
+
+                            if (getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS) {
+                                incrementWaitStatusRequestCounter();
+                            }
                         }
                     );
                 }
@@ -533,4 +539,16 @@ const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => 
     let logMessage = `WATCHLIST PLAYER LIMIT STATE: ${newWatchlistLimitActiveState ? 'ACTIVATED' : 'DISABLED'}.`;
 
     writeToLog(logMessage, idProgressAutobuyer);
+}
+
+const incrementWaitStatusRequestCounter = () => {
+    let currentCounter = getValue('waitStatusRequestCounter');
+
+    if (currentCounter === undefined) {
+        currentCounter = 1;
+    } else {
+        ++currentCounter;
+    }
+
+    setValue('waitStatusRequestCounter', currentCounter);
 }

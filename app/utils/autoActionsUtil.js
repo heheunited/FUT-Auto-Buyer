@@ -76,6 +76,7 @@ export const stopBotIfRequired = (buyerSetting) => {
     }
     stopAfter = null;
 
+    setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
     stopAutoBuyer(false);
     autoRestartAutoBuyer();
   } else {
@@ -143,6 +144,7 @@ export const pauseBotIfRequired = async function (buyerSetting) {
       return;
     }
 
+    setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
     updateStats("previousPause", searchCount);
     stopAutoBuyer(true);
     return setTimeout(() => {

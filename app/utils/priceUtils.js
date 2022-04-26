@@ -58,6 +58,22 @@ export const calculateProfitPercent = (playerPrice, userPrice) => {
   return Math.round(100 - resultPercent);
 }
 
+export const getEstimatedProfitPercentString = (definitionId, currentPrice) => {
+  const fbPriceWithCommission = getFutBinPlayerPrice(definitionId, 95);
+
+  if (fbPriceWithCommission === null) {
+    return 'null';
+  }
+
+  const estimatedProfit = calculateProfitPercent(fbPriceWithCommission, currentPrice);
+
+  if (estimatedProfit === 0) {
+    return 'null';
+  }
+
+  return estimatedProfit + '%';
+}
+
 export const getFutBinPlayerPrice = (definitionId, idBuyFutBinPercent = 100, defaultValue = null) => {
   const existingValue = getValue(definitionId);
 

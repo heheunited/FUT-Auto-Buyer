@@ -18,7 +18,12 @@ import {
 import { getSellPriceFromFutBin } from "./futbinUtil";
 import { writeToAbLog, writeToLog } from "./logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
-import {calculateProfitPercent, getFutBinPlayerPrice, getSellBidPrice} from "./priceUtils";
+import {
+  calculateProfitPercent,
+  getEstimatedProfitPercentString,
+  getFutBinPlayerPrice,
+  getSellBidPrice
+} from "./priceUtils";
 import { appendTransactions, updateProfit } from "./statsUtil";
 import {
   increaseBidPlayerRequestsCount,
@@ -139,7 +144,7 @@ export const buyPlayer = (
                 "success",
                 "waiting  ",
                 timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires)),
-                formatString(price ? calculateProfitPercent(getFutBinPlayerPrice(player.definitionId), price.toString()) + '%' : 'NULL', 9)
+                formatString(price ? getEstimatedProfitPercentString(player.definitionId, price.toString()) : 'null', 9)
             );
             increaseBidPlayerRequestsCount();
             const filterName = getValue("currentFilter");

@@ -127,6 +127,7 @@ export const startAutoBuyer = async function (isResume) {
   let operationInProgress = false;
 
   if (getValue("autoBuyerActive")) {
+
     interval = setRandomInterval(async () => {
       passInterval = await pauseBotWithContext(buyerSetting);
       stopBotIfRequired(buyerSetting);
@@ -166,7 +167,7 @@ export const startAutoBuyer = async function (isResume) {
             );
           }
 
-        if (getValue('transferListOverflowed') === true && getValue('watchListOverflowed') === true && buyerSetting['idAbOverflowingPassiveMod']) {
+        if (buyerSetting['idAbOverflowingPassiveMod'] && getValue('transferListOverflowed') === true && getValue('watchListOverflowed') === true) {
           writeToLog('OVERFLOWING PASSIVE MOD ACTIVATED.', idProgressAutobuyer, "\n")
           setValue('marketsOverflowed', true);
         } else {

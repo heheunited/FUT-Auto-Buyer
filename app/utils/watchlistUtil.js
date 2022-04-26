@@ -32,7 +32,6 @@ import {
     TRANSFER_LIST_MAX_COUNT,
     WAIT_UNTIL_PROCESSED_STATUS,
     WAIT_UNTIL_WAIT_STATUS,
-    WAIT_UNTIL_WORK_STATUS,
     WATCH_LIST_MAX_COUNT
 } from "./constants";
 import {getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";

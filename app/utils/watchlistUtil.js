@@ -137,7 +137,8 @@ export const watchListUtil = function (buyerSetting) {
                                     getValue('waitUntilWatchlistWillBeEmpty') !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
 
                                     if (
-                                        getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS && (watchListItemsCount === 0 || getValue('waitStatusRequestCounter') > 7)
+                                        getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS &&
+                                        (watchListItemsCount === 0 || getValue('waitStatusRequestCounter') >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit'])
                                     ) {
                                         setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_PROCESSED_STATUS);
                                         writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");

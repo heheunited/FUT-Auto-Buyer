@@ -122,6 +122,9 @@ export const idAbPreventTransferListOverflow = "elem_" + generateId(15);
 
 export const idAbIsPlayerTypeSearch = "elem_" + generateId(15);
 export const idAbWaitUntilWatchlistWillBeEmpty = "elem_" + generateId(15);
+export const idAbWaitUntilWatchlistWillBeEmptyRequestLimit = "elem_" + generateId(15);
+
+
 export const idAbOverflowingPassiveMod = "elem_" + generateId(15);
 
 export const idAbPreventWatchListOverflow = "elem_" + generateId(15);

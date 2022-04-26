@@ -1,9 +1,10 @@
 import {
     idAbIsPlayerTypeSearch,
     idAbOverflowingPassiveMod,
-    idAbWaitUntilWatchlistWillBeEmpty
+    idAbWaitUntilWatchlistWillBeEmpty, idAbWaitUntilWatchlistWillBeEmptyRequestLimit
 } from "../../../elementIds.constants";
 import {generateToggleInput} from "../../../utils/uiUtils/generateToggleInput";
+import {generateTextInput} from "../../../utils/uiUtils/generateTextInput";
 
 export const generalSettingsView = function () {
     return `<div style='display : none' class='buyer-settings-wrapper general-settings-view'>  
@@ -17,16 +18,24 @@ export const generalSettingsView = function () {
         "",
         "BuyerSettings"
     )}
+             ${generateToggleInput(
+        "Overflowing passive mod",
+        {idAbOverflowingPassiveMod},
+        "Passive mod, if TL/WL overflowed",
+        "BuyerSettings"
+    )}
          ${generateToggleInput(
         "Wait until watch list will be empty",
         {idAbWaitUntilWatchlistWillBeEmpty},
         "Pause, if watch list is empty",
         "BuyerSettings"
     )}
-         ${generateToggleInput(
-        "Overflowing passive mod",
-        {idAbOverflowingPassiveMod},
-        "Passive mod, if TL/WL overflowed",
+     
+       ${generateTextInput(
+        "Wait until request limit",
+        10,
+        {idAbWaitUntilWatchlistWillBeEmptyRequestLimit},
+        "",
         "BuyerSettings"
     )}
     `;

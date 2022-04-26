@@ -42,7 +42,8 @@ export const writeToAbLog = (
     operation,
     result,
     comments,
-    expireTime = ''
+    expireTime = '',
+    estimatedProfit = ''
 ) => {
   let message =
       sym +
@@ -58,6 +59,8 @@ export const writeToAbLog = (
       result +
       " | " +
       comments +
+      " | " +
+      estimatedProfit +
       " | " +
       expireTime;
   writeToLog(message, idProgressAutobuyer);

@@ -137,8 +137,9 @@ export const buyPlayer = (
                 formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
                 "bid",
                 "success",
-                "waiting to expire",
-                timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires))
+                "waiting  ",
+                timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires)),
+                formatString(price ? calculateProfitPercent(getFutBinPlayerPrice(player.definitionId), price.toString()) + '%' : 'NULL', 9)
             );
             increaseBidPlayerRequestsCount();
             const filterName = getValue("currentFilter");

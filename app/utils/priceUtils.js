@@ -49,6 +49,10 @@ export const getBuyBidPrice = (bin) => {
 };
 
 export const calculateProfitPercent = (playerPrice, userPrice) => {
+  if (!playerPrice || !userPrice) {
+    return 0;
+  }
+
   let resultPercent = (userPrice / playerPrice) * 100;
 
   return Math.round(100 - resultPercent);

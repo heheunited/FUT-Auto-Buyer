@@ -499,9 +499,9 @@ const searchTransferMarket = function (buyerSetting) {
 
                         if (
                             !bidPrice && userBuyNowPrice && isExpectedProfitInPercentForBuyProvided &&
-                            !isBidOrBuyMakeExpectedPercentProfit(buyNowPrice, null, fbPriceWithCommission, expectedProfitInPercent)
+                            !isBidOrBuyMakeExpectedPercentProfit(buyNowPrice, null, fbPriceWithCommission, expectedProfitInPercentForBuy)
                         ) {
-                            logWrite(`skip >>> (Buy dont make expected profit: ${expectedProfitInPercent}%)`);
+                            logWrite(`skip >>> (Buy dont make expected profit: ${expectedProfitInPercentForBuy}%)`);
                             continue;
                         }
 

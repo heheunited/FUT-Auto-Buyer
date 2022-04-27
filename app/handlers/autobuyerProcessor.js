@@ -354,6 +354,7 @@ const searchTransferMarket = function (buyerSetting) {
                         let {id} = player._metaData || {};
                         let playerRating = parseInt(player.rating);
                         let expires = services.Localization.localizeAuctionTimeRemaining(auction.expires);
+                        let fbPriceWithCommission = getFutBinPlayerPrice(player.definitionId, 95);
 
                         let currentPlayerFutBinPrice = -1;
                         if (type === "player") {
@@ -397,7 +398,7 @@ const searchTransferMarket = function (buyerSetting) {
                         let byBuyNowPrice = false;
                         let byCurrentBidPrice = false;
                         if (isSearchByExpectedProfit) {
-                            let fbPrice = getFutBinPlayerPrice(player.definitionId, 95);
+                            let fbPrice = fbPriceWithCommission;
 
                             if (isExpectedProfitInPercentProvided) {
                                 byCurrentBidPrice = isBidOrBuyMakeExpectedPercentProfit(null, checkPrice, fbPrice, expectedProfitInPercent);
@@ -489,15 +490,18 @@ const searchTransferMarket = function (buyerSetting) {
                         }
 
                         if (
-                            isExpectedProfitInPercentProvided &&
-                            !isBidOrBuyMakeExpectedPercentProfit(
-                                null,
-                                checkPrice,
-                                getFutBinPlayerPrice(player.definitionId, 95),
-                                expectedProfitInPercent
-                            )
+                            !userBuyNowPrice && bidPrice && isExpectedProfitInPercentProvided &&
+                            !isBidOrBuyMakeExpectedPercentProfit(null, checkPrice, fbPriceWithCommission, expectedProfitInPercent)
                         ) {
-                            logWrite(`skip >>> (Bid or Buy dont make expected profit: ${expectedProfitInPercent}%)`);
+                            logWrite(`skip >>> (Bid dont make expected profit: ${expectedProfitInPercent}%)`);
+                            continue;
+                        }
+
+                        if (
+                            !bidPrice && userBuyNowPrice && isExpectedProfitInPercentForBuyProvided &&
+                            !isBidOrBuyMakeExpectedPercentProfit(buyNowPrice, null, fbPriceWithCommission, expectedProfitInPercent)
+                        ) {
+                            logWrite(`skip >>> (Buy dont make expected profit: ${expectedProfitInPercent}%)`);
                             continue;
                         }
 

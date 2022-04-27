@@ -2,7 +2,7 @@ import {
     idAbBidExact, idAbBidExpiresLessThanSeconds,
     idAbBidFutBin,
     idAbBuyPrice,
-    idAbCardCount, idAbExpectedProfitInPercent,
+    idAbCardCount, idAbExpectedProfitInPercent, idAbExpectedProfitInPercentForBuy,
     idAbItemExpiring,
     idAbMaxBid,
     idAbSearchResult,
@@ -57,9 +57,16 @@ export const buySettingsView = function () {
         "BuyerSettings"
       )}
       ${generateTextInput(
-      "Minimum expected profit in percent",
+      "Minimum expected profit in percent (bid)",
       0,
       { idAbExpectedProfitInPercent },
+      '(Including 5% commission, 0 - disabled)',
+      "BuyerSettings"
+       )}
+      ${generateTextInput(
+      "Minimum expected profit in percent (buy)",
+      0,
+      { idAbExpectedProfitInPercentForBuy },
       '(Including 5% commission, 0 - disabled)',
       "BuyerSettings"
        )}

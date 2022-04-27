@@ -270,11 +270,17 @@ const searchTransferMarket = function (buyerSetting) {
         let expectedProfitInPercent = buyerSetting['idAbExpectedProfitInPercent'];
         let isExpectedProfitInPercentProvided = expectedProfitInPercent > 0;
 
-        if (!userBuyNowPrice && !bidPrice && !useFutBinPrice) {
+        let expectedProfitInPercentForBuy = buyerSetting['idAbExpectedProfitInPercentForBuy'];
+        let isExpectedProfitInPercentForBuyProvided = expectedProfitInPercentForBuy > 0;
+
+        let isSearchByExpectedProfit = (!userBuyNowPrice && !bidPrice && !useFutBinPrice) && (isExpectedProfitInPercentProvided || isExpectedProfitInPercentForBuyProvided);
+
+        if (!userBuyNowPrice && !bidPrice && !useFutBinPrice && !isSearchByExpectedProfit) {
             writeToLog(
                 "skip search >>> (No Buy or Bid Price given)",
                 idAutoBuyerFoundLog
             );
+
             return resolve();
         }
 
@@ -388,6 +394,28 @@ const searchTransferMarket = function (buyerSetting) {
                                 ? getBuyBidPrice(currentBid)
                                 : currentBid;
 
+                        let byBuyNowPrice = false;
+                        let byCurrentBidPrice = false;
+                        if (isSearchByExpectedProfit) {
+                            let fbPrice = getFutBinPlayerPrice(player.definitionId, 95);
+
+                            if (isExpectedProfitInPercentProvided) {
+                                let checkPriceForBid = isBidOrBuyMakeExpectedPercentProfit(null, checkPrice, fbPrice, expectedProfitInPercent)
+                                    ? currentBid
+                                    : null;
+
+                                byCurrentBidPrice = checkPriceForBid !== null;
+                            }
+
+                            if (isExpectedProfitInPercentForBuyProvided) {
+                                let buyPriceCheckPrice = isBidOrBuyMakeExpectedPercentProfit(buyNowPrice, null, fbPrice, expectedProfitInPercentForBuy)
+                                    ? buyNowPrice
+                                    : null;
+
+                                byBuyNowPrice = buyPriceCheckPrice !== null;
+                            }
+                        }
+
                         const isMinimalPLayerFutBinPriceCorrect = isUserFutBinMinimalPriceProvided
                             ? getFutBinPlayerPrice(player.definitionId) >= userFutBinMinimalPrice
                             : false;
@@ -419,6 +447,11 @@ const searchTransferMarket = function (buyerSetting) {
                             fuutbinPriceTxt,
                             expireTime
                         );
+
+                        if (isSearchByExpectedProfit && !byBuyNowPrice && !byCurrentBidPrice) {
+                            logWrite("skip >>> (Search by expected profit %. No profit.)");
+                            continue;
+                        }
 
                         if (
                             (!buyerSetting["idAbIgnoreAllowToggle"] && playersList.has(id)) ||
@@ -486,7 +519,7 @@ const searchTransferMarket = function (buyerSetting) {
                             continue;
                         }
 
-                        if (buyNowPrice <= userBuyNowPrice) {
+                        if ((buyNowPrice <= userBuyNowPrice) || (isSearchByExpectedProfit && byBuyNowPrice)) {
                             maxPurchases--;
                             logWrite("attempt buy: " + buyNowPrice);
                             currentBids.add(auction.tradeId);
@@ -501,7 +534,7 @@ const searchTransferMarket = function (buyerSetting) {
                             continue;
                         }
 
-                        if (bidPrice && currentBid <= priceToBid) {
+                        if ((bidPrice && currentBid <= priceToBid) || (isSearchByExpectedProfit && byCurrentBidPrice)) {
                             if (auction.expires > expiresIn) {
                                 logWrite("skip >>> (Waiting for specified expiry time)");
                                 continue;

@@ -262,21 +262,15 @@ export const buyPlayer = (
   });
 };
 
-export const isBidOrBuyMakeExpectedPercentProfit = (
-    userMaxBuyNow,
-    priceToBid,
-    futBinPrice,
-    expectedProfitPercent
-) => {
+export const isBidOrBuyMakeExpectedPercentProfit = (userMaxBuyNow, priceToBid, futBinPrice, expectedProfitPercent) => {
   if (!futBinPrice) {
-    return true;
+    return false;
   }
 
-  if (userMaxBuyNow && userMaxBuyNow > 0 && calculateProfitPercent(futBinPrice, userMaxBuyNow) >= expectedProfitPercent) {
-    return true;
-  }
+  let userMaxBuyNowResult = (userMaxBuyNow && userMaxBuyNow > 0 && calculateProfitPercent(futBinPrice, userMaxBuyNow) >= expectedProfitPercent);
+  let priceToBidResult = (priceToBid && priceToBid > 0 && calculateProfitPercent(futBinPrice, priceToBid) >= expectedProfitPercent);
 
-  return priceToBid && priceToBid > 0 && calculateProfitPercent(futBinPrice, priceToBid) >= expectedProfitPercent;
+  return userMaxBuyNowResult || priceToBidResult;
 }
 
 

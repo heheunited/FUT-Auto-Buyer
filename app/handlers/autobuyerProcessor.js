@@ -400,19 +400,11 @@ const searchTransferMarket = function (buyerSetting) {
                             let fbPrice = getFutBinPlayerPrice(player.definitionId, 95);
 
                             if (isExpectedProfitInPercentProvided) {
-                                let checkPriceForBid = isBidOrBuyMakeExpectedPercentProfit(null, checkPrice, fbPrice, expectedProfitInPercent)
-                                    ? currentBid
-                                    : null;
-
-                                byCurrentBidPrice = checkPriceForBid !== null;
+                                byCurrentBidPrice = isBidOrBuyMakeExpectedPercentProfit(null, checkPrice, fbPrice, expectedProfitInPercent);
                             }
 
                             if (isExpectedProfitInPercentForBuyProvided) {
-                                let buyPriceForBuy = isBidOrBuyMakeExpectedPercentProfit(buyNowPrice, null, fbPrice, expectedProfitInPercentForBuy)
-                                    ? buyNowPrice
-                                    : null;
-
-                                byBuyNowPrice = buyPriceForBuy !== null;
+                                byBuyNowPrice = isBidOrBuyMakeExpectedPercentProfit(buyNowPrice, null, fbPrice, expectedProfitInPercentForBuy);
                             }
                         }
 

@@ -59,7 +59,7 @@ export const cssOverride = () => {
     width: 100%;
   }
   .autoBuyerLog {
-    font-size: 14px; 
+    font-size: 13px; 
     width: 100%;
     height: 58%;
     background-color:#141414;

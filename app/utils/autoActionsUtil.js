@@ -47,7 +47,7 @@ export const stopBotIfRequired = (buyerSetting) => {
           ? "Transfer list is full"
           : "Max purchases count reached";
 
-  if (timeElapsed){
+  if (timeElapsed || getValue('waitStatusRequestCounter') >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']){
     let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
@@ -76,6 +76,7 @@ export const stopBotIfRequired = (buyerSetting) => {
     }
     stopAfter = null;
 
+    setValue('waitStatusRequestCounter', 0);
     setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
     stopAutoBuyer(false);
     autoRestartAutoBuyer();
@@ -127,7 +128,7 @@ export const pauseBotIfRequired = async function (buyerSetting) {
   //     sendUINotification("Softban cant be bypassed");
   // }
 
-  if (searchCount && !((searchCount - previousPause) % cycleAmount)) {
+  if ((searchCount && !((searchCount - previousPause) % cycleAmount)) || getValue('waitStatusRequestCounter') >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
     let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
@@ -144,6 +145,7 @@ export const pauseBotIfRequired = async function (buyerSetting) {
       return;
     }
 
+    setValue('waitStatusRequestCounter', 0);
     setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
     updateStats("previousPause", searchCount);
     stopAutoBuyer(true);

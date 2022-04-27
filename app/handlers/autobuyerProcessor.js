@@ -92,6 +92,7 @@ export const startAutoBuyer = async function (isResume) {
   setValue('WatchlistLimitActive', false);
   setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
   setValue('marketsOverflowed', false);
+  setValue('waitStatusRequestCounter', 0);
 
   if (!isResume) {
     setValue("botStartTime", new Date());

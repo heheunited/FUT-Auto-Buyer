@@ -111,7 +111,7 @@ export const pauseBotIfRequired = async function (buyerSetting) {
 
   const { searchCount, previousPause } = getValue("sessionStats");
 
-  if ((searchCount && !((searchCount - previousPause) % cycleAmount))) {
+  if (searchCount && !((searchCount - previousPause) % cycleAmount)) {
     let waitUntilWatchlistWillBeEmptyStatus = getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY);
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&

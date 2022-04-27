@@ -8,7 +8,7 @@ import {addFutbinCachePrice} from "./futbinUtil";
 import {listForPrice} from "./sellUtil";
 import {getRandWaitTimeInSeconds, wait} from "./commonUtil";
 import {saveStatisticAboutTransferListPlayers} from "./api/transferListPlayers";
-import {TRANSFER_LIST_MAX_COUNT} from "./constants";
+import {TRANSFER_LIST_MAX_COUNT, WATCH_LIST_MAX_COUNT} from "./constants";
 
 export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReListWithUpdatedPrice) {
     sendPinEvents("Transfer List - List View");
@@ -86,13 +86,6 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                     saveStatisticAboutTransferListPlayers(soldItemsList);
                 }
 
-                if (getTransferListTotalItemsCount() >= TRANSFER_LIST_MAX_COUNT) {
-                    setValue('transferListOverflowed', true);
-                    writeToLog('TRANSFER LIST IS FULL.', idProgressAutobuyer, "\n");
-                } else {
-                    setValue('transferListOverflowed', false);
-                }
-
                 resolve();
             }
         );
@@ -134,10 +127,25 @@ export const setTransferListTotalItemsCountInterval = () => {
         return new Promise((resolve) => {
             services.Item.requestTransferItems().observe(this, async (t, response) => {
                     setValue('transferListTotalItemsCount', response.data.items.length);
+                    setValue('transferListOverflowed', response.data.items.length >= TRANSFER_LIST_MAX_COUNT);
 
                     return resolve();
                 }
             );
         });
     }, 30000)
+}
+
+export const setWatchListTotalItemsCountInterval = () => {
+    setInterval(() => {
+        sendPinEvents("Transfer List - List View");
+        return new Promise((resolve) => {
+            services.Item.requestWatchedItems().observe(this, (t, response) => {
+                    setValue('watchListOverflowed', response.data.items.length >= WATCH_LIST_MAX_COUNT);
+
+                    return resolve();
+                }
+            );
+        });
+    }, 40000)
 }

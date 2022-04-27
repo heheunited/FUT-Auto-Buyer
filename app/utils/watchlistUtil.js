@@ -14,7 +14,6 @@ import {getSellPriceFromFutBin} from "./futbinUtil";
 import {writeToLog} from "./logUtil";
 import {sendErrorNotificationToUser, sendPinEvents, sendUINotification} from "./notificationUtil";
 import {
-    calculateProfitPercent,
     getBuyBidPrice,
     getEstimatedProfitPercentString,
     getFutBinPlayerPrice,
@@ -79,13 +78,6 @@ export const watchListUtil = function (buyerSetting) {
                 return resolve();
             }
 
-            if (response.data.items.length >= WATCH_LIST_MAX_COUNT) {
-                setValue('watchListOverflowed', true);
-                writeToLog('WATCH LIST IS FULL.', idProgressAutobuyer, "\n");
-            } else {
-                setValue('watchListOverflowed', false);
-            }
-
             services.Item.refreshAuctions(activeItems).observe(
                 this,
                 function (t, refreshResponse) {
@@ -99,52 +91,6 @@ export const watchListUtil = function (buyerSetting) {
 
                             const userWatchItems = getValue("userWatchItems");
                             if (isAutoBuyerActive && bidPrice) {
-
-                                if (watchlistPlayerLimit > 0) {
-                                    let watchListItemsCount = watchResponse.data.items.filter((item) => {
-                                        let auction = item._auction;
-                                        let tAuction = item.getAuctionData();
-                                        let currentBid = (auction.currentBid || auction.startingBid);
-
-                                        let checkPrice = buyerSetting["idAbBidExact"]
-                                            ? bidPrice
-                                            : auction.currentBid
-                                                ? getBuyBidPrice(currentBid)
-                                                : currentBid;
-
-                                        let expectedPercentProfit = isExpectedProfitInPercentProvided
-                                            ? isBidOrBuyMakeExpectedPercentProfit(
-                                                null,
-                                                checkPrice,
-                                                getFutBinPlayerPrice(item.definitionId, 95),
-                                                expectedProfitPercent
-                                            )
-                                            : true;
-
-                                        let isOutbidLimitValid = isIssetOutbidLimitPerPlayer
-                                            ? isOutbidAttemptLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
-                                            : true;
-
-                                        return (
-                                            !tAuction.isExpired() && !tAuction.isClosedTrade() && !tAuction.isWon() &&
-                                            (
-                                                (auction._bidState === "outbid" && expectedPercentProfit && bidPrice > currentBid && bidPrice > checkPrice && isOutbidLimitValid) ||
-                                                (auction._bidState !== "outbid" && auction._tradeState === "active")
-                                            )
-                                        );
-                                    }).length;
-
-                                    getValue('waitUntilWatchlistWillBeEmpty') !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
-
-                                    if (
-                                        getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS &&
-                                        (watchListItemsCount === 0 || getValue('waitStatusRequestCounter') >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit'])
-                                    ) {
-                                        setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_PROCESSED_STATUS);
-                                        writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
-                                    }
-                                }
-
                                 let outBidItems = watchResponse.data.items.filter((item) => {
                                     let auction = item._auction;
                                     let currentBid = (auction.currentBid || auction.startingBid);
@@ -197,6 +143,52 @@ export const watchListUtil = function (buyerSetting) {
                                         sellPrice,
                                         buyerSetting
                                     );
+                                }
+                            }
+
+                            if (watchlistPlayerLimit > 0) {
+                                let watchListItemsCount = watchResponse.data.items.filter((item) => {
+                                    let auction = item._auction;
+                                    let tAuction = item.getAuctionData();
+                                    let currentBid = (auction.currentBid || auction.startingBid);
+
+                                    let checkPrice = buyerSetting["idAbBidExact"]
+                                        ? bidPrice
+                                        : auction.currentBid
+                                            ? getBuyBidPrice(currentBid)
+                                            : currentBid;
+
+                                    let expectedPercentProfit = isExpectedProfitInPercentProvided
+                                        ? isBidOrBuyMakeExpectedPercentProfit(
+                                            null,
+                                            checkPrice,
+                                            getFutBinPlayerPrice(item.definitionId, 95),
+                                            expectedProfitPercent
+                                        )
+                                        : true;
+
+                                    let isOutbidLimitValid = isIssetOutbidLimitPerPlayer
+                                        ? isOutbidAttemptLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
+                                        : true;
+
+                                    return (
+                                        !tAuction.isExpired() && !tAuction.isClosedTrade() && !tAuction.isWon() &&
+                                        (
+                                            (auction._bidState === "outbid" && expectedPercentProfit && bidPrice > currentBid && bidPrice > checkPrice && isOutbidLimitValid) ||
+                                            (auction._bidState !== "outbid" && auction._tradeState === "active")
+                                        )
+                                    );
+                                }).length;
+
+                                getValue('waitUntilWatchlistWillBeEmpty') !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
+
+                                if (
+                                    getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS &&
+                                    (watchListItemsCount === 0 || getValue('waitStatusRequestCounter') >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit'])
+                                ) {
+                                    setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_PROCESSED_STATUS);
+                                    setValue('waitStatusRequestCounter', 0);
+                                    writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
                                 }
                             }
 
@@ -358,11 +350,12 @@ export const watchListUtil = function (buyerSetting) {
                             }
 
                             services.Item.clearTransferMarketCache();
-                            resolve();
 
                             if (getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS) {
                                 incrementWaitStatusRequestCounter();
                             }
+
+                            resolve();
                         }
                     );
                 }

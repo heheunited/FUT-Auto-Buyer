@@ -47,7 +47,7 @@ export const stopBotIfRequired = (buyerSetting) => {
           ? "Transfer list is full"
           : "Max purchases count reached";
 
-  if (timeElapsed || getValue('waitStatusRequestCounter') >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']){
+  if (timeElapsed){
     let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
@@ -76,7 +76,6 @@ export const stopBotIfRequired = (buyerSetting) => {
     }
     stopAfter = null;
 
-    setValue('waitStatusRequestCounter', 0);
     setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
     stopAutoBuyer(false);
     autoRestartAutoBuyer();
@@ -112,23 +111,7 @@ export const pauseBotIfRequired = async function (buyerSetting) {
 
   const { searchCount, previousPause } = getValue("sessionStats");
 
-  // if (getValue("softbanDetected") === true && buyerSetting["idBypassSoftBan"])
-  // {
-  //   setValue("softbanDetected", false)
-  //   showLoader()
-  //   stopAutoBuyer(true);
-  //   const isBypassed = await bypassSoftban()
-  //   hideLoader()
-  //   if (isBypassed)
-  //   {
-  //     sendUINotification("Softban successfully bypassed");
-  //     startAutoBuyer.call(this, true);
-  //   }
-  //   else
-  //     sendUINotification("Softban cant be bypassed");
-  // }
-
-  if ((searchCount && !((searchCount - previousPause) % cycleAmount)) || getValue('waitStatusRequestCounter') >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
+  if ((searchCount && !((searchCount - previousPause) % cycleAmount))) {
     let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
@@ -145,7 +128,6 @@ export const pauseBotIfRequired = async function (buyerSetting) {
       return;
     }
 
-    setValue('waitStatusRequestCounter', 0);
     setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
     updateStats("previousPause", searchCount);
     stopAutoBuyer(true);

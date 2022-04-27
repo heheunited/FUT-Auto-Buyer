@@ -8,7 +8,12 @@ import {addFutbinCachePrice} from "./futbinUtil";
 import {listForPrice} from "./sellUtil";
 import {getRandWaitTimeInSeconds, wait} from "./commonUtil";
 import {saveStatisticAboutTransferListPlayers} from "./api/transferListPlayers";
-import {TRANSFER_LIST_MAX_COUNT, WATCH_LIST_MAX_COUNT} from "./constants";
+import {
+    TRANSFER_LIST_MAX_COUNT,
+    TRANSFER_LIST_OVERFLOWED, TRANSFER_LIST_TOTAL_ITEMS_COUNT,
+    WATCH_LIST_MAX_COUNT,
+    WATCH_LIST_OVERFLOWED
+} from "./constants";
 
 export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReListWithUpdatedPrice) {
     sendPinEvents("Transfer List - List View");
@@ -126,8 +131,8 @@ export const setTransferListTotalItemsCountInterval = () => {
         sendPinEvents("Transfer List - List View");
         return new Promise((resolve) => {
             services.Item.requestTransferItems().observe(this, async (t, response) => {
-                    setValue('transferListTotalItemsCount', response.data.items.length);
-                    setValue('transferListOverflowed', response.data.items.length >= TRANSFER_LIST_MAX_COUNT);
+                    setValue(TRANSFER_LIST_TOTAL_ITEMS_COUNT, response.data.items.length);
+                    setValue(TRANSFER_LIST_OVERFLOWED, response.data.items.length >= TRANSFER_LIST_MAX_COUNT);
 
                     return resolve();
                 }
@@ -141,7 +146,7 @@ export const setWatchListTotalItemsCountInterval = () => {
         sendPinEvents("Transfer List - List View");
         return new Promise((resolve) => {
             services.Item.requestWatchedItems().observe(this, (t, response) => {
-                    setValue('watchListOverflowed', response.data.items.length >= WATCH_LIST_MAX_COUNT);
+                    setValue(WATCH_LIST_OVERFLOWED, response.data.items.length >= WATCH_LIST_MAX_COUNT);
 
                     return resolve();
                 }

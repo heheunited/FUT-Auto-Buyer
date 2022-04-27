@@ -17,7 +17,7 @@ import {
 import { writeToLog } from "./logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
 import { loadFilter } from "./userExternalUtil";
-import {WAIT_UNTIL_WAIT_STATUS, WAIT_UNTIL_WORK_STATUS} from "./constants";
+import {WAIT_UNTIL_WAIT_STATUS, WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_WORK_STATUS} from "./constants";
 
 let stopAfter, pauseCycle;
 
@@ -48,7 +48,7 @@ export const stopBotIfRequired = (buyerSetting) => {
           : "Max purchases count reached";
 
   if (timeElapsed){
-    let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
+    let waitUntilWatchlistWillBeEmptyStatus = getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY);
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
         (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS ||
@@ -57,7 +57,7 @@ export const stopBotIfRequired = (buyerSetting) => {
 
       if (waitUntilWatchlistWillBeEmptyStatus !== WAIT_UNTIL_WAIT_STATUS) {
         setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
-        setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WAIT_STATUS);
+        setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_WAIT_STATUS);
         writeToLog("PAUSE/STOP TRIGGERED. WAIT UNTIL WATCHLIST WILL BE EMPTY.", idProgressAutobuyer, "\n");
       }
 
@@ -76,7 +76,7 @@ export const stopBotIfRequired = (buyerSetting) => {
     }
     stopAfter = null;
 
-    setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
+    setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_WORK_STATUS);
     stopAutoBuyer(false);
     autoRestartAutoBuyer();
   } else {
@@ -112,7 +112,7 @@ export const pauseBotIfRequired = async function (buyerSetting) {
   const { searchCount, previousPause } = getValue("sessionStats");
 
   if ((searchCount && !((searchCount - previousPause) % cycleAmount))) {
-    let waitUntilWatchlistWillBeEmptyStatus = getValue('waitUntilWatchlistWillBeEmpty');
+    let waitUntilWatchlistWillBeEmptyStatus = getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY);
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
         (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS ||
@@ -121,14 +121,14 @@ export const pauseBotIfRequired = async function (buyerSetting) {
 
       if (waitUntilWatchlistWillBeEmptyStatus !== WAIT_UNTIL_WAIT_STATUS) {
         setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
-        setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WAIT_STATUS);
+        setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_WAIT_STATUS);
         writeToLog("PAUSE/STOP TRIGGERED. WAIT UNTIL WATCHLIST WILL BE EMPTY.", idProgressAutobuyer, "\n");
       }
 
       return;
     }
 
-    setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
+    setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_WORK_STATUS);
     updateStats("previousPause", searchCount);
     stopAutoBuyer(true);
     return setTimeout(() => {
@@ -165,7 +165,3 @@ export const switchFilterIfRequired = async function () {
       idAutoBuyerFoundLog
   );
 };
-
-const checkWaitUntilWatchlistWillBeEmptyStatus = () => {
-
-}

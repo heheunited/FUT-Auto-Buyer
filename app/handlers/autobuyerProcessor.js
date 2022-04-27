@@ -48,7 +48,12 @@ import {
 import {recordItemTradeStatistics} from "../utils/api/autobuyerItemsTradeStatistic";
 import {recordRequestsStatistics} from "../utils/api/autobuyerRequestsStatistic";
 import {_deleteAllCaptchaEntities} from "../utils/captchaUtil";
-import {WAIT_UNTIL_WORK_STATUS} from "../utils/constants";
+import {
+    MARKETS_OVERFLOWED, TRANSFER_LIST_OVERFLOWED,
+    WAIT_STATUS_REQUEST_COUNTER,
+    WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY,
+    WAIT_UNTIL_WORK_STATUS, WATCH_LIST_LIMIT_ACTIVE, WATCH_LIST_OVERFLOWED
+} from "../utils/constants";
 
 let interval = null;
 let passInterval = null;
@@ -88,10 +93,10 @@ export const startAutoBuyer = async function (isResume) {
     setValue("autoBuyerActive", true);
     setValue("autoBuyerState", STATE_ACTIVE);
     setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
-    setValue('WatchlistLimitActive', false);
-    setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_WORK_STATUS);
-    setValue('marketsOverflowed', false);
-    setValue('waitStatusRequestCounter', 0);
+    setValue(WATCH_LIST_LIMIT_ACTIVE, false);
+    setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_WORK_STATUS);
+    setValue(MARKETS_OVERFLOWED, false);
+    setValue(WAIT_STATUS_REQUEST_COUNTER, 0);
 
     if (!isResume) {
         setValue("botStartTime", new Date());
@@ -130,15 +135,15 @@ export const startAutoBuyer = async function (isResume) {
             passInterval = await pauseBotWithContext(buyerSetting);
             stopBotIfRequired(buyerSetting);
             const isBuyerActive = getValue("autoBuyerActive");
-            const watchlistLimitActiveState = getValue('WatchlistLimitActive');
+            const watchlistLimitActiveState = getValue(WATCH_LIST_LIMIT_ACTIVE);
 
             if (isBuyerActive && !operationInProgress) {
                 operationInProgress = true;
                 buyerSetting = getBuyerSettings();
 
-                if (getValue('marketsOverflowed') === false) {
+                if (getValue(MARKETS_OVERFLOWED) === false) {
                     if (isIssetWatchlistPlayerLimit || buyerSetting['idAbWaitUntilWatchlistWillBeEmpty']) {
-                        if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+                        if (watchlistLimitActiveState === false && getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WORK_STATUS) {
                             sendPinEvents("Hub - Transfers");
                             await srchTmWithContext(buyerSetting);
                         }
@@ -150,7 +155,7 @@ export const startAutoBuyer = async function (isResume) {
                     sendPinEvents("Hub - Transfers");
                     await watchListWithContext(buyerSetting);
 
-                    if (watchlistLimitActiveState === false && getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WORK_STATUS) {
+                    if (watchlistLimitActiveState === false && getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WORK_STATUS) {
                         sendPinEvents("Hub - Transfers");
                         await transferListWithContext(buyerSetting["idAbSellToggle"], buyerSetting["idAbMinDeleteCount"]);
                     }
@@ -233,11 +238,11 @@ export const stopAutoBuyer = (isPaused) => {
 };
 
 const controlMarketsOverflowedState = (buyerSetting) => {
-    if (buyerSetting['idAbOverflowingPassiveMod'] && getValue('transferListOverflowed') === true && getValue('watchListOverflowed') === true) {
+    if (buyerSetting['idAbOverflowingPassiveMod'] && getValue(TRANSFER_LIST_OVERFLOWED) === true && getValue(WATCH_LIST_OVERFLOWED) === true) {
         writeToLog('OVERFLOWING PASSIVE MOD ACTIVATED.', idProgressAutobuyer, "\n")
-        setValue('marketsOverflowed', true);
+        setValue(MARKETS_OVERFLOWED, true);
     } else {
-        setValue('marketsOverflowed', false);
+        setValue(MARKETS_OVERFLOWED, false);
     }
 }
 

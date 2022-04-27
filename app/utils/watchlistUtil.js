@@ -34,9 +34,9 @@ import {
     SELL_MOD_AUTO_DEFAULT,
     SELL_MOD_BY_COUNT,
     SELL_MOD_DISABLED,
-    TRANSFER_LIST_MAX_COUNT,
+    TRANSFER_LIST_MAX_COUNT, WAIT_STATUS_REQUEST_COUNTER,
     WAIT_UNTIL_PROCESSED_STATUS,
-    WAIT_UNTIL_WAIT_STATUS,
+    WAIT_UNTIL_WAIT_STATUS, WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WATCH_LIST_LIMIT_ACTIVE,
     WATCH_LIST_MAX_COUNT
 } from "./constants";
 import {getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";
@@ -180,14 +180,14 @@ export const watchListUtil = function (buyerSetting) {
                                     );
                                 }).length;
 
-                                getValue('waitUntilWatchlistWillBeEmpty') !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
+                                getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
 
                                 if (
-                                    getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS &&
-                                    (watchListItemsCount === 0 || getValue('waitStatusRequestCounter') >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit'])
+                                    getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS &&
+                                    (watchListItemsCount === 0 || getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit'])
                                 ) {
-                                    setValue('waitUntilWatchlistWillBeEmpty', WAIT_UNTIL_PROCESSED_STATUS);
-                                    setValue('waitStatusRequestCounter', 0);
+                                    setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
+                                    setValue(WAIT_STATUS_REQUEST_COUNTER, 0);
                                     writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
                                 }
                             }
@@ -351,7 +351,7 @@ export const watchListUtil = function (buyerSetting) {
 
                             services.Item.clearTransferMarketCache();
 
-                            if (getValue('waitUntilWatchlistWillBeEmpty') === WAIT_UNTIL_WAIT_STATUS) {
+                            if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS) {
                                 incrementWaitStatusRequestCounter();
                             }
 
@@ -517,14 +517,14 @@ const increaseOutbidPerPlayerAttemptCount = (playerTradeId) => {
 
 const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => {
     let watchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'];
-    let currentWatchlistLimitActiveState = getValue('WatchlistLimitActive');
+    let currentWatchlistLimitActiveState = getValue(WATCH_LIST_LIMIT_ACTIVE);
     let newWatchlistLimitActiveState = watchListItemsCount >= watchlistPlayerLimit;
 
     if (currentWatchlistLimitActiveState === newWatchlistLimitActiveState) {
         return;
     }
 
-    setValue('WatchlistLimitActive', newWatchlistLimitActiveState);
+    setValue(WATCH_LIST_LIMIT_ACTIVE, newWatchlistLimitActiveState);
 
     newWatchlistLimitActiveState === true
         ? setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
@@ -536,7 +536,7 @@ const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => 
 }
 
 const incrementWaitStatusRequestCounter = () => {
-    let currentCounter = getValue('waitStatusRequestCounter');
+    let currentCounter = getValue(WAIT_STATUS_REQUEST_COUNTER);
 
     if (currentCounter === undefined) {
         currentCounter = 1;
@@ -544,5 +544,5 @@ const incrementWaitStatusRequestCounter = () => {
         ++currentCounter;
     }
 
-    setValue('waitStatusRequestCounter', currentCounter);
+    setValue(WAIT_STATUS_REQUEST_COUNTER, currentCounter);
 }

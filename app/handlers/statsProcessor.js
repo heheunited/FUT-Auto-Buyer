@@ -20,6 +20,7 @@ import {
 import {sendMessageToDiscord} from "../services/discordService";
 import {getValue, setValue} from "../services/repository";
 import {getTimerProgress} from "../utils/commonUtil";
+import {TRANSFER_LIST_TOTAL_ITEMS_COUNT} from "../utils/constants";
 
 setValue("sessionStats", {
   soldItems: "-",
@@ -144,7 +145,7 @@ export const getStatsValue = (key) => {
 };
 
 export const getTransferListTotalItemsCount = () => {
-  return getValue('transferListTotalItemsCount') || getTransferListTotalItemsCountExternal();
+  return getValue(TRANSFER_LIST_TOTAL_ITEMS_COUNT) || getTransferListTotalItemsCountExternal();
 }
 
 export const getTransferListTotalItemsCountExternal = () => {

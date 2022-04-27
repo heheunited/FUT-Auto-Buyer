@@ -449,7 +449,7 @@ const searchTransferMarket = function (buyerSetting) {
                         );
 
                         if (isSearchByExpectedProfit && !byBuyNowPrice && !byCurrentBidPrice) {
-                            logWrite("skip >>> (Search by expected profit %. No profit.)");
+                            logWrite(`skip >>> (Search by %. No profit ${expectedProfitInPercent}% || ${expectedProfitInPercentForBuy}%)`);
                             continue;
                         }
 

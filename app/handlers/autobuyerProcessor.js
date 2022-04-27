@@ -408,11 +408,11 @@ const searchTransferMarket = function (buyerSetting) {
                             }
 
                             if (isExpectedProfitInPercentForBuyProvided) {
-                                let buyPriceCheckPrice = isBidOrBuyMakeExpectedPercentProfit(buyNowPrice, null, fbPrice, expectedProfitInPercentForBuy)
+                                let buyPriceForBuy = isBidOrBuyMakeExpectedPercentProfit(buyNowPrice, null, fbPrice, expectedProfitInPercentForBuy)
                                     ? buyNowPrice
                                     : null;
 
-                                byBuyNowPrice = buyPriceCheckPrice !== null;
+                                byBuyNowPrice = buyPriceForBuy !== null;
                             }
                         }
 

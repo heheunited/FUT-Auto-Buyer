@@ -491,7 +491,7 @@ const searchTransferMarket = function (buyerSetting) {
                         if (
                             isExpectedProfitInPercentProvided &&
                             !isBidOrBuyMakeExpectedPercentProfit(
-                                userBuyNowPrice,
+                                null,
                                 checkPrice,
                                 getFutBinPlayerPrice(player.definitionId, 95),
                                 expectedProfitInPercent

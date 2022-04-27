@@ -4,7 +4,7 @@ import {
 } from "../../elementIds.constants";
 
 export const logView = () => {
-  return `<div ${!isPhone() ? "style=width:54%" : ""}>
+  return `<div ${!isPhone() ? "style=width:52%" : ""}>
             <textarea readonly id=${idProgressAutobuyer} class="autoBuyerLog"></textarea>
             <label>Search Results:</label>
             <br/>

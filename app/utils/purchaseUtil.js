@@ -197,7 +197,7 @@ export const buyPlayer = (
             formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
             isBin ? "buy" : "bid",
             "failure",
-            `ERR: ${status}`
+            `ERR: ${status} `
           );
 
           if (notificationType === "L" || notificationType === "A") {

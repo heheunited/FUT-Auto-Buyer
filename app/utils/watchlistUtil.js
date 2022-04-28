@@ -90,7 +90,7 @@ export const watchListUtil = function (buyerSetting) {
                             // const filterWatchList = bidItemsByFilter.get(filterName) || new Set();
 
                             const userWatchItems = getValue("userWatchItems");
-                            if (isAutoBuyerActive && bidPrice) {
+                            if (isAutoBuyerActive && (bidPrice || isExpectedProfitInPercentProvided)) {
                                 let outBidItems = watchResponse.data.items.filter((item) => {
                                     let auction = item._auction;
                                     let currentBid = (auction.currentBid || auction.startingBid);
@@ -118,11 +118,14 @@ export const watchListUtil = function (buyerSetting) {
                                         ? isOutbidAttemptLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
                                         : true;
 
+                                    let byBidOrExpectedProfitPercent = !bidPrice && isExpectedProfitInPercentProvided
+                                        ? expectedPercentProfit
+                                        : bidPrice > currentBid && bidPrice > checkPrice;
+
                                     return (
                                         auction._bidState === "outbid" && auction._tradeState === "active" &&
-                                        isOutbidLimitValid && bidPrice > currentBid &&
-                                        expireTimeLessThan && expectedPercentProfit &&
-                                        bidPrice > checkPrice
+                                        isOutbidLimitValid && byBidOrExpectedProfitPercent &&
+                                        expireTimeLessThan && expectedPercentProfit
                                     );
                                 }).sort((a, b) => a._auction.expires - b._auction.expires);
 
@@ -141,7 +144,8 @@ export const watchListUtil = function (buyerSetting) {
                                         currentItem,
                                         bidPrice,
                                         sellPrice,
-                                        buyerSetting
+                                        buyerSetting,
+                                        !bidPrice && isExpectedProfitInPercentProvided
                                     );
                                 }
                             }
@@ -171,10 +175,14 @@ export const watchListUtil = function (buyerSetting) {
                                         ? isOutbidAttemptLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
                                         : true;
 
+                                    let byBidOrExpectedProfitPercent = !bidPrice && isExpectedProfitInPercentProvided
+                                        ? expectedPercentProfit
+                                        : bidPrice > currentBid && bidPrice > checkPrice;
+
                                     return (
                                         !tAuction.isExpired() && !tAuction.isClosedTrade() && !tAuction.isWon() &&
                                         (
-                                            (auction._bidState === "outbid" && expectedPercentProfit && bidPrice > currentBid && bidPrice > checkPrice && isOutbidLimitValid) ||
+                                            (auction._bidState === "outbid" && expectedPercentProfit && byBidOrExpectedProfitPercent && isOutbidLimitValid) ||
                                             (auction._bidState !== "outbid" && auction._tradeState === "active")
                                         )
                                     );
@@ -387,7 +395,7 @@ export const addUserWatchItems = () => {
     });
 };
 
-const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
+const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting, byExpectedProfitPercent) => {
     let auction = player._auction;
     let isBid = auction.currentBid;
     let currentBid = auction.currentBid || auction.startingBid;
@@ -406,7 +414,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
             ? getBuyBidPrice(currentBid)
             : currentBid;
 
-    if (isAutoBuyerActive && currentBid <= priceToBid) {
+    if (isAutoBuyerActive && (currentBid < priceToBid || byExpectedProfitPercent)) {
         let logMessage = ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`;
 
         if (buyerSetting['idAbBidLimitPerPlayer'] > 0) {
@@ -418,7 +426,6 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
         increaseOutbidPlayerRequestsCount();
 
         await buyPlayer(player, playerName, checkPrice, sellPrice);
-        // buyerSetting["idAbAddBuyDelay"] && (await wait(1));
     }
 };
 

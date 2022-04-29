@@ -1,6 +1,6 @@
 import {
     idAbIsPlayerTypeSearch,
-    idAbOverflowingPassiveMod,
+    idAbOverflowingPassiveMod, idAbOverflowingPassiveModWaitTime,
     idAbWaitUntilWatchlistWillBeEmpty, idAbWaitUntilWatchlistWillBeEmptyRequestLimit
 } from "../../../elementIds.constants";
 import {generateToggleInput} from "../../../utils/uiUtils/generateToggleInput";
@@ -23,6 +23,14 @@ export const generalSettingsView = function () {
         {idAbOverflowingPassiveMod},
         "Passive mod, if TL/WL overflowed",
         "BuyerSettings"
+    )}
+               ${generateTextInput(
+        "Overflowing passive mod wait time",
+        "20-40",
+        {idAbOverflowingPassiveModWaitTime},
+        "(Random second range eg. 20-40)",
+        "BuyerSettings",
+        "text",
     )}
          ${generateToggleInput(
         "Wait until watch list will be empty",

@@ -127,6 +127,7 @@ export const idAbWaitUntilWatchlistWillBeEmptyRequestLimit = "elem_" + generateI
 
 
 export const idAbOverflowingPassiveMod = "elem_" + generateId(15);
+export const idAbOverflowingPassiveModWaitTime = "elem_" + generateId(15);
 
 export const idAbPreventWatchListOverflow = "elem_" + generateId(15);
 export const idAbSellItemsOnlyAfterBotPause = "elem_" + generateId(15);

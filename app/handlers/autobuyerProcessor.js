@@ -241,8 +241,12 @@ const controlMarketsOverflowedState = (buyerSetting) => {
     if (buyerSetting['idAbOverflowingPassiveMod'] && getValue(TRANSFER_LIST_OVERFLOWED) === true && getValue(WATCH_LIST_OVERFLOWED) === true) {
         writeToLog('OVERFLOWING PASSIVE MOD ACTIVATED.', idProgressAutobuyer, "\n")
         setValue(MARKETS_OVERFLOWED, true);
+        setWaitTimeObj(20, 40);
     } else {
-        setValue(MARKETS_OVERFLOWED, false);
+        if (getValue(MARKETS_OVERFLOWED) !== false) {
+            setWaitTimeObj(buyerSetting['idAbWaitTime']);
+            setValue(MARKETS_OVERFLOWED, false);
+        }
     }
 }
 

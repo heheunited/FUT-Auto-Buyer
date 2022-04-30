@@ -485,7 +485,7 @@ const sellWonItems = async (
     const boughtPrice = (auction.currentBid || auction.startingBid);
     const fbPrice = getFutBinPlayerPrice(player.definitionId);
 
-    const logMessage = ` ($$$) Selling Player: ${player._staticData.name}.` + ` Bought: ${boughtPrice}.` + ` Sell: ${sellPrice}.` + ` FB: ${fbPrice}.` + ` Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice)}`;
+    const logMessage = ` ($$$) Selling Player: ${player._staticData.name}.` + ` Bought: ${boughtPrice}.` + ` Sell: ${sellPrice}.` + ` FB: ${fbPrice}.` + ` Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice, sellPrice)}`;
 
     writeToLog(logMessage, idProgressAutobuyer);
 

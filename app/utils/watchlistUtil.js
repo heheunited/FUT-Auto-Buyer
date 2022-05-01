@@ -90,7 +90,7 @@ export const watchListUtil = function (buyerSetting) {
                             // const filterWatchList = bidItemsByFilter.get(filterName) || new Set();
 
                             const userWatchItems = getValue("userWatchItems");
-                            if (isAutoBuyerActive && bidPrice) {
+                            if (isAutoBuyerActive && (bidPrice || isExpectedProfitInPercentProvided)) {
                                 let outBidItems = watchResponse.data.items.filter((item) => {
                                     let auction = item._auction;
                                     let currentBid = (auction.currentBid || auction.startingBid);
@@ -118,11 +118,14 @@ export const watchListUtil = function (buyerSetting) {
                                         ? isOutbidAttemptLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
                                         : true;
 
+                                    let byBidOrExpectedProfitPercent = !bidPrice && isExpectedProfitInPercentProvided
+                                        ? expectedPercentProfit
+                                        : bidPrice > currentBid && bidPrice > checkPrice;
+
                                     return (
                                         auction._bidState === "outbid" && auction._tradeState === "active" &&
-                                        isOutbidLimitValid && bidPrice > currentBid &&
-                                        expireTimeLessThan && expectedPercentProfit &&
-                                        bidPrice > checkPrice
+                                        isOutbidLimitValid && byBidOrExpectedProfitPercent &&
+                                        expireTimeLessThan && expectedPercentProfit
                                     );
                                 }).sort((a, b) => a._auction.expires - b._auction.expires);
 
@@ -141,7 +144,8 @@ export const watchListUtil = function (buyerSetting) {
                                         currentItem,
                                         bidPrice,
                                         sellPrice,
-                                        buyerSetting
+                                        buyerSetting,
+                                        !bidPrice && isExpectedProfitInPercentProvided
                                     );
                                 }
                             }
@@ -171,10 +175,14 @@ export const watchListUtil = function (buyerSetting) {
                                         ? isOutbidAttemptLimitPerPlayerNotExceeded(buyerSetting['idAbBidLimitPerPlayer'], auction.tradeId)
                                         : true;
 
+                                    let byBidOrExpectedProfitPercent = !bidPrice && isExpectedProfitInPercentProvided
+                                        ? expectedPercentProfit
+                                        : bidPrice > currentBid && bidPrice > checkPrice;
+
                                     return (
                                         !tAuction.isExpired() && !tAuction.isClosedTrade() && !tAuction.isWon() &&
                                         (
-                                            (auction._bidState === "outbid" && expectedPercentProfit && bidPrice > currentBid && bidPrice > checkPrice && isOutbidLimitValid) ||
+                                            (auction._bidState === "outbid" && expectedPercentProfit && byBidOrExpectedProfitPercent && isOutbidLimitValid) ||
                                             (auction._bidState !== "outbid" && auction._tradeState === "active")
                                         )
                                     );
@@ -182,12 +190,8 @@ export const watchListUtil = function (buyerSetting) {
 
                                 getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
 
-                                if (
-                                    getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS &&
-                                    (watchListItemsCount === 0 || getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit'])
-                                ) {
+                                if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS && watchListItemsCount === 0) {
                                     setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
-                                    setValue(WAIT_STATUS_REQUEST_COUNTER, 0);
                                     writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
                                 }
                             }
@@ -335,7 +339,7 @@ export const watchListUtil = function (buyerSetting) {
                                     let currentBid = (auction.currentBid || auction.startingBid);
 
                                     writeToLog(
-                                        ` (---) Remove Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
+                                        ` (---) Remove: ${player._staticData.name}. Last Bid: ${currentBid}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
                                         idProgressAutobuyer
                                     );
 
@@ -350,17 +354,22 @@ export const watchListUtil = function (buyerSetting) {
                             }
 
                             services.Item.clearTransferMarketCache();
-
-                            if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS) {
-                                incrementWaitStatusRequestCounter();
-                            }
-
                             resolve();
                         }
                     );
                 }
             );
         });
+
+        if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS) {
+            incrementWaitStatusRequestCounter();
+            writeToLog(`WAIT REQUEST: ${getValue(WAIT_STATUS_REQUEST_COUNTER)} ...`, idProgressAutobuyer, "\n");
+        }
+
+        if (getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
+            setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
+            writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
+        }
     });
 };
 
@@ -387,7 +396,7 @@ export const addUserWatchItems = () => {
     });
 };
 
-const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
+const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting, byExpectedProfitPercent) => {
     let auction = player._auction;
     let isBid = auction.currentBid;
     let currentBid = auction.currentBid || auction.startingBid;
@@ -406,8 +415,8 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
             ? getBuyBidPrice(currentBid)
             : currentBid;
 
-    if (isAutoBuyerActive && currentBid <= priceToBid) {
-        let logMessage = ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`;
+    if (isAutoBuyerActive && (currentBid < priceToBid || byExpectedProfitPercent)) {
+        let logMessage = ` (@@@) Outbid: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`;
 
         if (buyerSetting['idAbBidLimitPerPlayer'] > 0) {
             logMessage += ` Attempt: ${outbidLimitPerPlayerMap.get(auction.tradeId)}.`;
@@ -418,7 +427,6 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting) => {
         increaseOutbidPlayerRequestsCount();
 
         await buyPlayer(player, playerName, checkPrice, sellPrice);
-        // buyerSetting["idAbAddBuyDelay"] && (await wait(1));
     }
 };
 
@@ -478,7 +486,7 @@ const sellWonItems = async (
     const boughtPrice = (auction.currentBid || auction.startingBid);
     const fbPrice = getFutBinPlayerPrice(player.definitionId);
 
-    const logMessage = ` ($$$) Selling Player: ${player._staticData.name}.` + ` Bought: ${boughtPrice}.` + ` Sell: ${sellPrice}.` + ` FB: ${fbPrice}.` + ` Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice)}`;
+    const logMessage = ` ($$$) Selling: ${formatString(player._staticData.name, 15)}` + `[Bought: ${formatString(boughtPrice, 10)}.` + ` Sell: ${formatString(sellPrice, 10)}.` + ` FB: ${formatString(fbPrice + "]", 10)}` + `[Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice, sellPrice)}]`;
 
     writeToLog(logMessage, idProgressAutobuyer);
 
@@ -535,7 +543,7 @@ const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => 
     writeToLog(logMessage, idProgressAutobuyer);
 }
 
-const incrementWaitStatusRequestCounter = () => {
+export const incrementWaitStatusRequestCounter = () => {
     let currentCounter = getValue(WAIT_STATUS_REQUEST_COUNTER);
 
     if (currentCounter === undefined) {

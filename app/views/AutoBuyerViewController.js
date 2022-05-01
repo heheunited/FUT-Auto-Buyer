@@ -15,7 +15,11 @@ import {
 } from "./layouts/MenuItemView";
 import { filterHeaderSettingsView } from "./layouts/Settings/FilterSettingsView";
 import {getCaptchaCountInterval, getErrorsCountInterval} from "../utils/api/errorsStatistic";
-import {setTransferListTotalItemsCountInterval, setWatchListTotalItemsCountInterval} from "../utils/transferlistUtil";
+import {
+  checkBotStopTriggeredHealth,
+  setTransferListTotalItemsCountInterval,
+  setWatchListTotalItemsCountInterval
+} from "../utils/transferlistUtil";
 
 export const AutoBuyerViewController = function (t) {
   UTMarketSearchFiltersViewController.call(this);
@@ -56,6 +60,7 @@ AutoBuyerViewController.prototype.init = function () {
   getCaptchaCountInterval();
   setTransferListTotalItemsCountInterval();
   setWatchListTotalItemsCountInterval();
+  // checkBotStopTriggeredHealth();
 
   root.addClass("auto-buyer");
   const btnContainer = root.find(".button-container");

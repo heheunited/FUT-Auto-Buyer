@@ -141,7 +141,7 @@ export const startAutoBuyer = async function (isResume) {
                 operationInProgress = true;
                 buyerSetting = getBuyerSettings();
 
-                if (getValue(MARKETS_OVERFLOWED) === false) {
+                if (getValue(MARKETS_OVERFLOWED) === false && getValue(WATCH_LIST_OVERFLOWED) === false) {
                     if (isIssetWatchlistPlayerLimit || buyerSetting['idAbWaitUntilWatchlistWillBeEmpty']) {
                         if (watchlistLimitActiveState === false && getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WORK_STATUS) {
                             sendPinEvents("Hub - Transfers");
@@ -241,8 +241,13 @@ const controlMarketsOverflowedState = (buyerSetting) => {
     if (buyerSetting['idAbOverflowingPassiveMod'] && getValue(TRANSFER_LIST_OVERFLOWED) === true && getValue(WATCH_LIST_OVERFLOWED) === true) {
         writeToLog('OVERFLOWING PASSIVE MOD ACTIVATED.', idProgressAutobuyer, "\n")
         setValue(MARKETS_OVERFLOWED, true);
+        setWaitTimeObj(...getRangeValue(buyerSetting['idAbOverflowingPassiveModWaitTime']));
     } else {
-        setValue(MARKETS_OVERFLOWED, false);
+        if (getValue(MARKETS_OVERFLOWED) !== false) {
+            writeToLog('OVERFLOWING PASSIVE MOD DISABLED.', idProgressAutobuyer, "\n")
+            setWaitTimeObj(buyerSetting['idAbWaitTime']);
+            setValue(MARKETS_OVERFLOWED, false);
+        }
     }
 }
 

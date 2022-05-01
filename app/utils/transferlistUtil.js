@@ -1,7 +1,7 @@
 import {idProgressAutobuyer, idSellFutBinPercent} from "../elementIds.constants";
 import {getStatsValue, getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";
 import {writeToLog} from "./logUtil";
-import {sendPinEvents} from "./notificationUtil";
+import {sendPinEvents, sendUINotification} from "./notificationUtil";
 import {updateUserCredits} from "./userUtil";
 import {getBuyerSettings, getValue, setValue} from "../services/repository";
 import {addFutbinCachePrice} from "./futbinUtil";
@@ -10,10 +10,14 @@ import {getRandWaitTimeInSeconds, wait} from "./commonUtil";
 import {saveStatisticAboutTransferListPlayers} from "./api/transferListPlayers";
 import {
     TRANSFER_LIST_MAX_COUNT,
-    TRANSFER_LIST_OVERFLOWED, TRANSFER_LIST_TOTAL_ITEMS_COUNT,
+    TRANSFER_LIST_OVERFLOWED,
+    TRANSFER_LIST_TOTAL_ITEMS_COUNT, WAIT_STATUS_REQUEST_COUNTER, WAIT_UNTIL_PROCESSED_STATUS,
+    WAIT_UNTIL_WAIT_STATUS,
+    WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY,
     WATCH_LIST_MAX_COUNT,
     WATCH_LIST_OVERFLOWED
 } from "./constants";
+import {pauseBotIfRequired, stopBotIfRequired} from "./autoActionsUtil";
 
 export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReListWithUpdatedPrice) {
     sendPinEvents("Transfer List - List View");
@@ -153,4 +157,24 @@ export const setWatchListTotalItemsCountInterval = () => {
             );
         });
     }, 40000)
+}
+
+export const checkBotStopTriggeredHealth = () => {
+    let buyerSettings = getBuyerSettings();
+
+    setInterval(async () => {
+        if (!buyerSettings['idAbWaitUntilWatchlistWillBeEmpty'] || !buyerSettings['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
+            return false;
+        }
+
+        if (
+            getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS &&
+            getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSettings['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']
+        ) {
+            setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
+            sendUINotification('checkBotStopTriggeredHealth');
+
+            return await pauseBotIfRequired.bind(this)(buyerSettings) || stopBotIfRequired(buyerSettings);
+        }
+    }, 60000)
 }

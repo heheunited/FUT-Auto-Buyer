@@ -190,12 +190,8 @@ export const watchListUtil = function (buyerSetting) {
 
                                 getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) !== WAIT_UNTIL_WAIT_STATUS && controlWatchlistPlayerLimitState(buyerSetting, watchListItemsCount);
 
-                                if (
-                                    getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS &&
-                                    (watchListItemsCount === 0 || getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit'])
-                                ) {
+                                if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS && watchListItemsCount === 0) {
                                     setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
-                                    setValue(WAIT_STATUS_REQUEST_COUNTER, 0);
                                     writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
                                 }
                             }
@@ -358,17 +354,21 @@ export const watchListUtil = function (buyerSetting) {
                             }
 
                             services.Item.clearTransferMarketCache();
-
-                            if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS) {
-                                incrementWaitStatusRequestCounter();
-                            }
-
                             resolve();
                         }
                     );
                 }
             );
         });
+
+        if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS) {
+            incrementWaitStatusRequestCounter();
+        }
+
+        if (getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
+            setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
+            writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
+        }
     });
 };
 
@@ -542,7 +542,7 @@ const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => 
     writeToLog(logMessage, idProgressAutobuyer);
 }
 
-const incrementWaitStatusRequestCounter = () => {
+export const incrementWaitStatusRequestCounter = () => {
     let currentCounter = getValue(WAIT_STATUS_REQUEST_COUNTER);
 
     if (currentCounter === undefined) {

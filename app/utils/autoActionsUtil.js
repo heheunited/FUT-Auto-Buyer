@@ -17,7 +17,11 @@ import {
 import { writeToLog } from "./logUtil";
 import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
 import { loadFilter } from "./userExternalUtil";
-import {WAIT_UNTIL_WAIT_STATUS, WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_WORK_STATUS} from "./constants";
+import {
+  WAIT_UNTIL_WAIT_STATUS,
+  WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY,
+  WAIT_UNTIL_WORK_STATUS
+} from "./constants";
 
 let stopAfter, pauseCycle;
 
@@ -51,8 +55,7 @@ export const stopBotIfRequired = (buyerSetting) => {
     let waitUntilWatchlistWillBeEmptyStatus = getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY);
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
-        (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS ||
-            waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WAIT_STATUS)
+        (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS || waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WAIT_STATUS)
     ) {
 
       if (waitUntilWatchlistWillBeEmptyStatus !== WAIT_UNTIL_WAIT_STATUS) {
@@ -115,8 +118,7 @@ export const pauseBotIfRequired = async function (buyerSetting) {
     let waitUntilWatchlistWillBeEmptyStatus = getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY);
 
     if (buyerSetting['idAbWaitUntilWatchlistWillBeEmpty'] &&
-        (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS ||
-            waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WAIT_STATUS)
+        (waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WORK_STATUS || waitUntilWatchlistWillBeEmptyStatus === WAIT_UNTIL_WAIT_STATUS)
     ) {
 
       if (waitUntilWatchlistWillBeEmptyStatus !== WAIT_UNTIL_WAIT_STATUS) {

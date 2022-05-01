@@ -60,7 +60,7 @@ AutoBuyerViewController.prototype.init = function () {
   getCaptchaCountInterval();
   setTransferListTotalItemsCountInterval();
   setWatchListTotalItemsCountInterval();
-  checkBotStopTriggeredHealth();
+  // checkBotStopTriggeredHealth();
 
   root.addClass("auto-buyer");
   const btnContainer = root.find(".button-container");

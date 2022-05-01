@@ -343,7 +343,7 @@ export const watchListUtil = function (buyerSetting) {
                                     let currentBid = (auction.currentBid || auction.startingBid);
 
                                     writeToLog(
-                                        ` (---) Remove Player: ${player._staticData.name}. Last Bid: ${currentBid}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
+                                        ` (---) Remove: ${player._staticData.name}. Last Bid: ${currentBid}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`,
                                         idProgressAutobuyer
                                     );
 
@@ -415,7 +415,7 @@ const tryBidItems = async (player, bidPrice, sellPrice, buyerSetting, byExpected
             : currentBid;
 
     if (isAutoBuyerActive && (currentBid < priceToBid || byExpectedProfitPercent)) {
-        let logMessage = ` (@@@) Try to outbid. Player: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`;
+        let logMessage = ` (@@@) Outbid: ${player._staticData.name}. Bid: ${checkPrice}. FB: ${getFutBinPlayerPrice(player.definitionId)}.`;
 
         if (buyerSetting['idAbBidLimitPerPlayer'] > 0) {
             logMessage += ` Attempt: ${outbidLimitPerPlayerMap.get(auction.tradeId)}.`;
@@ -485,7 +485,7 @@ const sellWonItems = async (
     const boughtPrice = (auction.currentBid || auction.startingBid);
     const fbPrice = getFutBinPlayerPrice(player.definitionId);
 
-    const logMessage = ` ($$$) Selling Player: ${player._staticData.name}.` + ` Bought: ${boughtPrice}.` + ` Sell: ${sellPrice}.` + ` FB: ${fbPrice}.` + ` Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice, sellPrice)}`;
+    const logMessage = ` ($$$) Selling: ${formatString(player._staticData.name + ".", 15)}` + `Bought: ${boughtPrice}.` + ` Sell: ${sellPrice}.` + ` FB: ${formatString(fbPrice + ".", 7)}` + `Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice, sellPrice)}`;
 
     writeToLog(logMessage, idProgressAutobuyer);
 

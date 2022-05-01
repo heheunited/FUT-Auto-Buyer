@@ -363,6 +363,7 @@ export const watchListUtil = function (buyerSetting) {
 
         if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS) {
             incrementWaitStatusRequestCounter();
+            writeToLog(`WAIT REQUEST: ${getValue(WAIT_STATUS_REQUEST_COUNTER)} ...`, idProgressAutobuyer, "\n");
         }
 
         if (getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
@@ -485,7 +486,7 @@ const sellWonItems = async (
     const boughtPrice = (auction.currentBid || auction.startingBid);
     const fbPrice = getFutBinPlayerPrice(player.definitionId);
 
-    const logMessage = ` ($$$) Selling: ${formatString(player._staticData.name, 15)}` + `[Bought: ${formatString(boughtPrice, 10)}.` + ` Sell: ${formatString(sellPrice, 10)}.` + ` FB: ${formatString(fbPrice + "]", 7)}` + `[Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice, sellPrice)}]`;
+    const logMessage = ` ($$$) Selling: ${formatString(player._staticData.name, 15)}` + `[Bought: ${formatString(boughtPrice, 10)}.` + ` Sell: ${formatString(sellPrice, 10)}.` + ` FB: ${formatString(fbPrice + "]", 10)}` + `[Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice, sellPrice)}]`;
 
     writeToLog(logMessage, idProgressAutobuyer);
 

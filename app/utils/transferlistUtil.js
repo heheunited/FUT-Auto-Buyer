@@ -158,23 +158,3 @@ export const setWatchListTotalItemsCountInterval = () => {
         });
     }, 40000)
 }
-
-export const checkBotStopTriggeredHealth = () => {
-    let buyerSettings = getBuyerSettings();
-
-    setInterval(async () => {
-        if (!buyerSettings['idAbWaitUntilWatchlistWillBeEmpty'] || !buyerSettings['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
-            return false;
-        }
-
-        if (
-            getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS &&
-            getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSettings['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']
-        ) {
-            setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
-            sendUINotification('checkBotStopTriggeredHealth');
-
-            return await pauseBotIfRequired.bind(this)(buyerSettings) || stopBotIfRequired(buyerSettings);
-        }
-    }, 60000)
-}

@@ -16,7 +16,6 @@ import {
 import { filterHeaderSettingsView } from "./layouts/Settings/FilterSettingsView";
 import {getCaptchaCountInterval, getErrorsCountInterval} from "../utils/api/errorsStatistic";
 import {
-  checkBotStopTriggeredHealth,
   setTransferListTotalItemsCountInterval,
   setWatchListTotalItemsCountInterval
 } from "../utils/transferlistUtil";
@@ -60,7 +59,6 @@ AutoBuyerViewController.prototype.init = function () {
   getCaptchaCountInterval();
   setTransferListTotalItemsCountInterval();
   setWatchListTotalItemsCountInterval();
-  // checkBotStopTriggeredHealth();
 
   root.addClass("auto-buyer");
   const btnContainer = root.find(".button-container");

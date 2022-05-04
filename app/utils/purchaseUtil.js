@@ -143,7 +143,7 @@ export const buyPlayer = (
                 "bid",
                 "success",
                 formatString('waiting', 9),
-                `[${timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires))} | ${player._auction.expires} sec]`,
+                `[${formatString(timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires)), 7)} | ${player._auction.expires} sec]`,
                 formatString(price ? getEstimatedProfitPercentString(player.definitionId, price.toString()) : 'NULL', 9)
             );
             increaseBidPlayerRequestsCount();
@@ -198,7 +198,7 @@ export const buyPlayer = (
               isBin ? "buy" : "bid",
               "failure",
               formatString(`ERR:${status}`, 9),
-              `[${timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires))} | ${player._auction.expires} sec]`,
+              `[${formatString(timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires)), 7)} | ${player._auction.expires} sec]`,
               formatString(price ? getEstimatedProfitPercentString(player.definitionId, price.toString()) : 'NULL', 9)
           );
 

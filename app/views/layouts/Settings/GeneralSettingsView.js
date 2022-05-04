@@ -40,7 +40,7 @@ export const generalSettingsView = function () {
     )}
      
        ${generateTextInput(
-        "Wait until request limit",
+        "Wait until/Watch list limit request limit",
         10,
         {idAbWaitUntilWatchlistWillBeEmptyRequestLimit},
         "",

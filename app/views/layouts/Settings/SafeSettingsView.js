@@ -55,14 +55,14 @@ export const safeSettingsView = function () {
     "CommonSettings"
   )}
   ${generateTextInput(
-    "Watchlist player limit",
+    "Watch list player limit",
     0,
     { idAbWatchlistPlayersLimit },
     "(0 - disabled)",
     "CommonSettings"
   )}
     ${generateTextInput(
-      "Watchlist player limit wait time",
+      "Watch list player limit wait time",
       "5-7",
       {idAbWatchlistPlayersLimitWaitTime},
       "(Random second range eg. 5-7)",

@@ -34,9 +34,13 @@ import {
     SELL_MOD_AUTO_DEFAULT,
     SELL_MOD_BY_COUNT,
     SELL_MOD_DISABLED,
-    TRANSFER_LIST_MAX_COUNT, WAIT_STATUS_REQUEST_COUNTER,
+    TRANSFER_LIST_MAX_COUNT,
+    WAIT_STATUS_REQUEST_COUNTER,
     WAIT_UNTIL_PROCESSED_STATUS,
-    WAIT_UNTIL_WAIT_STATUS, WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WATCH_LIST_LIMIT_ACTIVE,
+    WAIT_UNTIL_WAIT_STATUS,
+    WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY,
+    WATCH_LIST_LIMIT_ACTIVE,
+    WATCH_LIST_LIMIT_REQUEST_COUNTER,
     WATCH_LIST_MAX_COUNT
 } from "./constants";
 import {getTransferListTotalItemsCount, updateStats} from "../handlers/statsProcessor";
@@ -69,7 +73,7 @@ export const watchListUtil = function (buyerSetting) {
             }
 
             if (buyerSetting['idAbPreventWatchListOverflow'] && response.data.items.length >= WATCH_LIST_MAX_COUNT && !buyerSetting['idAbOverflowingPassiveMod']) {
-                let logMessage = 'WATCHLIST IS FULL. AUTOBUYER IS STOPPED.';
+                let logMessage = 'WATCH LIST IS FULL. AUTOBUYER IS STOPPED.';
 
                 writeToLog(logMessage, idProgressAutobuyer);
                 sendErrorNotificationToUser(logMessage);
@@ -362,13 +366,25 @@ export const watchListUtil = function (buyerSetting) {
         });
 
         if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS) {
-            incrementWaitStatusRequestCounter();
+            incrementCounterByName(WAIT_STATUS_REQUEST_COUNTER);
             writeToLog(`WAIT REQUEST: ${getValue(WAIT_STATUS_REQUEST_COUNTER)} ...`, idProgressAutobuyer);
+
+            if (getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
+                setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
+                setValue(WAIT_STATUS_REQUEST_COUNTER, 0);
+                writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
+            }
         }
 
-        if (getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
-            setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
-            writeToLog('WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
+        if (getValue(WATCH_LIST_LIMIT_ACTIVE) === true) {
+            incrementCounterByName(WATCH_LIST_LIMIT_REQUEST_COUNTER);
+            writeToLog(`WATCH LIST LIMIT REQUEST: ${getValue(WATCH_LIST_LIMIT_REQUEST_COUNTER)} ...`, idProgressAutobuyer);
+
+            if (getValue(WATCH_LIST_LIMIT_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
+                setValue(WATCH_LIST_LIMIT_ACTIVE, false);
+                setValue(WATCH_LIST_LIMIT_REQUEST_COUNTER, 0);
+                writeToLog('WATCH LIST LIMIT DISABLED BY REQUEST COUNT.', idProgressAutobuyer, "\n");
+            }
         }
     });
 };
@@ -533,18 +549,19 @@ const controlWatchlistPlayerLimitState = (buyerSetting, watchListItemsCount) => 
     }
 
     setValue(WATCH_LIST_LIMIT_ACTIVE, newWatchlistLimitActiveState);
+    setValue(WATCH_LIST_LIMIT_REQUEST_COUNTER, 0);
 
     newWatchlistLimitActiveState === true
         ? setWaitTimeObj(...getRangeValue(buyerSetting['idAbWatchlistPlayersLimitWaitTime']))
         : setWaitTimeObj(...getRangeValue(buyerSetting['idAbWaitTime']));
 
-    let logMessage = `WATCHLIST PLAYER LIMIT STATE: ${newWatchlistLimitActiveState ? 'ACTIVATED' : 'DISABLED'}.`;
+    let logMessage = `WATCH LIST PLAYER LIMIT STATE: ${newWatchlistLimitActiveState ? 'ACTIVATED' : 'DISABLED'}.`;
 
     writeToLog(logMessage, idProgressAutobuyer);
 }
 
-export const incrementWaitStatusRequestCounter = () => {
-    let currentCounter = getValue(WAIT_STATUS_REQUEST_COUNTER);
+export const incrementCounterByName = (counterName) => {
+    let currentCounter = getValue(counterName);
 
     if (currentCounter === undefined) {
         currentCounter = 1;
@@ -552,5 +569,5 @@ export const incrementWaitStatusRequestCounter = () => {
         ++currentCounter;
     }
 
-    setValue(WAIT_STATUS_REQUEST_COUNTER, currentCounter);
+    setValue(counterName, currentCounter);
 }

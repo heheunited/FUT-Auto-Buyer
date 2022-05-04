@@ -12,6 +12,7 @@ export const WAIT_UNTIL_PROCESSED_STATUS = 2;
 
 export const MARKETS_OVERFLOWED = 'marketsOverflowed';
 export const WAIT_STATUS_REQUEST_COUNTER = 'waitStatusRequestCounter';
+export const WATCH_LIST_LIMIT_REQUEST_COUNTER = 'watchListLimitRequestCounter';
 export const WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY = 'waitUntilWatchlistWillBeEmpty';
 export const TRANSFER_LIST_OVERFLOWED = 'transferListOverflowed';
 export const WATCH_LIST_OVERFLOWED = 'watchListOverflowed';

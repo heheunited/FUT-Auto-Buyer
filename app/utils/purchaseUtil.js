@@ -144,7 +144,7 @@ export const buyPlayer = (
                 "success",
                 formatString('waiting', 9),
                 timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires)),
-                formatString(price ? getEstimatedProfitPercentString(player.definitionId, price.toString()) : 'null', 9)
+                formatString(price ? getEstimatedProfitPercentString(player.definitionId, price.toString()) : 'NULL', 9)
             );
             increaseBidPlayerRequestsCount();
             const filterName = getValue("currentFilter");
@@ -191,13 +191,15 @@ export const buyPlayer = (
            }
 
           logMessage = writeToAbLog(
-            sym,
-            playerName,
-            priceTxt,
-            formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
-            isBin ? "buy" : "bid",
-            "failure",
-            `ERR: ${status} `
+              sym,
+              playerName,
+              priceTxt,
+              formatString(getFutBinPlayerPrice(player.definitionId).toString(), 8),
+              isBin ? "buy" : "bid",
+              "failure",
+              formatString(`ERR:${status}`, 9),
+              timeStringFormat(services.Localization.localizeAuctionTimeRemaining(player._auction.expires)),
+              formatString(price ? getEstimatedProfitPercentString(player.definitionId, price.toString()) : 'NULL', 9)
           );
 
           if (notificationType === "L" || notificationType === "A") {

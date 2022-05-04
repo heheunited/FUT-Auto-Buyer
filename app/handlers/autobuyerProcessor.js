@@ -427,7 +427,7 @@ const searchTransferMarket = function (buyerSetting) {
 
                         let bidTxt = formatString(currentBid.toString(), 6);
                         let buyTxt = formatString(buyNowPrice.toString(), 6);
-                        let fuutbinPriceTxt = formatString(currentPlayerFutBinPrice ? currentPlayerFutBinPrice.toString() : 'null', 10)
+                        let fuutbinPriceTxt = formatString(currentPlayerFutBinPrice ? currentPlayerFutBinPrice.toString() : 'NULL', 10)
                         let playerName = formatString(player._staticData.name, 15);
                         let expireTime = formatString(expires, 15);
 

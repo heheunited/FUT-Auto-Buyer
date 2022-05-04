@@ -196,7 +196,7 @@ export const watchListUtil = function (buyerSetting) {
 
                                 if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS && watchListItemsCount === 0) {
                                     setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
-                                    writeToLog('[1] WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
+                                    writeToLog('[STATE] WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
                                 }
                             }
 
@@ -372,7 +372,7 @@ export const watchListUtil = function (buyerSetting) {
             if (getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
                 setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
                 setValue(WAIT_STATUS_REQUEST_COUNTER, 0);
-                writeToLog('[2] WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
+                writeToLog('[LIMIT] WATCH LIST IS EMPTY. PROCESS PAUSE/STOP.', idProgressAutobuyer, "\n");
             }
         }
 
@@ -383,7 +383,7 @@ export const watchListUtil = function (buyerSetting) {
             if (getValue(WATCH_LIST_LIMIT_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
                 setValue(WATCH_LIST_LIMIT_ACTIVE, false);
                 setValue(WATCH_LIST_LIMIT_REQUEST_COUNTER, 0);
-                writeToLog('WATCH LIST LIMIT DISABLED BY REQUEST COUNT.', idProgressAutobuyer, "\n");
+                writeToLog('[LIMIT] WATCH LIST LIMIT DISABLED BY REQUEST COUNT.', idProgressAutobuyer, "\n");
             }
         }
     });

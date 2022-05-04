@@ -157,11 +157,11 @@ export const formatString = (str, len) => {
   return str;
 };
 
-export const timeStringFormat = (str, len = 3) => {
+export const timeStringFormat = (str, len = 3, dot = false) => {
   let explodedTime = str.split(" ");
 
   return (
-      explodedTime[0] + ' ' + explodedTime[1].substr(0, len).toLowerCase() + '.'
+      explodedTime[0] + ' ' + explodedTime[1].substr(0, len).toLowerCase() + (dot ? '.' : '')
   );
 }
 

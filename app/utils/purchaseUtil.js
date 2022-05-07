@@ -1,4 +1,3 @@
-import { errorCodeLookUp } from "../app.constants";
 import { idProgressAutobuyer } from "../elementIds.constants";
 import { startAutoBuyer, stopAutoBuyer } from "../handlers/autobuyerProcessor";
 import {
@@ -11,7 +10,7 @@ import {
   convertRangeToSeconds,
   convertToSeconds,
   formatString,
-  getRandWaitTime, getRandWaitTimeInSeconds,
+  getRandWaitTime,
   playAudio, timeStringFormat,
   wait,
 } from "./commonUtil";

@@ -386,6 +386,10 @@ export const watchListUtil = function (buyerSetting) {
                 writeToLog('[LIMIT] WATCH LIST LIMIT DISABLED BY REQUEST COUNT.', idProgressAutobuyer, "\n");
             }
         }
+
+        if (sellBids.size > 100) {
+            sellBids.clear();
+        }
     });
 };
 
@@ -393,10 +397,9 @@ export const addUserWatchItems = () => {
     return new Promise((resolve, reject) => {
         services.Item.requestWatchedItems().observe(this, function (t, response) {
             if (response.success) {
-                const userWatchItems =
-                    response.data.items
-                        .filter((item) => item._auction)
-                        .map((item) => item._auction.tradeId) || [];
+                const userWatchItems = response.data.items
+                    .filter((item) => item._auction)
+                    .map((item) => item._auction.tradeId) || [];
 
                 setValue("userWatchItems", new Set(userWatchItems));
 

@@ -114,7 +114,7 @@ export const startAutoBuyer = async function (isResume) {
 
     await setFutBinPricesCacheTime(buyerSetting);
     setValue('needSellWonItemsAfterBotPause', buyerSetting['idAbSellItemsOnlyAfterBotPause']);
-    !isResume && (await addUserWatchItems());
+    !isResume && !buyerSetting['idAbSellWatchListInStart'] && (await addUserWatchItems());
 
     sendPinEvents("Hub - Transfers");
     await transferListWithContext(

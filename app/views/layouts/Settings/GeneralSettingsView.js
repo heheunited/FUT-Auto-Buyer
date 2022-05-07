@@ -1,6 +1,6 @@
 import {
     idAbIsPlayerTypeSearch,
-    idAbOverflowingPassiveMod, idAbOverflowingPassiveModWaitTime,
+    idAbOverflowingPassiveMod, idAbOverflowingPassiveModWaitTime, idAbSellWatchListInStart,
     idAbWaitUntilWatchlistWillBeEmpty, idAbWaitUntilWatchlistWillBeEmptyRequestLimit
 } from "../../../elementIds.constants";
 import {generateToggleInput} from "../../../utils/uiUtils/generateToggleInput";
@@ -43,6 +43,12 @@ export const generalSettingsView = function () {
         "Wait until/Watch list limit request limit",
         10,
         {idAbWaitUntilWatchlistWillBeEmptyRequestLimit},
+        "",
+        "BuyerSettings"
+    )}
+       ${generateToggleInput(
+        "Sell watch list on start",
+        {idAbSellWatchListInStart},
         "",
         "BuyerSettings"
     )}

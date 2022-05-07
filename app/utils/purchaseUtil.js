@@ -176,6 +176,7 @@ export const buyPlayer = (
 
            if (status == 429 || status == 521 || status == 512) {
              let logMessage = `***Too many request from this user. Status ${status} triggered. Bot stopped.`;
+             sendErrorNotificationToUser(logMessage)
 
              if (getStatsValue("searchCount") > 2) {
                saveErrorStatistic({code: status});
@@ -183,9 +184,6 @@ export const buyPlayer = (
 
              writeToLog(logMessage, idProgressAutobuyer);
 
-             sendErrorNotificationToUser(logMessage)
-
-             errorCodeCountMap.clear();
              stopAutoBuyer();
            }
 

@@ -97,6 +97,7 @@ export const startAutoBuyer = async function (isResume) {
     setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_WORK_STATUS);
     setValue(MARKETS_OVERFLOWED, false);
     setValue(WAIT_STATUS_REQUEST_COUNTER, 0);
+    setValue('userWatchItems', new Set());
 
     if (!isResume) {
         setValue("botStartTime", new Date());

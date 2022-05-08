@@ -371,7 +371,7 @@ export const watchListUtil = function (buyerSetting) {
 
         if (getValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY) === WAIT_UNTIL_WAIT_STATUS) {
             incrementCounterByName(WAIT_STATUS_REQUEST_COUNTER);
-            writeToLog(`WAIT REQUEST: ${getValue(WAIT_STATUS_REQUEST_COUNTER)} ...`, idProgressAutobuyer);
+            // writeToLog(`WAIT REQUEST: ${getValue(WAIT_STATUS_REQUEST_COUNTER)} ...`, idProgressAutobuyer);
 
             if (getValue(WAIT_STATUS_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
                 setValue(WAIT_UNTIL_WATCH_LIST_WILL_BE_EMPTY, WAIT_UNTIL_PROCESSED_STATUS);
@@ -382,7 +382,7 @@ export const watchListUtil = function (buyerSetting) {
 
         if (getValue(WATCH_LIST_LIMIT_ACTIVE) === true) {
             incrementCounterByName(WATCH_LIST_LIMIT_REQUEST_COUNTER);
-            writeToLog(`WATCH LIST LIMIT REQUEST: ${getValue(WATCH_LIST_LIMIT_REQUEST_COUNTER)} ...`, idProgressAutobuyer);
+            // writeToLog(`WATCH LIST LIMIT REQUEST: ${getValue(WATCH_LIST_LIMIT_REQUEST_COUNTER)} ...`, idProgressAutobuyer);
 
             if (getValue(WATCH_LIST_LIMIT_REQUEST_COUNTER) >= buyerSetting['idAbWaitUntilWatchlistWillBeEmptyRequestLimit']) {
                 setValue(WATCH_LIST_LIMIT_ACTIVE, false);

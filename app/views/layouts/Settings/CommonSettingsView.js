@@ -1,4 +1,5 @@
 import {
+  idAbIgnoreTradeIds,
   idAbPreventTransferListOverflow,
   idAbPreventWatchListOverflow,
   idAbResumeAfterErrorOccured,
@@ -41,6 +42,15 @@ export const commonSettingsView = function () {
     "CommonSettings",
     "text",
     "\\d+-\\d+[H|M|S|h|m|s]$"
+  )}
+  ${generateTextInput(
+      "Watch list ignore trade ids list",
+      "",
+      { idAbIgnoreTradeIds },
+      "divide by comma",
+      "CommonSettings",
+      "text",
+      "^\\d+(,\\d+)*$"
   )}
   ${generateToggleInput(
     "Auto Clear Log",

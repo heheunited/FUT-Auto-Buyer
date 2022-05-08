@@ -73,6 +73,7 @@ export const idAbAvailableItems = "elem_" + generateId(15);
 export const idAbActiveTransfers = "elem_" + generateId(15);
 export const idAbNumberFilterSearch = "elem_" + generateId(15);
 export const idAbStopErrorCode = "elem_" + generateId(15);
+export const idAbIgnoreTradeIds = "elem_" + generateId(15);
 export const idAbStopErrorCodeCount = "elem_" + generateId(15);
 export const idWinMp3 = "elem_" + generateId(15);
 export const idFinishMp3 = "elem_" + generateId(15);

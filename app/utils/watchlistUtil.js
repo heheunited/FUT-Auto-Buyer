@@ -63,6 +63,7 @@ export const watchListUtil = function (buyerSetting) {
             let isExpectedProfitInPercentProvided = expectedProfitPercent > 0;
             let isIssetOutbidLimitPerPlayer = buyerSetting['idAbBidLimitPerPlayer'] > 0;
             let watchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'];
+            let ignoreTradeIdsList = new Set(buyerSetting["idAbIgnoreTradeIds"].split(","))
 
             let activeItems = response.data.items.filter(function (item) {
                 return item._auction && item._auction._tradeState === "active";
@@ -205,7 +206,10 @@ export const watchListUtil = function (buyerSetting) {
 
                             if (sellMod !== SELL_MOD_DISABLED) {
                                 let boughtItems = watchResponse.data.items.filter(function (item) {
-                                    return item.getAuctionData().isWon() && !sellBids.has(item._auction.tradeId) && !userWatchItems.has(item._auction.tradeId);
+                                    return item.getAuctionData().isWon() &&
+                                        !sellBids.has(item._auction.tradeId) &&
+                                        !userWatchItems.has(item._auction.tradeId) &&
+                                        !ignoreTradeIdsList.has(item._auction.tradeId);
                                 });
 
                                 const isNeedSellWonItemsByCount = sellMod === SELL_MOD_BY_COUNT && boughtItems.length >= buyerSetting['idAbSellWonItemsCount'];
@@ -505,7 +509,7 @@ const sellWonItems = async (
     const boughtPrice = (auction.currentBid || auction.startingBid);
     const fbPrice = getFutBinPlayerPrice(player.definitionId);
 
-    const logMessage = ` ($$$) Selling: ${formatString(player._staticData.name, 16)}` + formatString(`[Bought: ${boughtPrice}. Sell: ${sellPrice}. FB: ${fbPrice}]`, 40) + `[Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice, sellPrice)}]`;
+    const logMessage = ` ($$$) Selling: ${formatString(player._staticData.name, 16)}` + formatString(`[${auction.tradeId}]`, 13)  + formatString(`[Bought: ${boughtPrice}. Sell: ${sellPrice}. FB: ${fbPrice}]`, 37) + `[Profit: ${profit} | ${getEstimatedProfitPercentString(player.definitionId, boughtPrice, sellPrice)}]`;
 
     writeToLog(logMessage, idProgressAutobuyer);
 

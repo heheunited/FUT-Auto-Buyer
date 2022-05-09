@@ -37,6 +37,16 @@ export const sendErrorNotificationToUser = (message) => {
   }
 }
 
+export const sendNotificationToTelegram = (message) => {
+  const buyerSetting = getBuyerSettings();
+
+  return sendMessageToTelegram(
+      buyerSetting["idTelegramBotToken"],
+      buyerSetting["idTelegramChatId"],
+      message
+  );
+}
+
 const sendNotificationToExternal = (buyerSetting, message) => {
   let telegramToken = buyerSetting["idTelegramBotToken"];
   let telegramChatId = buyerSetting["idTelegramChatId"];

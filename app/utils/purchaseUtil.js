@@ -16,7 +16,7 @@ import {
 } from "./commonUtil";
 import { getSellPriceFromFutBin } from "./futbinUtil";
 import { writeToAbLog, writeToLog } from "./logUtil";
-import {sendErrorNotificationToUser, sendNotificationToUser} from "./notificationUtil";
+import {sendErrorNotificationToUser, sendNotificationToTelegram, sendNotificationToUser} from "./notificationUtil";
 import {
   calculateProfitPercent,
   getEstimatedProfitPercentString,
@@ -176,7 +176,7 @@ export const buyPlayer = (
 
            if (status == 429 || status == 521 || status == 512) {
              let logMessage = `***Too many request from this user. Status ${status} triggered. Bot stopped.`;
-             sendErrorNotificationToUser(logMessage)
+             sendNotificationToTelegram(logMessage)
 
              if (getStatsValue("searchCount") > 2) {
                saveErrorStatistic({code: status});

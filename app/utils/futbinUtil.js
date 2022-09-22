@@ -124,7 +124,7 @@ const fetchPrices = (definitionId, refIds) => {
   return new Promise((resolve, reject) => {
     GM_xmlhttpRequest({
       method: "GET",
-      url: `https://www.futbin.com/22/playerPrices?player=${definitionId}&rids=${refIds}`,
+      url: `https://www.futbin.com/23/playerPrices?player=${definitionId}&rids=${refIds}`,
       onload: (res) => {
         if (res.status === 200) {
           resolve(res);

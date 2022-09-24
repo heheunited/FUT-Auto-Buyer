@@ -65,7 +65,7 @@ export const watchListUtil = function (buyerSetting) {
             let watchlistPlayerLimit = buyerSetting['idAbWatchlistPlayersLimit'];
             let ignoreTradeIdsList = new Set(buyerSetting["idAbIgnoreTradeIds"].split(","))
 
-            let activeItems = response.data.items.filter(function (item) {
+            let activeItems = response.response.items.filter(function (item) {
                 return item._auction && item._auction._tradeState === "active";
             });
 
@@ -73,7 +73,7 @@ export const watchListUtil = function (buyerSetting) {
                 return resolve();
             }
 
-            if (buyerSetting['idAbPreventWatchListOverflow'] && response.data.items.length >= WATCH_LIST_MAX_COUNT && !buyerSetting['idAbOverflowingPassiveMod']) {
+            if (buyerSetting['idAbPreventWatchListOverflow'] && response.response.items.length >= WATCH_LIST_MAX_COUNT && !buyerSetting['idAbOverflowingPassiveMod']) {
                 let logMessage = 'WATCH LIST IS FULL. AUTOBUYER IS STOPPED.';
 
                 writeToLog(logMessage, idProgressAutobuyer);
@@ -96,7 +96,7 @@ export const watchListUtil = function (buyerSetting) {
 
                             const userWatchItems = getValue("userWatchItems");
                             if (isAutoBuyerActive && (bidPrice || isExpectedProfitInPercentProvided)) {
-                                let outBidItems = watchResponse.data.items.filter((item) => {
+                                let outBidItems = watchResponse.response.items.filter((item) => {
                                     let auction = item._auction;
                                     let currentBid = (auction.currentBid || auction.startingBid);
 
@@ -156,7 +156,7 @@ export const watchListUtil = function (buyerSetting) {
                             }
 
                             if (watchlistPlayerLimit > 0) {
-                                let watchListItemsCount = watchResponse.data.items.filter((item) => {
+                                let watchListItemsCount = watchResponse.response.items.filter((item) => {
                                     let auction = item._auction;
                                     let tAuction = item.getAuctionData();
                                     let currentBid = (auction.currentBid || auction.startingBid);
@@ -205,7 +205,7 @@ export const watchListUtil = function (buyerSetting) {
                             const sellMod = getSellWonItemsMod(buyerSetting);
 
                             if (sellMod !== SELL_MOD_DISABLED) {
-                                let boughtItems = watchResponse.data.items.filter(function (item) {
+                                let boughtItems = watchResponse.response.items.filter(function (item) {
                                     return item.getAuctionData().isWon() &&
                                         !sellBids.has(item._auction.tradeId) &&
                                         !userWatchItems.has(item._auction.tradeId) &&
@@ -284,7 +284,7 @@ export const watchListUtil = function (buyerSetting) {
                                 sellMod === SELL_MOD_AFTER_BOT_PAUSE && setValue('needSellWonItemsAfterBotPause', false);
                             }
 
-                            let expiredItems = watchResponse.data.items.filter((item) => {
+                            let expiredItems = watchResponse.response.items.filter((item) => {
                                 var t = item.getAuctionData();
                                 return t.isExpired() || (t.isClosedTrade() && !t.isWon());
                             });
@@ -401,7 +401,7 @@ export const addUserWatchItems = () => {
     return new Promise((resolve, reject) => {
         services.Item.requestWatchedItems().observe(this, function (t, response) {
             if (response.success) {
-                const userWatchItems = response.data.items
+                const userWatchItems = response.response.items
                     .filter((item) => item._auction)
                     .map((item) => item._auction.tradeId) || [];
 

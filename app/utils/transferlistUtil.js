@@ -25,7 +25,7 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
         services.Item.requestTransferItems().observe(
             this,
             async function (t, response) {
-                let soldItemsList = response.data.items.filter(function (item) {
+                let soldItemsList = response.response.items.filter(function (item) {
                     return item.getAuctionData().isSold();
                 })
                 let soldItems = soldItemsList.length;
@@ -34,7 +34,7 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                 }
                 updateStats("soldItems", soldItems);
 
-                const unsoldItems = response.data.items.filter(function (item) {
+                const unsoldItems = response.response.items.filter(function (item) {
                     return (
                         !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
                     );
@@ -55,7 +55,7 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
 
                 if (unsoldItems && !relistUnsold && isNeedReListWithUpdatedPrice) {
                     await reListWithUpdatedPrice(
-                        response.data.items.filter((item) => {
+                        response.response.items.filter((item) => {
                                 return (
                                     !item.getAuctionData().isSold() && item.getAuctionData().isExpired()
                                 );
@@ -63,12 +63,12 @@ export const transferListUtil = function (relistUnsold, minSoldCount, isNeedReLi
                         ))
                 }
 
-                const activeTransfers = response.data.items.filter(function (item) {
+                const activeTransfers = response.response.items.filter(function (item) {
                     return item.getAuctionData().isSelling();
                 }).length;
                 updateStats("activeTransfers", activeTransfers);
 
-                const availableItems = response.data.items.filter(function (item) {
+                const availableItems = response.response.items.filter(function (item) {
                     return item.getAuctionData().isInactive();
                 }).length;
 
@@ -135,8 +135,8 @@ export const setTransferListTotalItemsCountInterval = () => {
         sendPinEvents("Transfer List - List View");
         return new Promise((resolve) => {
             services.Item.requestTransferItems().observe(this, async (t, response) => {
-                    setValue(TRANSFER_LIST_TOTAL_ITEMS_COUNT, response.data.items.length);
-                    setValue(TRANSFER_LIST_OVERFLOWED, response.data.items.length >= TRANSFER_LIST_MAX_COUNT);
+                    setValue(TRANSFER_LIST_TOTAL_ITEMS_COUNT, response.response.items.length);
+                    setValue(TRANSFER_LIST_OVERFLOWED, response.response.items.length >= TRANSFER_LIST_MAX_COUNT);
 
                     return resolve();
                 }
@@ -150,7 +150,7 @@ export const setWatchListTotalItemsCountInterval = () => {
         sendPinEvents("Transfer List - List View");
         return new Promise((resolve) => {
             services.Item.requestWatchedItems().observe(this, (t, response) => {
-                    setValue(WATCH_LIST_OVERFLOWED, response.data.items.length >= WATCH_LIST_MAX_COUNT);
+                    setValue(WATCH_LIST_OVERFLOWED, response.response.items.length >= WATCH_LIST_MAX_COUNT);
 
                     return resolve();
                 }

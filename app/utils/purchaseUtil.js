@@ -185,6 +185,13 @@ export const buyPlayer = (
              writeToLog(logMessage, idProgressAutobuyer);
 
              stopAutoBuyer();
+           } else if (status == 461) {
+             let logMessage = `*** 461 error triggered`;
+             sendNotificationToTelegram(logMessage)
+
+             writeToLog(logMessage, idProgressAutobuyer);
+
+             stopAutoBuyer();
            }
 
           logMessage = writeToAbLog(

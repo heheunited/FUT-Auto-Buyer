@@ -1,7 +1,7 @@
-import {getValue} from "../services/repository";
+import {getValue} from '../services/repository';
 
 export const roundOffPrice = (price) => {
-  let range = JSUtils.find(UTCurrencyInputControl.PRICE_TIERS, function (e) {
+  let range = JSUtils.find(UTCurrencyInputControl.PRICE_TIERS, function(e) {
     return price >= e.min;
   });
   var nearestPrice = Math.round(price / range.inc) * range.inc;
@@ -56,9 +56,10 @@ export const calculateProfitPercent = (playerPrice, userPrice) => {
   let resultPercent = (userPrice / playerPrice) * 100;
 
   return Math.round(100 - resultPercent);
-}
+};
 
-export const getEstimatedProfitPercentString = (definitionId, currentPrice, customPrice = null) => {
+export const getEstimatedProfitPercentString = (
+    definitionId, currentPrice, customPrice = null) => {
   const price = customPrice || getFutBinPlayerPrice(definitionId, 95);
 
   if (price === null) {
@@ -72,16 +73,21 @@ export const getEstimatedProfitPercentString = (definitionId, currentPrice, cust
   }
 
   return estimatedProfit + '%';
-}
+};
 
-export const getFutBinPlayerPrice = (definitionId, idBuyFutBinPercent = 100, defaultValue = null) => {
+export const getFutBinPlayerPrice = (
+    definitionId, idBuyFutBinPercent = 100, defaultValue = null) => {
   const existingValue = getValue(definitionId);
 
   if (existingValue && existingValue.price) {
     return roundOffPrice(
-        (existingValue.price * idBuyFutBinPercent) / 100
+        (existingValue.price * idBuyFutBinPercent) / 100,
     );
   }
 
   return defaultValue;
-}
+};
+
+export const getPriceWithSellPercent = (playerPrice, percent) => {
+  return Math.round((percent / 100) * playerPrice);
+};

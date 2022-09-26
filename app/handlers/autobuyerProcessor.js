@@ -16,11 +16,11 @@ import {
 import {
     convertRangeToSeconds,
     convertToSeconds,
-    formatString,
+    formatString, getAvgSellPercent,
     getRandNum,
     getRangeValue,
     playAudio, setWaitTimeObj,
-} from "../utils/commonUtil";
+} from '../utils/commonUtil';
 import {addFutbinCachePrice, setFutBinPricesCacheTime} from "../utils/futbinUtil";
 import {writeToDebugLog, writeToLog} from "../utils/logUtil";
 import {
@@ -29,10 +29,10 @@ import {
     sendUINotification
 } from "../utils/notificationUtil";
 import {
-    getBuyBidPrice, getFutBinPlayerPrice,
+    getBuyBidPrice, getFutBinPlayerPrice, getPriceWithSellPercent,
     getSellBidPrice,
     roundOffPrice,
-} from "../utils/priceUtils";
+} from '../utils/priceUtils';
 import {buyPlayer, checkRating, isBidOrBuyMakeExpectedPercentProfit} from "../utils/purchaseUtil";
 import {updateRequestCount} from "../utils/statsUtil";
 import {setRandomInterval} from "../utils/timeOutUtil";
@@ -361,6 +361,7 @@ const searchTransferMarket = function (buyerSetting) {
                         let playerRating = parseInt(player.rating);
                         let expires = services.Localization.localizeAuctionTimeRemaining(auction.expires);
                         let fbPriceWithCommission = getFutBinPlayerPrice(player.definitionId, 95);
+                        let fbPriceWithCommissionAndSellPercent = getPriceWithSellPercent(fbPriceWithCommission, (getAvgSellPercent(buyerSetting["idSellFutBinPercent"]) || 100));
 
                         let currentPlayerFutBinPrice = -1;
                         if (type === "player") {
@@ -404,7 +405,7 @@ const searchTransferMarket = function (buyerSetting) {
                         let byBuyNowPrice = false;
                         let byCurrentBidPrice = false;
                         if (isSearchByExpectedProfit) {
-                            let fbPrice = fbPriceWithCommission;
+                            let fbPrice = fbPriceWithCommissionAndSellPercent;
 
                             if (isExpectedProfitInPercentProvided) {
                                 byCurrentBidPrice = isBidOrBuyMakeExpectedPercentProfit(null, checkPrice, fbPrice, expectedProfitInPercent);

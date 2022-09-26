@@ -108,6 +108,14 @@ export const getRandNumberInRange = (range) => {
   return rangeVal[0] || 0;
 };
 
+export const getAvgSellPercent = (range) => {
+  const rangeValue = getRangeValue(range);
+
+  return Math.round(
+      (rangeValue[0] + rangeValue[1]) / 2
+  );
+}
+
 export const getRandNum = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
 
